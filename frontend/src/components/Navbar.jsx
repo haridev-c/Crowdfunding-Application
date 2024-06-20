@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import NavbarUserProfile from "./NavbarUserProfile";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
-    <nav className="bg-gray-800">
+    <nav className="bg-[#4a6283]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div id="test" className="flex h-16 items-center justify-between">
           {/* Mobile menu button */}
@@ -96,9 +97,11 @@ const Navbar = () => {
                 <NavbarUserProfile />
               </div>
             ) : (
-              <button className="rounded bg-[#4a6283] px-4 py-2 font-bold text-gray-300 hover:bg-[#759bcf]">
-                Login
-              </button>
+              <Link to={"/login"}>
+                <button className="rounded bg-[#759bcf] px-4 py-2 font-bold text-gray-300 hover:bg-[#759bcf]">
+                  Login
+                </button>
+              </Link>
             )}
           </div>
         </div>
