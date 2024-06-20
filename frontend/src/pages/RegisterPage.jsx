@@ -1,7 +1,28 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function RegisterPage() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    axios.post("/user/register", { name, email, password }).then((result) => {
+      console.log(result.data);
+      if (result.data.success) {
+        alert(result.data.serverMsg);
+        navigate("/login");
+      } else {
+        alert(result.data.serverMsg);
+        navigate("/login");
+      }
+    });
+  };
+
   return (
     <>
       <div className="m-auto rounded border-2 border-solid border-[#1f2937] p-3 shadow-xl md:w-1/2">
@@ -9,13 +30,14 @@ function RegisterPage() {
           <h2 className="m-3 text-center text-2xl font-bold">
             Create new account
           </h2>
-          <label htmlFor="fullName" className="my-2">
+          <label htmlFor="name" className="my-2">
             <p>Full Name</p>
             <input
               type="text"
-              name="fullName"
+              name="name"
               placeholder="John Doe"
               className="form-input rounded-md md:w-full"
+              onChange={(e) => setName(e.target.value)}
             />
           </label>
           <label htmlFor="email" className="my-2">
@@ -25,6 +47,7 @@ function RegisterPage() {
               placeholder="johndoe@abc.com"
               className="form-input rounded-md md:w-full"
               name="email"
+              onChange={(e) => setEmail(e.target.value)}
             />
           </label>
           <label htmlFor="password" className="my-2">
@@ -34,9 +57,13 @@ function RegisterPage() {
               className="form-input rounded-md md:w-full"
               name="password"
               placeholder="sjd123!&^#"
+              onChange={(e) => setPassword(e.target.value)}
             />
           </label>
-          <button className="my-2 rounded-md bg-[#4a6283] py-2 text-lg font-bold text-gray-300">
+          <button
+            onClick={handleSubmit}
+            className="my-2 rounded-md bg-[#4a6283] py-2 text-lg font-bold text-gray-300"
+          >
             Sign Up
           </button>
           <div className="my-1 text-center text-lg md:w-full">
