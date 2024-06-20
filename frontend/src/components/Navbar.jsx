@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import NavbarUserProfile from "./NavbarUserProfile";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   return (
     <nav className="bg-gray-800">
@@ -50,7 +51,9 @@ const Navbar = () => {
           {/* Login Button */}
           <div className="hidden md:block">
             {isLoggedIn ? (
-              <div>Logout</div>
+              <div>
+                <NavbarUserProfile />
+              </div>
             ) : (
               <button className="rounded bg-[#4a6283] px-4 py-2 font-bold text-gray-300 hover:bg-[#759bcf]">
                 Login
