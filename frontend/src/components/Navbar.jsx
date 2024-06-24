@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import NavbarUserProfile from "./NavbarUserProfile";
 import { Link } from "react-router-dom";
+import { GlobalContext } from "../GlobalStateRepository";
+import AuthenticatedUserControls from "./AuthenticatedUserControls";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { user } = useContext(GlobalContext);
 
   return (
     <nav className="bg-[#4a6283]">
@@ -52,35 +54,33 @@ const Navbar = () => {
           </div>
           <div className="flex items-center">
             {/* Brand Name and Logo */}
-            <div className="flex flex-shrink-0 items-center">
-              <img
-                className="h-8 w-8"
-                src="https://cdn3.iconfinder.com/data/icons/parks-and-rec/400/parks-10-512.png"
-                alt="Your Logo"
-              />
-              <p className="ml-2 text-gray-300">SparkFund</p>
-            </div>
+            <Link to={"/"}>
+              <div className="flex flex-shrink-0 items-center">
+                <img
+                  className="h-8 w-8"
+                  src="https://cdn3.iconfinder.com/data/icons/parks-and-rec/400/parks-10-512.png"
+                  alt="Your Logo"
+                />
+                <p className="ml-2 text-gray-300">SparkFund</p>
+              </div>
+            </Link>
+
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
                 {/* Navigation Links */}
-                <a
-                  href="#"
+                <Link
+                  to={"/"}
                   className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
                 >
                   Home
-                </a>
-                <a
-                  href="#"
+                </Link>
+                <Link
+                  to={"/about"}
                   className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
                 >
                   About
-                </a>
-                <a
-                  href="#"
-                  className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-                >
-                  Services
-                </a>
+                </Link>
+
                 <a
                   href="#"
                   className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
@@ -92,9 +92,9 @@ const Navbar = () => {
           </div>
           {/* Login Button */}
           <div className="">
-            {isLoggedIn ? (
+            {user ? (
               <div>
-                <NavbarUserProfile />
+                <AuthenticatedUserControls />
               </div>
             ) : (
               <Link to={"/login"}>

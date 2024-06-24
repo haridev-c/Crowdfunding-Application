@@ -1,11 +1,14 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { Link, useNavigate, Navigate } from "react-router-dom";
 import axios from "axios";
+import { GlobalContext } from "../GlobalStateRepository";
 
 function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const { user } = useContext(GlobalContext);
 
   const navigate = useNavigate();
 
@@ -22,6 +25,10 @@ function RegisterPage() {
       }
     });
   };
+
+  if (user) {
+    return <Navigate to={"/"} />;
+  }
 
   return (
     <>
