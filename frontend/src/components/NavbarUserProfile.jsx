@@ -29,12 +29,10 @@ function NavbarUserProfile() {
   };
 
   return (
-    <div className="flex rounded-full hover:bg-gray-700">
+    <div className="flex rounded-full hover:shadow-lg">
       <Menu>
         <MenuButton
-          className={
-            "flex rounded-full bg-[#4a6283] p-2 text-white hover:bg-gray-700"
-          }
+          className={"flex rounded-full bg-[#6A994E] p-2 text-[#F2E8CF]"}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -42,7 +40,7 @@ function NavbarUserProfile() {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="size-6 rounded-full hover:bg-gray-700"
+            className="size-6 rounded-full"
           >
             <path
               strokeLinecap="round"
@@ -61,17 +59,20 @@ function NavbarUserProfile() {
         >
           <MenuItems
             anchor="bottom"
-            className="mt-3 w-52 origin-top text-nowrap rounded-lg bg-slate-200 p-2 shadow-lg transition"
+            className="mt-3 w-52 origin-top text-nowrap rounded-lg bg-[#E9F1E4] p-2 shadow-lg transition"
           >
             <MenuItem>
-              <Link className="my-1 block w-full rounded p-1 font-bold text-gray-500 data-[focus]:bg-blue-100 md:hidden">
+              <Link
+                to={"/create-new-fundraiser"}
+                className="my-1 block w-full rounded p-1 font-bold text-[#386641] data-[focus]:bg-[#A7C957] md:hidden"
+              >
                 Start a Fundraiser
               </Link>
             </MenuItem>
             <MenuItem>
               <Link
                 to={"/dashboard"}
-                className="my-1 block w-full rounded p-1 font-bold text-gray-500 data-[focus]:bg-blue-100"
+                className="my-1 block w-full rounded p-1 font-bold text-[#386641] data-[focus]:bg-[#A7C957]"
               >
                 My Profile
               </Link>
@@ -79,7 +80,7 @@ function NavbarUserProfile() {
             <MenuItem>
               <button
                 onClick={handleLogout}
-                className="my-1 block w-full rounded p-1 text-left font-bold text-red-600 data-[focus]:bg-blue-100"
+                className="my-1 block w-full rounded p-1 text-left font-bold text-[#B44143] data-[focus]:bg-[#E9D9AF]"
               >
                 Logout
               </button>
