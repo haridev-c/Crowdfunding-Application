@@ -1,6 +1,8 @@
 const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const path = require("path");
+const fs = require("fs").promises;
 
 const saltRounds = 10;
 const jwtSecret = "asjkdbv9238r4jvdsb";
@@ -104,16 +106,18 @@ const getProfile = async (req, res) => {
     console.log("Getting token from request");
     const token = req.cookies["token"];
     if (token) {
-      console.log("JWT token captured successfully; going to verify token");
+      console.log("JWT token captured successfully; verifying token");
       jwt.verify(token, jwtSecret, {}, async (err, userData) => {
         if (err) throw err;
-        console.log("JWT token verified; going to get user details from db");
-        const { name, email, _id } = await User.findById(userData._id);
-        res.json({ name, email, _id });
+        console.log("JWT token verified; getting user details from db");
+        const { name, email, _id, profilePic } = await User.findById(
+          userData._id
+        );
+        res.json({ name, email, _id, profilePic });
         console.log("response sent");
       });
     } else {
-      console.log("No JWT token found; sending back null with response");
+      console.log("No JWT token found; sending null response");
       res.json(null);
     }
   } catch (error) {
@@ -123,6 +127,7 @@ const getProfile = async (req, res) => {
 };
 
 const logoutUser = (req, res) => {
+  console.log("- - - - - - - - - - - - - - - ");
   console.log("logoutUser func started");
   res.clearCookie("token");
   res.json({ success: true, serverMsg: "Logged out successfully" });
@@ -130,4 +135,86 @@ const logoutUser = (req, res) => {
   console.log("_ _ _ _ _ _ _ _ _ _ _ _ _ _ ");
 };
 
-module.exports = { registerUser, loginUser, getProfile, logoutUser };
+const updateDp = async (req, res) => {
+  console.log("- - - - - - - - - - - - - - - ");
+  console.log("updateDp func started");
+  try {
+    const userID = req.body.userID;
+    console.log("Updating user doc");
+    User.findByIdAndUpdate(
+      userID,
+      { $set: { profilePic: req.file.filename } },
+      { new: true }
+    ).then((updatedDoc) => {
+      if (updatedDoc) {
+        console.log("Doc update complete");
+        res.json({ success: true, serverMsg: "Doc update complete" });
+      } else {
+        console.log(
+          "Something unexpected happened in updateDP while updating document to db"
+        );
+        res.json({
+          success: false,
+          serverMsg:
+            "Something unexpected happened in updateDP while updating document to db",
+        });
+      }
+    });
+  } catch (error) {
+    console.log("Error occured in updateDp func in user.controller.js file");
+    console.log(error);
+    res.json({ success: false, serverMsg: "Internal server error" });
+  }
+};
+
+const getDP = async (req, res) => {
+  try {
+    console.log("- - - - - - - - - - - - - - - ");
+    console.log("Started getDP func");
+    const fileName = req.params.filename;
+
+    const uploadsDir = path.join(__dirname, "..", "uploads");
+    const imagePath = path.join(uploadsDir, fileName);
+
+    console.log("Full image path:", imagePath);
+
+    // Log directory contents
+    try {
+      const files = await fs.readdir(uploadsDir);
+      console.log("Files in uploads directory:", files);
+    } catch (err) {
+      console.error("Error reading uploads directory:", err);
+    }
+
+    try {
+      await fs.access(imagePath, fs.constants.R_OK);
+      console.log("File exists and is readable");
+
+      res.setHeader("Content-Type", "image/jpeg");
+      res.setHeader("Cache-Control", "public, max-age=3600");
+      res.setHeader("Content-Disposition", "inline");
+
+      res.sendFile(imagePath);
+      console.log("File sent");
+    } catch (err) {
+      console.log("File does not exist or is not readable");
+      console.error("Error details:", err);
+      return res.status(404).send("Image not found");
+    }
+  } catch (error) {
+    console.log("Error in getDP func in user.controller.js file");
+    console.error(error);
+    res
+      .status(500)
+      .json({ success: false, serverMsg: "Internal server error" });
+  }
+};
+
+module.exports = {
+  registerUser,
+  loginUser,
+  getProfile,
+  logoutUser,
+  updateDp,
+  getDP,
+};
