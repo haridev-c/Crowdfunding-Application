@@ -6,6 +6,7 @@ function EditProfile() {
   const { user, setRenderGSR } = useContext(GlobalContext);
   const [name, setName] = useState(user.name);
   const [phoneNo, setPhoneNo] = useState(user.phoneNo);
+  const [age, setAge] = useState(user.age);
 
   const imageUpload = (dp) => {
     const formData = new FormData();
@@ -16,6 +17,24 @@ function EditProfile() {
       console.log(data);
       setRenderGSR((prev) => prev + 1);
     });
+  };
+
+  const userDetailsUpdate = (e) => {
+    e.preventDefault();
+    axios
+      .post("/user/update-user-details", { name, phoneNo, age })
+      .then(({ data }) => {
+        if (!data.success) {
+          alert(data.serverMsg);
+        } else {
+          console.log(data.serverMsg);
+          alert(data.serverMsg);
+          setRenderGSR((prev) => prev + 1);
+        }
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
   };
 
   return (
@@ -54,7 +73,7 @@ function EditProfile() {
           <div className="m-auto">
             <label
               htmlFor="profilePicturePicker"
-              className="rounded-full border border-solid border-[#A3B18A] p-2 hover:bg-[#E9F1E4]"
+              className="rounded-full border border-solid border-[#A3B18A] p-2 font-semibold hover:bg-[#E9F1E4]"
             >
               Update Profile Picture
               <input
@@ -71,41 +90,55 @@ function EditProfile() {
         <div id="textElements" className="my-8 w-full">
           <div className="my-6">
             <label htmlFor="">
-              <p>Full Name</p>
+              <p className="font-medium">Full Name</p>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-3/4 rounded-lg"
+                className="form-input w-full rounded-md border-none bg-gray-200 shadow-inner"
               />
             </label>
           </div>
           <div className="my-6">
             <label htmlFor="">
-              <p>Email</p>
+              <p className="font-medium">Email</p>
               <input
                 type="email"
                 placeholder={user.email}
                 disabled
-                className="w-3/4 rounded-lg"
+                className="w-full rounded-md border-none bg-gray-200 shadow-inner"
               />
             </label>
           </div>
           <div className="my-6">
             <label htmlFor="">
-              <p>Phone Number</p>
+              <p className="font-medium">Age</p>
+              <input
+                type="number"
+                onChange={(e) => setAge(e.target.value)}
+                value={age}
+                className="w-full rounded-md border-none bg-gray-200 shadow-inner"
+              />
+            </label>
+          </div>
+          <div className="my-6">
+            <label htmlFor="">
+              <p className="font-medium">Phone Number</p>
               <input
                 type="number"
                 onChange={(e) => setPhoneNo(e.target.value)}
                 value={phoneNo}
-                className="w-3/4 rounded-lg"
+                className="w-full rounded-md border-none bg-gray-200 shadow-inner"
               />
             </label>
           </div>
         </div>
 
         <div className="flex w-full">
-          <button className="mx-auto rounded-full bg-[#588157] px-8 py-2 text-xl font-bold text-[#DAD7CD]">
+          <button
+            onClick={userDetailsUpdate}
+            className="mx-auto rounded-full bg-[#588157] px-10 py-2 text-xl font-bold text-[#DAD7CD]"
+          >
             Update
           </button>
         </div>

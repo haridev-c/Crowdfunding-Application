@@ -57,7 +57,7 @@ const loginUser = async (req, res) => {
 
   try {
     console.log("Checking email id for existing account");
-    const doc = await User.findOne({ email });
+    const doc = await User.findOne({ email }).select("+password").exec();
 
     if (doc) {
       console.log("Email id found, comparing password with hash");
@@ -110,10 +110,8 @@ const getProfile = async (req, res) => {
       jwt.verify(token, jwtSecret, {}, async (err, userData) => {
         if (err) throw err;
         console.log("JWT token verified; getting user details from db");
-        const { name, email, _id, profilePic } = await User.findById(
-          userData._id
-        );
-        res.json({ name, email, _id, profilePic });
+        const userObject = await User.findById(userData._id);
+        res.json(userObject);
         console.log("response sent");
       });
     } else {
@@ -132,7 +130,6 @@ const logoutUser = (req, res) => {
   res.clearCookie("token");
   res.json({ success: true, serverMsg: "Logged out successfully" });
   console.log("Successfully logged out user");
-  console.log("_ _ _ _ _ _ _ _ _ _ _ _ _ _ ");
 };
 
 const updateDp = async (req, res) => {
@@ -178,24 +175,24 @@ const getDP = async (req, res) => {
 
     console.log("Full image path:", imagePath);
 
-    // Log directory contents
     try {
-      const files = await fs.readdir(uploadsDir);
-      console.log("Files in uploads directory:", files);
-    } catch (err) {
-      console.error("Error reading uploads directory:", err);
-    }
+      console.log("Starting authorisation check");
+      // Authorisation check
+      if (req.authenticatedUser.profilePic !== fileName) {
+        console.log("Unautherised request!");
+        res.json({ success: false, serverMsg: "Unautherised request!" });
+      } else {
+        console.log("Authorisation check passed");
+        await fs.access(imagePath, fs.constants.R_OK);
+        console.log("File exists and is readable");
 
-    try {
-      await fs.access(imagePath, fs.constants.R_OK);
-      console.log("File exists and is readable");
+        res.setHeader("Content-Type", "image/jpeg");
+        res.setHeader("Cache-Control", "public, max-age=3600");
+        res.setHeader("Content-Disposition", "inline");
 
-      res.setHeader("Content-Type", "image/jpeg");
-      res.setHeader("Cache-Control", "public, max-age=3600");
-      res.setHeader("Content-Disposition", "inline");
-
-      res.sendFile(imagePath);
-      console.log("File sent");
+        res.sendFile(imagePath);
+        console.log("File sent");
+      }
     } catch (err) {
       console.log("File does not exist or is not readable");
       console.error("Error details:", err);
@@ -210,6 +207,44 @@ const getDP = async (req, res) => {
   }
 };
 
+const updateUserDetails = async (req, res) => {
+  console.log("- - - - - - - - - - - - - - - ");
+  console.log("Started updateUserDetails func in user.controller.js file");
+  try {
+    const { name, age, phoneNo } = req.body;
+    const { _id } = req.authenticatedUser;
+    console.log("Updating user details");
+    const updatedDoc = await User.findByIdAndUpdate(
+      _id,
+      {
+        $set: { name, age, phoneNo },
+      },
+      { new: true }
+    );
+
+    if (!updateDp) {
+      console.log("Something went wrong in updateUserDetails");
+      res.json({
+        success: false,
+        serevrMsg: "Something went wrong while trying to update user details",
+      });
+    } else {
+      console.log("Update successfull");
+      res.json({
+        success: true,
+        serverMsg: "User details updated successfully",
+        updatedDoc,
+      });
+    }
+  } catch (error) {
+    console.log(
+      "Error in updateUserDetails func in user.controller.js file: ",
+      error
+    );
+    res.json({ success: false, serverMsg: "Internal server error" });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
@@ -217,4 +252,5 @@ module.exports = {
   logoutUser,
   updateDp,
   getDP,
+  updateUserDetails,
 };

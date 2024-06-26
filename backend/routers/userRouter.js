@@ -5,6 +5,7 @@ const {
   logoutUser,
   updateDp,
   getDP,
+  updateUserDetails,
 } = require("../controllers/user.controller");
 
 const express = require("express");
@@ -23,5 +24,6 @@ userRouter.post(
   updateDp
 );
 userRouter.get("/get-dp/:filename", authenticate, getDP);
+userRouter.post("/update-user-details", authenticate, updateUserDetails);
 
 module.exports = userRouter;

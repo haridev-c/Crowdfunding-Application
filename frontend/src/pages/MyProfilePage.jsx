@@ -26,7 +26,7 @@ function MyProfilePage() {
         {/* Sidebar */}
         <div
           id="sidebar"
-          className="m-3 hidden w-1/4 flex-grow flex-col justify-around rounded-3xl border bg-[#DAD7CD] p-4 text-center md:flex"
+          className="m-3 hidden w-1/4 flex-grow flex-col justify-around rounded-3xl border bg-[#DAD7CD] p-4 text-center shadow-sm md:flex"
         >
           <div className="rounded-md p-4 hover:bg-[#A3B18A]">
             <button
