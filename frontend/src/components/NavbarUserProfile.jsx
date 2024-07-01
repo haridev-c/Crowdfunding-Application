@@ -29,7 +29,7 @@ function NavbarUserProfile() {
   };
 
   return (
-    <div className="flex rounded-full hover:shadow-lg">
+    <div className="flex rounded-full">
       <Menu>
         <MenuButton className={"flex rounded-full bg-[#6A994E] text-[#F2E8CF]"}>
           {user.profilePic ? (
@@ -79,7 +79,7 @@ function NavbarUserProfile() {
             <MenuItem>
               <Link
                 to={"/dashboard"}
-                className="my-1 block w-full rounded p-1 font-bold text-[#386641] data-[focus]:bg-[#A7C957]"
+                className="my-1 block w-full rounded p-1 font-bold text-[#386641] transition-all duration-300 data-[focus]:bg-[#A7C957]"
               >
                 My Profile
               </Link>
@@ -87,7 +87,7 @@ function NavbarUserProfile() {
             <MenuItem>
               <button
                 onClick={handleLogout}
-                className="my-1 block w-full rounded p-1 text-left font-bold text-[#B44143] data-[focus]:bg-[#E9D9AF]"
+                className="my-1 block w-full rounded p-1 text-left font-bold text-[#B44143] transition-all duration-300 data-[focus]:bg-[#E9D9AF]"
               >
                 Logout
               </button>

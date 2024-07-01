@@ -73,4 +73,33 @@ const getAllCampaigns = async (req, res) => {
   }
 };
 
-module.exports = { createCampaign, getAllCampaigns };
+const getCampaignDetails = async (req, res) => {
+  console.log("- - - - - - - - - - - - - - - ");
+  console.log("Started getCampaignDetails func in campaign.controller.js file");
+  try {
+    const { campaignId } = req.body;
+    console.log("Captured id: ", campaignId);
+    console.log("Searching for campaign");
+    const campaign = await Campaign.findById(campaignId).populate(
+      "createdBy",
+      "-password"
+    );
+
+    if (!campaign) {
+      console.log("No campaign found for the given id; sending false response");
+      res.json({
+        success: false,
+        serverMsg: "Couldn't fetch campaign from database",
+      });
+    } else {
+      console.log("Campaign found; sending campaign details via response");
+      res.json({ success: true, serverMsg: "Campaign found", campaign });
+    }
+  } catch (error) {
+    console.log("Some error occured in getCampaignDetails func.");
+    console.log(error);
+    res.json({ success: false, serverMsg: "Internal server error" });
+  }
+};
+
+module.exports = { createCampaign, getAllCampaigns, getCampaignDetails };

@@ -58,7 +58,7 @@ const loginUser = async (req, res) => {
   try {
     console.log("Checking email id for existing account");
     const doc = await User.findOne({ email }).select("+password").exec();
-
+    console.log(doc);
     if (doc) {
       console.log("Email id found, comparing password with hash");
       bcrypt.compare(password, doc.password).then((result) => {
@@ -88,6 +88,12 @@ const loginUser = async (req, res) => {
           });
           console.log("Response sent");
         }
+      });
+    } else {
+      console.log("No doc found");
+      res.json({
+        success: false,
+        serverMsg: "Did not find any existing account, please login",
       });
     }
   } catch (error) {
@@ -176,23 +182,32 @@ const getDP = async (req, res) => {
     console.log("Full image path:", imagePath);
 
     try {
-      console.log("Starting authorisation check");
+      // console.log("Starting authorisation check");
       // Authorisation check
-      if (req.authenticatedUser.profilePic !== fileName) {
-        console.log("Unautherised request!");
-        res.json({ success: false, serverMsg: "Unautherised request!" });
-      } else {
-        console.log("Authorisation check passed");
-        await fs.access(imagePath, fs.constants.R_OK);
-        console.log("File exists and is readable");
+      // if (req.authenticatedUser.profilePic !== fileName) {
+      //   console.log("Unautherised request!");
+      //   res.json({ success: false, serverMsg: "Unautherised request!" });
+      // } else {
+      //   console.log("Authorisation check passed");
+      //   await fs.access(imagePath, fs.constants.R_OK);
+      //   console.log("File exists and is readable");
 
-        res.setHeader("Content-Type", "image/jpeg");
-        res.setHeader("Cache-Control", "public, max-age=3600");
-        res.setHeader("Content-Disposition", "inline");
+      //   res.setHeader("Content-Type", "image/jpeg");
+      //   res.setHeader("Cache-Control", "public, max-age=3600");
+      //   res.setHeader("Content-Disposition", "inline");
 
-        res.sendFile(imagePath);
-        console.log("File sent");
-      }
+      //   res.sendFile(imagePath);
+      //   console.log("File sent");
+      // }
+      await fs.access(imagePath, fs.constants.R_OK);
+      console.log("File exists and is readable");
+
+      res.setHeader("Content-Type", "image/jpeg");
+      res.setHeader("Cache-Control", "public, max-age=3600");
+      res.setHeader("Content-Disposition", "inline");
+
+      res.sendFile(imagePath);
+      console.log("File sent");
     } catch (err) {
       console.log("File does not exist or is not readable");
       console.error("Error details:", err);
@@ -222,7 +237,7 @@ const updateUserDetails = async (req, res) => {
       { new: true }
     );
 
-    if (!updateDp) {
+    if (!updatedDoc) {
       console.log("Something went wrong in updateUserDetails");
       res.json({
         success: false,

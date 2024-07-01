@@ -17,7 +17,12 @@ const app = express();
 // middleware setup
 app.use(cookieParser());
 app.use(express.json());
-app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
+app.use(
+  cors({
+    credentials: true,
+    origin: "http://localhost:5173",
+  })
+);
 
 // routes setup
 app.use("/user", userRouter);

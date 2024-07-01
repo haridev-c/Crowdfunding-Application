@@ -54,14 +54,14 @@ const Navbar = () => {
           </div>
           <div className="flex items-center">
             {/* Brand Name and Logo */}
-            <Link to={"/"}>
+            <Link to={"/"} className="p-2">
               <div className="flex flex-shrink-0 items-center">
                 <img
                   className="h-8 w-8"
                   src="https://cdn3.iconfinder.com/data/icons/parks-and-rec/400/parks-10-512.png"
                   alt="Your Logo"
                 />
-                <p className="ml-2 font-bold text-[#A7C957]">SparkFund</p>
+                <p className="mx-2 font-bold text-[#A7C957]">SparkFund</p>
               </div>
             </Link>
 
@@ -70,20 +70,20 @@ const Navbar = () => {
                 {/* Navigation Links */}
                 <Link
                   to={"/"}
-                  className="rounded-md px-3 py-2 text-sm font-medium text-[#F2E8CF] hover:bg-[#6A994E]"
+                  className="rounded-md px-3 py-2 text-sm font-medium text-[#F2E8CF] transition-all duration-500 hover:bg-[#6A994E]"
                 >
                   Home
                 </Link>
                 <Link
                   to={"/about"}
-                  className="rounded-md px-3 py-2 text-sm font-medium text-[#F2E8CF] hover:bg-[#6A994E]"
+                  className="rounded-md px-3 py-2 text-sm font-medium text-[#F2E8CF] transition-all duration-500 hover:bg-[#6A994E]"
                 >
                   About
                 </Link>
 
                 <a
                   href="#"
-                  className="rounded-md px-3 py-2 text-sm font-medium text-[#F2E8CF] hover:bg-[#6A994E]"
+                  className="rounded-md px-3 py-2 text-sm font-medium text-[#F2E8CF] transition-all duration-500 hover:bg-[#6A994E]"
                 >
                   Contact
                 </a>

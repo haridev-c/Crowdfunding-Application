@@ -38,8 +38,8 @@ function EditProfile() {
   };
 
   return (
-    <div className="flex-grow flex-col border border-black">
-      <form className="m-auto rounded-md border border-dashed border-yellow-400 md:w-1/2">
+    <div className="flex-grow flex-col">
+      <form className="m-auto rounded-lg p-6 shadow-lg md:w-1/2">
         <div id="profilePhotoSection" className="flex items-center">
           {user.profilePic ? (
             <div className="size-28 rounded-full">
@@ -137,7 +137,7 @@ function EditProfile() {
         <div className="flex w-full">
           <button
             onClick={userDetailsUpdate}
-            className="mx-auto rounded-full bg-[#588157] px-10 py-2 text-xl font-bold text-[#DAD7CD]"
+            className="mx-auto rounded-full bg-[#588157] px-10 py-2 text-xl font-bold text-[#f2e8cf] hover:shadow-lg"
           >
             Update
           </button>

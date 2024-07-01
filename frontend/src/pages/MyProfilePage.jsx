@@ -26,9 +26,9 @@ function MyProfilePage() {
         {/* Sidebar */}
         <div
           id="sidebar"
-          className="m-3 hidden w-1/4 flex-grow flex-col justify-around rounded-3xl border bg-[#DAD7CD] p-4 text-center shadow-sm md:flex"
+          className="m-3 hidden w-1/4 flex-grow flex-col justify-center rounded-3xl border bg-[#DAD7CD] p-4 text-center shadow-sm md:flex"
         >
-          <div className="rounded-md p-4 hover:bg-[#A3B18A]">
+          <div className="my-4 rounded-md p-4 hover:bg-[#A3B18A]">
             <button
               onClick={() => setTabValue(1)}
               className="flex font-mono text-xl"
@@ -50,7 +50,7 @@ function MyProfilePage() {
               Edit Profile
             </button>
           </div>
-          <div className="rounded-md p-4 hover:bg-[#A3B18A]">
+          <div className="my-4 rounded-md p-4 hover:bg-[#A3B18A]">
             <button
               onClick={() => setTabValue(2)}
               className="flex font-mono text-xl"
@@ -72,7 +72,7 @@ function MyProfilePage() {
               My Campaigns
             </button>
           </div>
-          <div className="rounded-md p-4 hover:bg-[#A3B18A]">
+          <div className="my-4 rounded-md p-4 hover:bg-[#A3B18A]">
             <button
               onClick={() => setTabValue(3)}
               className="flex font-mono text-xl"

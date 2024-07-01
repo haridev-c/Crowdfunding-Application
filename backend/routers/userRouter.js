@@ -23,7 +23,7 @@ userRouter.post(
   upload.single("profilePic"),
   updateDp
 );
-userRouter.get("/get-dp/:filename", authenticate, getDP);
+userRouter.get("/get-dp/:filename", getDP);
 userRouter.post("/update-user-details", authenticate, updateUserDetails);
 
 module.exports = userRouter;

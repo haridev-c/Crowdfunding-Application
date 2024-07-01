@@ -6,7 +6,7 @@ const CampaignSchema = mongoose.Schema({
   description: String,
   targetAmount: Number,
   deadline: Date,
-  amountRaised: Number,
+  amountRaised: { type: Number, default: 0 },
   donors: [{ type: mongoose.Schema.Types.ObjectId, ref: "Users" }],
 });
 

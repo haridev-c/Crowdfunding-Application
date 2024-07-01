@@ -30,15 +30,15 @@ function LoginPage() {
 
   return (
     <>
-      <div className="m-auto rounded border-2 border-solid border-[#BC4749] p-3 shadow-xl md:w-1/2">
-        <form className="flex flex-col">
+      <div className="m-auto flex flex-grow flex-col justify-center md:w-1/2">
+        <form className="my-4 flex flex-col rounded-md border-2 border-solid p-6 shadow-xl">
           <h2 className="m-3 text-center text-2xl font-bold">Log In</h2>
           <label htmlFor="email" className="my-2">
             <p>Email</p>
             <input
               type="email"
               placeholder="johndoe@abc.com"
-              className="form-input rounded-md md:w-full"
+              className="form-input w-full rounded-md border-none bg-gray-200"
               name="email"
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -47,7 +47,7 @@ function LoginPage() {
             <p>Password</p>
             <input
               type="password"
-              className="form-input rounded-md md:w-full"
+              className="form-input w-full rounded-md border-none bg-gray-200"
               name="password"
               placeholder="sjd123!&^#"
               onChange={(e) => setPassword(e.target.value)}
@@ -55,7 +55,7 @@ function LoginPage() {
           </label>
           <button
             onClick={handleSubmit}
-            className="my-2 rounded-md bg-[#6A994E] py-2 text-lg font-bold text-[#F2E8CF]"
+            className="my-6 rounded-md bg-[#6A994E] py-2 text-lg font-bold text-[#F2E8CF]"
           >
             Submit
           </button>
