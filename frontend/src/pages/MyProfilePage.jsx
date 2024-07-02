@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { GlobalContext } from "../GlobalStateRepository";
 import { Navigate } from "react-router-dom";
 import EditProfile from "../components/EditProfile";
+import MyCampaignsTab from "../components/MyCampaignsTab";
 
 function MyProfilePage() {
   const { user } = useContext(GlobalContext);
@@ -160,7 +161,7 @@ function MyProfilePage() {
           {tabVlue === 1 ? (
             <EditProfile />
           ) : tabVlue === 2 ? (
-            <div>Tab 2</div>
+            <MyCampaignsTab />
           ) : (
             <div>Tab 3</div>
           )}

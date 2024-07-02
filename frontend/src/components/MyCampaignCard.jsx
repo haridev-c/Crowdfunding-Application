@@ -1,7 +1,8 @@
+import axios from "axios";
 import React from "react";
 import { Link } from "react-router-dom";
 
-function CampaignCard({
+function MyCampaignCard({
   title,
   createdBy,
   description,
@@ -9,8 +10,20 @@ function CampaignCard({
   deadline,
   amountRaised,
   campaignId,
+  setRefresh,
 }) {
   let progress = (amountRaised / targetAmount) * 100;
+
+  const handleDeleteCampaign = () => {
+    axios.delete("/campaign/delete-one", { campaignId }).then(({ data }) => {
+      if (!data.success) {
+        alert(data.serverMsg);
+      } else {
+        alert(data.serverMsg);
+        setRefresh((prev) => !prev);
+      }
+    });
+  };
 
   return (
     <div className="m-2 mb-4 rounded-md p-6 shadow-lg md:min-w-[400px] md:max-w-[400px]">
@@ -62,8 +75,11 @@ function CampaignCard({
         </div>
         <div className="flex flex-grow justify-end">
           <Link to={`/campaign/${campaignId}`}>
-            <button className="rounded-full bg-[#A7C957]/95 px-6 py-2 font-medium transition-all duration-300 hover:bg-[#A7C957] hover:shadow-md hover:shadow-[#386641]">
-              Details
+            <button
+              onClick={handleDeleteCampaign}
+              className="rounded-full bg-[#A7C957]/95 px-6 py-2 font-medium transition-all duration-300 hover:bg-[#A7C957] hover:shadow-md hover:shadow-[#386641]"
+            >
+              Delete
             </button>
           </Link>
         </div>
@@ -83,4 +99,4 @@ function CampaignCard({
   );
 }
 
-export default CampaignCard;
+export default MyCampaignCard;

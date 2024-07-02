@@ -11,6 +11,7 @@ const cookieParser = require("cookie-parser");
 //custom modules
 const userRouter = require("./routers/userRouter");
 const campaignRouter = require("./routers/campaignRouter");
+const paymentRouter = require("./routers/paymentRouter");
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use(
 // routes setup
 app.use("/user", userRouter);
 app.use("/campaign", campaignRouter);
+app.use("/payments", paymentRouter);
 
 // database connection
 mongoose.connect(process.env.CONN_STRING).then(console.log("Connected to db"));

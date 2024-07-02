@@ -1,11 +1,16 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { GlobalContext } from "../GlobalStateRepository";
 
 function CampaignPage() {
   const [campaign, setCampaign] = useState(null);
   const [progress, setProgress] = useState();
+  const [donation, setDonation] = useState(5000);
+  const [refresh, setRefresh] = useState(false);
   const { id } = useParams();
+  const { user } = useContext(GlobalContext);
+  const navigate = useNavigate();
 
   async function fetchCampaignDetails(campaignId) {
     axios
@@ -25,14 +30,81 @@ function CampaignPage() {
 
   useEffect(() => {
     fetchCampaignDetails(id);
-  }, []);
+  }, [refresh]);
+
+  const handleLoginPrompt = () => {
+    alert("You have to login first befor making a donation");
+    navigate("/login");
+  };
+
+  const initPayment = (order) => {
+    const options = {
+      key: "rzp_test_ZakI1Bhhsz3xal",
+      amount: order.amount,
+      currency: order.currency,
+      name: campaign.title,
+      description: `Contribution to ${campaign.createdBy.name}'s cause`,
+      order_id: order.id,
+      handler: async (response) => {
+        try {
+          const { data } = await axios.post(
+            "/payments/verify-payment",
+            response,
+          );
+          console.log(data);
+          // code to update amountRaised field in campiagn model
+          if (!data.success) {
+            alert(data.serverMsg);
+          } else {
+            axios
+              .post("/campaign/add-donation", {
+                amount: donation,
+                donatedBy: user,
+                campaignId: campaign._id,
+              })
+              .then(({ data }) => {
+                console.log(data);
+                if (data.success) {
+                  setRefresh(!refresh);
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          }
+        } catch (error) {
+          console.log("An error occured while initiating payment");
+          console.log(error);
+          alert("An error occured while initiating payment");
+        }
+      },
+      theme: {
+        color: "#3399cc",
+      },
+    };
+
+    const rzp1 = new window.Razorpay(options);
+    rzp1.open();
+  };
+
+  const handlePayments = async () => {
+    try {
+      const { data } = await axios.post("/payments/create-order", {
+        amount: donation,
+      });
+      console.log(data);
+      initPayment(data.order);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   if (!campaign) {
     return <div>Loading</div>;
   }
 
   return (
-    <div className="my-4 flex flex-col rounded border border-solid border-black p-4 shadow-lg md:mx-auto md:mt-10 md:w-1/2">
+    <div className="mx-4 my-4 flex flex-col rounded p-4 shadow-lg md:mx-auto md:mt-10 md:w-1/2">
       <div id="title" className="text-2xl font-bold text-[#386641]">
         {campaign.title}
       </div>
@@ -75,9 +147,23 @@ function CampaignPage() {
           <p>Amount Raised: &#x20b9;{campaign.amountRaised}</p>
         </div>
         <div className="flex flex-grow justify-end">
-          <button className="rounded-full bg-[#A7C957]/95 px-6 py-2 font-medium transition-all duration-300 hover:bg-[#A7C957] hover:shadow-md hover:shadow-[#386641]">
-            Donate
-          </button>
+          <div className="hidden" id="donateButton">
+            {user ? (
+              <button
+                onClick={handlePayments}
+                className="rounded-full bg-[#A7C957]/95 px-6 py-2 font-medium transition-all duration-300 hover:bg-[#A7C957] hover:shadow-md hover:shadow-[#386641]"
+              >
+                Donate
+              </button>
+            ) : (
+              <button
+                onClick={handleLoginPrompt}
+                className="rounded-full bg-[#A7C957]/95 px-6 py-2 font-medium transition-all duration-300 hover:bg-[#A7C957] hover:shadow-md hover:shadow-[#386641]"
+              >
+                Donate
+              </button>
+            )}
+          </div>
         </div>
       </div>
       <div id="progressBar" className="my-4 py-2">

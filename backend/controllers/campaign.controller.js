@@ -102,4 +102,98 @@ const getCampaignDetails = async (req, res) => {
   }
 };
 
-module.exports = { createCampaign, getAllCampaigns, getCampaignDetails };
+const addDonation = async (req, res) => {
+  console.log("- - - - - - - - - - - - - - - ");
+  console.log("Started addDonation func in campaign.controller.js file");
+  const { donatedBy, campaignId } = req.body;
+  const amount = Number(req.body.amount);
+  try {
+    const updatedCampaign = await Campaign.findByIdAndUpdate(
+      campaignId,
+      { $inc: { amountRaised: amount } },
+      { new: true }
+    );
+
+    if (!updatedCampaign) {
+      console.log("Couldnt find campaign from given campaign ID");
+      res.json({
+        success: false,
+        serverMsg: "Failed to update campaign from given CampaignID",
+      });
+    } else {
+      res.json({ success: true, serverMsg: "Campaign updated successfully" });
+    }
+  } catch (error) {
+    console.log(
+      "Some error happeend in addDonation func in campaign.controller.js file"
+    );
+    console.log(error);
+    res.json({ success: false, serverMsg: "Internal server error" });
+  }
+};
+
+const getLoggedInUserCampaigns = async (req, res) => {
+  console.log("- - - - - - - - - - - - - - - ");
+  console.log(
+    "Started getLoggedInUserCampaigns func in campaign.controller.js file"
+  );
+  try {
+    console.log("Searching for campaigns");
+    const myCampaigns = await Campaign.find({
+      createdBy: req.authenticatedUser._id,
+    }).populate("createdBy", "-password");
+
+    if (!myCampaigns) {
+      console.log("No campaigns found for the query");
+      res.json({ success: false, serverMsg: "No campaigns found" });
+    } else {
+      console.log("Campaigns found; sending success response");
+      res.json({ success: true, serverMsg: "Campaigns found", myCampaigns });
+    }
+  } catch (error) {
+    console.log(
+      "Some error occured in getLoggedInUserCampaigns in campaign.controller.js file"
+    );
+    console.error(error);
+    res.json({ success: false, serverMsg: "Internal server error" });
+  }
+};
+
+const deleteOne = async (req, res) => {
+  console.log("- - - - - - - - - - - - - - - ");
+  console.log("Started deleteOne func in campaign.controller.js file");
+  try {
+    const { campaignId } = req.body;
+    console.log("CampaignID: ", campaignId);
+    const result = await Campaign.findByIdAndDelete(campaignId);
+    console.log(result);
+    if (!result) {
+      console.log("Failed to delete document from MongoDB");
+      res.json({
+        success: false,
+        serverMsg: "Failed to delete document from MongoDB",
+      });
+    } else {
+      console.log("Successfully deleted document from MongoDB");
+      res.json({
+        success: true,
+        serverMsg: "Successfully deleted document from MongoDB",
+      });
+    }
+  } catch (error) {
+    console.log(
+      "Some error occured in deleteOne func in campaign.controller.js file"
+    );
+    console.error(error);
+    res.json({ success: false, serverMsg: "Internal server error" });
+  }
+};
+
+module.exports = {
+  createCampaign,
+  getAllCampaigns,
+  getCampaignDetails,
+  addDonation,
+  getLoggedInUserCampaigns,
+  deleteOne,
+};

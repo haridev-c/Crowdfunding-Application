@@ -21,58 +21,17 @@ function HomePage() {
       <h1 className="text-center text-xl">HomePage</h1>
 
       <div className="md:flex md:flex-wrap md:justify-around">
-        <CampaignCard
-          campaignId={campaigns[0]._id}
-          title={campaigns[0].title}
-          createdBy={campaigns[0].createdBy}
-          description={campaigns[0].description}
-          targetAmount={campaigns[0].targetAmount}
-          deadline={campaigns[0].deadline}
-          amountRaised={campaigns[0].amountRaised}
-        />
-        <CampaignCard
-          title={campaigns[0].title}
-          createdBy={campaigns[0].createdBy}
-          description={campaigns[0].description}
-          targetAmount={campaigns[0].targetAmount}
-          deadline={campaigns[0].deadline}
-          amountRaised={campaigns[0].amountRaised}
-        />
-        <CampaignCard
-          title={campaigns[0].title}
-          createdBy={campaigns[0].createdBy}
-          description={campaigns[0].description}
-          targetAmount={campaigns[0].targetAmount}
-          deadline={campaigns[0].deadline}
-          amountRaised={campaigns[0].amountRaised}
-        />
-
-        <CampaignCard
-          title={campaigns[0].title}
-          createdBy={campaigns[0].createdBy}
-          description={campaigns[0].description}
-          targetAmount={campaigns[0].targetAmount}
-          deadline={campaigns[0].deadline}
-          amountRaised={campaigns[0].amountRaised}
-        />
-
-        <CampaignCard
-          title={campaigns[0].title}
-          createdBy={campaigns[0].createdBy}
-          description={campaigns[0].description}
-          targetAmount={campaigns[0].targetAmount}
-          deadline={campaigns[0].deadline}
-          amountRaised={campaigns[0].amountRaised}
-        />
-
-        <CampaignCard
-          title={campaigns[0].title}
-          createdBy={campaigns[0].createdBy}
-          description={campaigns[0].description}
-          targetAmount={campaigns[0].targetAmount}
-          deadline={campaigns[0].deadline}
-          amountRaised={campaigns[0].amountRaised}
-        />
+        {campaigns.map((item) => (
+          <CampaignCard
+            campaignId={item._id}
+            title={item.title}
+            createdBy={item.createdBy}
+            description={item.description}
+            targetAmount={item.targetAmount}
+            deadline={item.deadline}
+            amountRaised={item.amountRaised}
+          />
+        ))}
       </div>
     </div>
   );
