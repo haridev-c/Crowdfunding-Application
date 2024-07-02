@@ -53,6 +53,39 @@ function CampaignPage() {
     }
   };
 
+  const handleAfterPaymentVerificationTasks = async (response) => {
+    try {
+      axios
+        .post("/donation/create-donation", {
+          campaignId: campaign._id,
+          donationAmount: donation,
+          orderId: response.razorpay_order_id,
+          paymentId: response.razorpay_payment_id,
+        })
+        .then(({ data }) => {
+          if (!data.success) {
+            alert(data.serverMsg);
+          } else {
+            axios
+              .post("/campaign/add-donation", {
+                amount: donation,
+                campaignId: campaign._id,
+                donationID: data.savedDonation._id,
+              })
+              .then(({ data }) => {
+                if (!data.success) {
+                  alert(data.serverMsg);
+                } else {
+                  setRefresh(!refresh);
+                }
+              });
+          }
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const initPayment = (order) => {
     const options = {
       key: "rzp_test_ZakI1Bhhsz3xal",
@@ -72,21 +105,7 @@ function CampaignPage() {
           if (!data.success) {
             alert(data.serverMsg);
           } else {
-            axios
-              .post("/campaign/add-donation", {
-                amount: donation,
-                donatedBy: user,
-                campaignId: campaign._id,
-              })
-              .then(({ data }) => {
-                console.log(data);
-                if (data.success) {
-                  setRefresh(!refresh);
-                }
-              })
-              .catch((err) => {
-                console.log(err);
-              });
+            handleAfterPaymentVerificationTasks(response);
           }
         } catch (error) {
           console.log("An error occured while initiating payment");

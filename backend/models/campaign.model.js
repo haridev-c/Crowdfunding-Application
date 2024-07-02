@@ -7,7 +7,7 @@ const CampaignSchema = mongoose.Schema({
   targetAmount: Number,
   deadline: Date,
   amountRaised: { type: Number, default: 0 },
-  donors: [{ type: mongoose.Schema.Types.ObjectId, ref: "Users" }],
+  donations: [{ type: mongoose.Schema.Types.ObjectId, ref: "Donations" }],
 });
 
 const CampaignModel = mongoose.model("Campaigns", CampaignSchema);

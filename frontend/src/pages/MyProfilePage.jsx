@@ -2,7 +2,8 @@ import React, { useContext, useState } from "react";
 import { GlobalContext } from "../GlobalStateRepository";
 import { Navigate } from "react-router-dom";
 import EditProfile from "../components/EditProfile";
-import MyCampaignsTab from "../components/MyCampaignsTab";
+import MyCampaignsTab from "../components/MyCampaignsTab/MyCampaignsTab";
+import MyDonationsTab from "../components/MyDonationsTab/MyDonationsTab";
 
 function MyProfilePage() {
   const { user } = useContext(GlobalContext);
@@ -163,7 +164,7 @@ function MyProfilePage() {
           ) : tabVlue === 2 ? (
             <MyCampaignsTab />
           ) : (
-            <div>Tab 3</div>
+            <MyDonationsTab />
           )}
         </div>
       </div>

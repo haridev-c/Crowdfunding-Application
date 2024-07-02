@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import NavbarUserProfile from "./NavbarUserProfile";
 import { Link } from "react-router-dom";
-import { GlobalContext } from "../GlobalStateRepository";
+import { GlobalContext } from "../../GlobalStateRepository";
 import AuthenticatedUserControls from "./AuthenticatedUserControls";
 
 const Navbar = () => {
@@ -109,30 +109,24 @@ const Navbar = () => {
       {/* Mobile menu, show/hide based on menu state. */}
       <div className={`${isMobileMenuOpen ? "block" : "hidden"} md:hidden`}>
         <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
-          <a
-            href="#"
+          <Link
+            to={"/"}
             className="block rounded-md px-3 py-2 text-base font-medium text-[#F2E8CF] hover:bg-[#6A994E]"
           >
             Home
-          </a>
-          <a
-            href="#"
+          </Link>
+          <Link
+            to={"/"}
             className="block rounded-md px-3 py-2 text-base font-medium text-[#F2E8CF] hover:bg-[#6A994E]"
           >
             About
-          </a>
-          <a
-            href="#"
-            className="block rounded-md px-3 py-2 text-base font-medium text-[#F2E8CF] hover:bg-[#6A994E]"
-          >
-            Services
-          </a>
-          <a
-            href="#"
+          </Link>
+          <Link
+            to={"/"}
             className="block rounded-md px-3 py-2 text-base font-medium text-[#F2E8CF] hover:bg-[#6A994E]"
           >
             Contact
-          </a>
+          </Link>
         </div>
       </div>
     </nav>

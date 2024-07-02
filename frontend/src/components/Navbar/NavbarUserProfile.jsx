@@ -8,7 +8,7 @@ import {
 } from "@headlessui/react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { GlobalContext } from "../GlobalStateRepository";
+import { GlobalContext } from "../../GlobalStateRepository";
 
 function NavbarUserProfile() {
   const navigate = useNavigate();

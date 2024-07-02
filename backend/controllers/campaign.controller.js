@@ -105,12 +105,12 @@ const getCampaignDetails = async (req, res) => {
 const addDonation = async (req, res) => {
   console.log("- - - - - - - - - - - - - - - ");
   console.log("Started addDonation func in campaign.controller.js file");
-  const { donatedBy, campaignId } = req.body;
+  const { campaignId, donationID } = req.body;
   const amount = Number(req.body.amount);
   try {
     const updatedCampaign = await Campaign.findByIdAndUpdate(
       campaignId,
-      { $inc: { amountRaised: amount } },
+      { $inc: { amountRaised: amount }, $push: { donations: donationID } },
       { new: true }
     );
 

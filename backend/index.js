@@ -12,6 +12,7 @@ const cookieParser = require("cookie-parser");
 const userRouter = require("./routers/userRouter");
 const campaignRouter = require("./routers/campaignRouter");
 const paymentRouter = require("./routers/paymentRouter");
+const donationRouter = require("./routers/donationRouter");
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use(
 app.use("/user", userRouter);
 app.use("/campaign", campaignRouter);
 app.use("/payments", paymentRouter);
+app.use("/donation", donationRouter);
 
 // database connection
 mongoose.connect(process.env.CONN_STRING).then(console.log("Connected to db"));

@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import MyCampaignCard from "../components/MyCampaignCard";
+import MyCampaignCard from "./MyCampaignCard";
 
 function MyCampaignsTab() {
   const [campaigns, setCampaigns] = useState();
