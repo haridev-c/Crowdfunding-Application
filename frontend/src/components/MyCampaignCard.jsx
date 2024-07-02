@@ -14,6 +14,15 @@ function MyCampaignCard({
 }) {
   let progress = (amountRaised / targetAmount) * 100;
 
+  const formatAmount = (num) => {
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(num);
+  };
+
   const handleDeleteCampaign = () => {
     axios.delete("/campaign/delete-one", { campaignId }).then(({ data }) => {
       if (!data.success) {
@@ -70,14 +79,14 @@ function MyCampaignCard({
       </div>
       <div id="Info" className="my-4 flex items-center">
         <div>
-          <p>Target Amount: &#x20b9;{targetAmount}</p>
-          <p>Amount Raised: &#x20b9;{amountRaised}</p>
+          <p>Target Amount: {formatAmount(targetAmount)}</p>
+          <p>Amount Raised: {formatAmount(amountRaised)}</p>
         </div>
         <div className="flex flex-grow justify-end">
           <Link to={`/campaign/${campaignId}`}>
             <button
               onClick={handleDeleteCampaign}
-              className="rounded-full bg-[#A7C957]/95 px-6 py-2 font-medium transition-all duration-300 hover:bg-[#A7C957] hover:shadow-md hover:shadow-[#386641]"
+              className="rounded-full bg-[#bc4749]/95 px-6 py-2 font-medium text-[#f2e8cf] transition-all duration-300 hover:bg-[bc4749] hover:shadow-lg"
             >
               Delete
             </button>

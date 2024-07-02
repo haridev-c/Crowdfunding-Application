@@ -12,6 +12,15 @@ function CampaignCard({
 }) {
   let progress = (amountRaised / targetAmount) * 100;
 
+  const formatAmount = (num) => {
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(num);
+  };
+
   return (
     <div className="m-2 mb-4 rounded-md p-6 shadow-lg md:min-w-[400px] md:max-w-[400px]">
       <Link to={`/campaign/${campaignId}`}>
@@ -57,8 +66,8 @@ function CampaignCard({
       </div>
       <div id="Info" className="my-4 flex items-center">
         <div>
-          <p>Target Amount: &#x20b9;{targetAmount}</p>
-          <p>Amount Raised: &#x20b9;{amountRaised}</p>
+          <p>Target Amount: {formatAmount(targetAmount)}</p>
+          <p>Amount Raised: {formatAmount(amountRaised)}</p>
         </div>
         <div className="flex flex-grow justify-end">
           <Link to={`/campaign/${campaignId}`}>

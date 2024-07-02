@@ -6,7 +6,7 @@ import { GlobalContext } from "../GlobalStateRepository";
 function CampaignPage() {
   const [campaign, setCampaign] = useState(null);
   const [progress, setProgress] = useState();
-  const [donation, setDonation] = useState(5000);
+  const [donation, setDonation] = useState();
   const [refresh, setRefresh] = useState(false);
   const { id } = useParams();
   const { user } = useContext(GlobalContext);
@@ -32,9 +32,25 @@ function CampaignPage() {
     fetchCampaignDetails(id);
   }, [refresh]);
 
+  const formatAmount = (num) => {
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(num);
+  };
+
   const handleLoginPrompt = () => {
     alert("You have to login first befor making a donation");
     navigate("/login");
+  };
+  const handleDonationCheck = () => {
+    if (!donation) {
+      alert("Please input a donation amount");
+    } else {
+      handlePayments();
+    }
   };
 
   const initPayment = (order) => {
@@ -143,27 +159,38 @@ function CampaignPage() {
       </div>
       <div id="info" className="flex">
         <div id="targetDetails">
-          <p>Target Amount: &#x20b9;{campaign.targetAmount}</p>
-          <p>Amount Raised: &#x20b9;{campaign.amountRaised}</p>
+          <p>Amount Raised: {formatAmount(campaign.amountRaised)}</p>
         </div>
         <div className="flex flex-grow justify-end">
-          <div className="hidden" id="donateButton">
-            {user ? (
-              <button
-                onClick={handlePayments}
-                className="rounded-full bg-[#A7C957]/95 px-6 py-2 font-medium transition-all duration-300 hover:bg-[#A7C957] hover:shadow-md hover:shadow-[#386641]"
-              >
-                Donate
-              </button>
-            ) : (
-              <button
-                onClick={handleLoginPrompt}
-                className="rounded-full bg-[#A7C957]/95 px-6 py-2 font-medium transition-all duration-300 hover:bg-[#A7C957] hover:shadow-md hover:shadow-[#386641]"
-              >
-                Donate
-              </button>
-            )}
-          </div>
+          <p>Target Amount: {formatAmount(campaign.targetAmount)}</p>
+        </div>
+      </div>
+      <div id="donationSection" className="my-4 flex">
+        <div className="flex-grow">
+          <input
+            type="number"
+            value={donation}
+            placeholder="Enter donation amount"
+            onChange={(e) => setDonation(e.target.value)}
+            className="w-full rounded border-none bg-gray-200"
+          />
+        </div>
+        <div className="ml-4 flex justify-end" id="donateButton">
+          {user ? (
+            <button
+              onClick={handleDonationCheck}
+              className="rounded-full bg-[#A7C957]/95 px-6 py-2 font-medium transition-all duration-300 hover:bg-[#A7C957] hover:shadow-md hover:shadow-[#386641]"
+            >
+              Donate
+            </button>
+          ) : (
+            <button
+              onClick={handleLoginPrompt}
+              className="rounded-full bg-[#A7C957]/95 px-6 py-2 font-medium transition-all duration-300 hover:bg-[#A7C957] hover:shadow-md hover:shadow-[#386641]"
+            >
+              Donate
+            </button>
+          )}
         </div>
       </div>
       <div id="progressBar" className="my-4 py-2">
