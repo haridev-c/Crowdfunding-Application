@@ -26,8 +26,8 @@ function MyCampaignsTab() {
   }
 
   return (
-    <div className="flex-grow md:flex md:flex-wrap md:justify-around">
-      <div>
+    <div className="flex-grow">
+      <div className="md:flex md:flex-wrap md:justify-around">
         {campaigns.map((item) => (
           <MyCampaignCard
             key={item._id}
