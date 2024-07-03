@@ -9,7 +9,7 @@ const Navbar = () => {
   const { user } = useContext(GlobalContext);
 
   return (
-    <nav className="bg-[#386641]">
+    <nav className="bg-[#6A994E]">
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <div id="test" className="flex h-16 items-center justify-between">
           {/* Mobile menu button */}
@@ -61,7 +61,7 @@ const Navbar = () => {
                   src="https://cdn3.iconfinder.com/data/icons/parks-and-rec/400/parks-10-512.png"
                   alt="Your Logo"
                 />
-                <p className="mx-2 font-bold text-[#A7C957]">SparkFund</p>
+                <p className="mx-2 font-bold text-[#FFB703]">SparkFund</p>
               </div>
             </Link>
 
@@ -70,28 +70,28 @@ const Navbar = () => {
                 {/* Navigation Links */}
                 <Link
                   to={"/"}
-                  className="rounded-md px-3 py-2 text-sm font-medium text-[#F2E8CF] transition-all duration-500 hover:bg-[#6A994E]"
+                  className="rounded-md px-3 py-2 text-sm font-medium text-[#F2E8CF] transition-all duration-500 hover:bg-[#8bc34a] hover:text-black"
                 >
                   Home
                 </Link>
                 <Link
                   to={"/about"}
-                  className="rounded-md px-3 py-2 text-sm font-medium text-[#F2E8CF] transition-all duration-500 hover:bg-[#6A994E]"
+                  className="rounded-md px-3 py-2 text-sm font-medium text-[#F2E8CF] transition-all duration-500 hover:bg-[#8bc34a] hover:text-black"
                 >
                   About
                 </Link>
 
                 <a
                   href="#"
-                  className="rounded-md px-3 py-2 text-sm font-medium text-[#F2E8CF] transition-all duration-500 hover:bg-[#6A994E]"
+                  className="rounded-md px-3 py-2 text-sm font-medium text-[#F2E8CF] transition-all duration-500 hover:bg-[#8bc34a] hover:text-black"
                 >
-                  Contact
+                  Categories
                 </a>
               </div>
             </div>
           </div>
           {/* Login Button */}
-          <div className="flex flex-grow justify-end">
+          <div className="flex justify-end">
             {user ? (
               <div>
                 <AuthenticatedUserControls />

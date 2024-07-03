@@ -18,13 +18,21 @@ function HomePage() {
 
   return (
     <div>
-      <div className="flex h-screen w-full flex-col bg-[url('/MotorCycleGroup.jpeg')] bg-cover bg-center bg-no-repeat">
+      <div
+        id="imageBackground"
+        className="flex h-screen w-full flex-col justify-between bg-[url('/MotorCycleGroup.jpeg')] bg-cover bg-center bg-no-repeat"
+      >
         <div className="mx-auto mt-20">
           <h1 className="text-center text-4xl font-extrabold text-[#6A994E]">
             SparkFund
           </h1>
-          <h1 className="text-4xl font-extrabold text-[#F2E8CF]">
+          <h1 className="mx-2 text-4xl font-extrabold text-[#F2E8CF]">
             Empowering Dreams, One Contribution at a Time
+          </h1>
+        </div>
+        <div className="mb-36 text-center">
+          <h1 className="mx-2 text-4xl font-extrabold text-[#FFB703]">
+            Trusted by 10,000+ users worldwide
           </h1>
         </div>
       </div>
