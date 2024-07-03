@@ -32,7 +32,9 @@ function LoginPage() {
     <>
       <div className="m-auto flex flex-grow flex-col justify-center md:w-1/2">
         <form className="my-4 flex flex-col rounded-md border-2 border-solid p-6 shadow-xl">
-          <h2 className="m-3 text-center text-2xl font-bold">Log In</h2>
+          <h2 className="m-3 text-center text-2xl font-bold text-[#386641]">
+            Welcome Back to SparkFund
+          </h2>
           <label htmlFor="email" className="my-2">
             <p>Email</p>
             <input
@@ -57,7 +59,7 @@ function LoginPage() {
             onClick={handleSubmit}
             className="my-6 rounded-md bg-[#6A994E] py-2 text-lg font-bold text-[#F2E8CF]"
           >
-            Submit
+            Login
           </button>
           <div className="my-1 text-center text-lg md:w-full">
             <p>

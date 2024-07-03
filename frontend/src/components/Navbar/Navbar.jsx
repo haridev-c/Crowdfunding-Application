@@ -10,7 +10,7 @@ const Navbar = () => {
 
   return (
     <nav className="bg-[#386641]">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
         <div id="test" className="flex h-16 items-center justify-between">
           {/* Mobile menu button */}
           <div className="md:hidden">
@@ -91,7 +91,7 @@ const Navbar = () => {
             </div>
           </div>
           {/* Login Button */}
-          <div className="">
+          <div className="flex flex-grow justify-end">
             {user ? (
               <div>
                 <AuthenticatedUserControls />

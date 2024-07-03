@@ -18,8 +18,16 @@ function HomePage() {
 
   return (
     <div>
-      <h1 className="text-center text-xl">HomePage</h1>
-
+      <div className="flex h-screen w-full flex-col bg-[url('/MotorCycleGroup.jpeg')] bg-cover bg-center bg-no-repeat">
+        <div className="mx-auto mt-20">
+          <h1 className="text-center text-4xl font-extrabold text-[#6A994E]">
+            SparkFund
+          </h1>
+          <h1 className="text-4xl font-extrabold text-[#F2E8CF]">
+            Empowering Dreams, One Contribution at a Time
+          </h1>
+        </div>
+      </div>
       <div className="md:flex md:flex-wrap md:justify-around">
         {campaigns.map((item) => (
           <CampaignCard

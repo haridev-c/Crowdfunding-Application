@@ -34,8 +34,8 @@ function RegisterPage() {
     <>
       <div className="m-auto flex flex-grow flex-col justify-center md:w-1/2">
         <form className="my-4 flex flex-col rounded-md border-2 border-solid p-6 shadow-xl">
-          <h2 className="m-3 text-center text-2xl font-bold">
-            Create new account
+          <h2 className="m-3 text-center text-2xl font-bold text-[#386641]">
+            Join the SparkFund Community
           </h2>
           <label htmlFor="name" className="my-2">
             <p>Full Name</p>
