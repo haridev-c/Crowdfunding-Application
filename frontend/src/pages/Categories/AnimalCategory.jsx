@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import CampaignCard from "../../components/CampaignCard";
+import GoldenRetriever from "../../assets/GoldenRetriever.jpg";
 
 function AnimalCategory() {
   const [campaigns, setCampaigns] = useState([]);
@@ -29,7 +30,11 @@ function AnimalCategory() {
 
   return (
     <div>
-      AnimalCategory
+      <div className="p-6">
+        <div id="" className="h-96 w-full rounded-lg bg-[#E9F1E4]">
+          <img src={GoldenRetriever} alt="" className="h-full rounded-l-lg" />
+        </div>
+      </div>
       <div
         id="sampleCampaigns"
         className="md:flex md:flex-wrap md:justify-around"

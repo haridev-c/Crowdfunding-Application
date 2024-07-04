@@ -225,6 +225,48 @@ const getAllCampaignsInCategory = async (req, res) => {
   }
 };
 
+const getOneOfEachCategory = async (req, res) => {
+  console.log("- - - - - - - - - - - - - - - ");
+  console.log(
+    "Started getOneOfEachCategory func in campaign.controller.js file"
+  );
+  try {
+    // Get all unique categories
+    const categories = await Campaign.distinct("category");
+
+    // Find one campaign for each category
+    const campaigns = await Promise.all(
+      categories.map(async (category) => {
+        return await Campaign.findOne({ category }).populate(
+          "createdBy",
+          "-password"
+        );
+      })
+    );
+
+    // Filter out any null results (in case a category has no campaigns)
+    const validCampaigns = campaigns.filter((campaign) => campaign !== null);
+
+    if (validCampaigns.length === 0) {
+      console.log("No campaigns found");
+      res.json({ success: false, serverMsg: "No campaigns found" });
+    } else {
+      console.log("Campaigns found for each category");
+      res.json({
+        success: true,
+        serverMsg: "Campaigns found for each category",
+        campaigns: validCampaigns,
+      });
+    }
+  } catch (error) {
+    console.log(
+      "Some error occurred in getOneOfEachCategory func in campaign.controller.js file"
+    );
+    console.error(error);
+    res.json({ success: false, serverMsg: "Internal server error" });
+  }
+};
+
 module.exports = {
   createCampaign,
   getAllCampaigns,
@@ -233,4 +275,5 @@ module.exports = {
   getLoggedInUserCampaigns,
   deleteOne,
   getAllCampaignsInCategory,
+  getOneOfEachCategory,
 };

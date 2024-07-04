@@ -22,7 +22,7 @@ function CampaignCard({
   };
 
   return (
-    <div className="m-2 mb-4 rounded-md p-6 shadow-lg md:min-w-[400px] md:max-w-[400px]">
+    <div className="m-2 mb-4 rounded-md bg-white p-6 shadow-lg md:min-w-[400px] md:max-w-[400px]">
       <Link to={`/campaign/${campaignId}`}>
         <div
           id="card-header"

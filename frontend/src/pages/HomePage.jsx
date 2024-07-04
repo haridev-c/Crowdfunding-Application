@@ -14,7 +14,7 @@ function HomePage() {
   const [campaigns, setCampaigns] = useState(null);
 
   useEffect(() => {
-    axios.get("/campaign/get-all-campaigns").then(({ data }) => {
+    axios.get("/campaign/get-one-of-each-category").then(({ data }) => {
       console.log("collected data: ", data);
       setCampaigns(data.campaigns);
     });
@@ -45,28 +45,30 @@ function HomePage() {
         </div>
       </div>
       {/* Sample campaigns */}
-      <div
-        id="sampleCampaigns"
-        className="md:flex md:flex-wrap md:justify-around"
-      >
-        {campaigns ? (
-          <div className="md:flex md:flex-wrap md:justify-around">
-            {campaigns.map((item) => (
-              <CampaignCard
-                key={item._id}
-                campaignId={item._id}
-                title={item.title}
-                createdBy={item.createdBy}
-                description={item.description}
-                targetAmount={item.targetAmount}
-                deadline={item.deadline}
-                amountRaised={item.amountRaised}
-              />
-            ))}
-          </div>
-        ) : (
-          <div>No campaigns to show </div>
-        )}
+      <div className="my-10 p-2">
+        <div id="sampleCampaigns" className="rounded-md bg-[#E9F1E4]">
+          <h1 className="flex h-28 items-center justify-center text-center text-4xl font-bold">
+            Featured Campaigns
+          </h1>
+          {campaigns ? (
+            <div className="md:flex md:flex-wrap md:justify-around">
+              {campaigns.map((item) => (
+                <CampaignCard
+                  key={item._id}
+                  campaignId={item._id}
+                  title={item.title}
+                  createdBy={item.createdBy}
+                  description={item.description}
+                  targetAmount={item.targetAmount}
+                  deadline={item.deadline}
+                  amountRaised={item.amountRaised}
+                />
+              ))}
+            </div>
+          ) : (
+            <div>No campaigns to show </div>
+          )}
+        </div>
       </div>
 
       {/* Categories */}
@@ -75,7 +77,7 @@ function HomePage() {
         <div id="categoriesList" className="flex flex-wrap justify-around">
           <Link
             to={"/category/medical"}
-            className="m-4 flex items-center justify-center rounded bg-[#E9F1E4] px-10 py-4 text-2xl"
+            className="m-4 flex items-center justify-center rounded bg-[#E9F1E4] px-10 py-4 text-2xl transition-all duration-300 hover:shadow-lg"
           >
             <FaHandHoldingMedical className="mx-4" />
             <p className="mr-10 flex h-36 w-32 items-center">Medical</p>
@@ -83,7 +85,7 @@ function HomePage() {
           </Link>
           <Link
             to={"/category/education"}
-            className="m-4 flex items-center justify-center rounded bg-[#E9F1E4] px-10 py-4 text-2xl"
+            className="m-4 flex items-center justify-center rounded bg-[#E9F1E4] px-10 py-4 text-2xl transition-all duration-300 hover:shadow-lg"
           >
             <IoMdSchool className="mx-4" />
             <p className="mr-10 flex h-36 w-32 items-center">Education</p>
@@ -91,7 +93,7 @@ function HomePage() {
           </Link>
           <Link
             to={"/category/sports"}
-            className="m-4 flex items-center justify-center rounded bg-[#E9F1E4] px-10 py-4 text-2xl"
+            className="m-4 flex items-center justify-center rounded bg-[#E9F1E4] px-10 py-4 text-2xl transition-all duration-300 hover:shadow-lg"
           >
             <MdOutlineSportsTennis className="mx-4" />
             <p className="mr-10 flex h-36 w-32 items-center">Sports</p>
@@ -99,7 +101,7 @@ function HomePage() {
           </Link>
           <Link
             to={"/category/environment"}
-            className="m-4 flex items-center justify-center rounded bg-[#E9F1E4] px-10 py-4 text-2xl"
+            className="m-4 flex items-center justify-center rounded bg-[#E9F1E4] px-10 py-4 text-2xl transition-all duration-300 hover:shadow-lg"
           >
             <GiEarthAsiaOceania className="mx-4" />
             <p className="mr-10 flex h-36 w-32 items-center">Environment</p>
@@ -107,7 +109,7 @@ function HomePage() {
           </Link>
           <Link
             to={"/category/emergency"}
-            className="m-4 flex items-center justify-center rounded bg-[#E9F1E4] px-10 py-4 text-2xl"
+            className="m-4 flex items-center justify-center rounded bg-[#E9F1E4] px-10 py-4 text-2xl transition-all duration-300 hover:shadow-lg"
           >
             <PiAmbulanceFill className="mx-4" />
             <p className="mr-10 flex h-36 w-32 items-center">Emergency</p>
@@ -115,7 +117,7 @@ function HomePage() {
           </Link>
           <Link
             to={"/category/animal"}
-            className="m-4 flex items-center justify-center rounded bg-[#E9F1E4] px-10 py-4 text-2xl"
+            className="m-4 flex items-center justify-center rounded bg-[#E9F1E4] px-10 py-4 text-2xl transition-all duration-300 hover:shadow-lg"
           >
             <PiDogFill className="mx-4" />
             <p className="mr-10 flex h-36 w-32 items-center">Animal</p>

@@ -10,10 +10,12 @@ const {
   getLoggedInUserCampaigns,
   deleteOne,
   getAllCampaignsInCategory,
+  getOneOfEachCategory,
 } = require("../controllers/campaign.controller");
 
 campaignRouter.post("/create", authenticate, createCampaign);
 campaignRouter.get("/get-all-campaigns", getAllCampaigns);
+campaignRouter.get("/get-one-of-each-category", getOneOfEachCategory);
 campaignRouter.post("/get-campaign-details", getCampaignDetails);
 campaignRouter.post("/add-donation", authenticate, addDonation);
 campaignRouter.get("/get-my-campaigns", authenticate, getLoggedInUserCampaigns);
