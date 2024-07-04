@@ -71,7 +71,7 @@ function NavbarUserProfile() {
             <MenuItem>
               <Link
                 to={"/create-new-fundraiser"}
-                className="my-1 block w-full rounded p-1 font-bold text-[#386641] data-[focus]:bg-[#A7C957] md:hidden"
+                className="my-1 block w-full rounded p-1 px-6 font-bold text-[#386641] data-[focus]:bg-[#A7C957] md:hidden"
               >
                 Start a Fundraiser
               </Link>
@@ -79,7 +79,7 @@ function NavbarUserProfile() {
             <MenuItem>
               <Link
                 to={"/dashboard"}
-                className="my-1 block w-full rounded p-1 font-bold text-[#386641] transition-all duration-300 data-[focus]:bg-[#A7C957]"
+                className="my-1 block w-full rounded p-1 px-6 font-bold text-[#386641] transition-all duration-300 data-[focus]:bg-[#a7c957]"
               >
                 My Profile
               </Link>
@@ -87,7 +87,7 @@ function NavbarUserProfile() {
             <MenuItem>
               <button
                 onClick={handleLogout}
-                className="my-1 block w-full rounded p-1 text-left font-bold text-[#B44143] transition-all duration-300 data-[focus]:bg-[#E9D9AF]"
+                className="my-1 block w-full rounded p-1 px-6 text-left font-bold text-[#B44143] transition-all duration-300 data-[focus]:bg-[#E9D9AF]"
               >
                 Logout
               </button>

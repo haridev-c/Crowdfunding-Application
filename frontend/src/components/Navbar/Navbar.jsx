@@ -3,6 +3,7 @@ import NavbarUserProfile from "./NavbarUserProfile";
 import { Link } from "react-router-dom";
 import { GlobalContext } from "../../GlobalStateRepository";
 import AuthenticatedUserControls from "./AuthenticatedUserControls";
+import CategoriesDropdown from "./CategoriesDropdown";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -81,12 +82,9 @@ const Navbar = () => {
                   About
                 </Link>
 
-                <a
-                  href="#"
-                  className="rounded-md px-3 py-2 text-sm font-medium text-[#F2E8CF] transition-all duration-500 hover:bg-[#8bc34a] hover:text-black"
-                >
-                  Categories
-                </a>
+                <div className="rounded-md px-3 py-2 text-sm font-medium text-[#F2E8CF] transition-all duration-500 hover:bg-[#8bc34a] hover:text-black">
+                  <CategoriesDropdown />
+                </div>
               </div>
             </div>
           </div>
@@ -121,11 +119,8 @@ const Navbar = () => {
           >
             About
           </Link>
-          <Link
-            to={"/"}
-            className="block rounded-md px-3 py-2 text-base font-medium text-[#F2E8CF] hover:bg-[#6A994E]"
-          >
-            Contact
+          <Link className="block rounded-md px-3 py-2 text-base font-medium text-[#F2E8CF] hover:bg-[#6A994E]">
+            <CategoriesDropdown />
           </Link>
         </div>
       </div>

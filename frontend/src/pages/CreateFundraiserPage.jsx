@@ -1,32 +1,36 @@
-import React, { useContext, useState } from "react";
-import { GlobalContext } from "../GlobalStateRepository";
+import React, { useState, useContext } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { GlobalContext } from "../GlobalStateRepository";
 
 function CreateFundraiserPage() {
-  const { user } = useContext(GlobalContext);
   const navigate = useNavigate();
+
+  const { user } = useContext(GlobalContext);
 
   // state declarations
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [targetAmount, setTargetAmount] = useState();
+  const [category, setCategory] = useState("Medical");
   const [deadline, setDeadline] = useState();
 
   const handleCreateCampaign = (e) => {
     e.preventDefault();
     axios
       .post("/campaign/create", {
-        createdBy: user._id,
         title,
         description,
         targetAmount,
         deadline,
+        category,
       })
       .then(({ data }) => {
         if (data.success) {
           alert(data.serverMsg);
-          navigate("/dashboard");
+          navigate("/");
+        } else {
+          alert(data.serverMsg);
         }
       });
   };
@@ -40,9 +44,26 @@ function CreateFundraiserPage() {
       <div className="m-auto p-2 md:w-1/2">
         <form className="m-2 flex flex-col rounded-lg border-2 p-4 shadow-lg">
           <div className="m-3">
-            <h1 className="text-center text-xl font-bold">
+            <h1 className="text-center text-xl font-bold text-[#386641]">
               Create New Fundraiser
             </h1>
+          </div>
+          <div className="m-3">
+            <label>
+              <p>Campaign Type</p>
+              <select
+                name="category"
+                onChange={(e) => setCategory(e.target.value)}
+                className="w-full rounded-md border-none bg-gray-200 focus:ring-0"
+              >
+                <option value="Medical">Medical</option>
+                <option value="Education">Education</option>
+                <option value="Sports">Sports</option>
+                <option value="Environment">Environment</option>
+                <option value="Emergency">Emergency</option>
+                <option value="Animal">Animal</option>
+              </select>
+            </label>
           </div>
           <div className="m-3">
             <label>
@@ -112,7 +133,7 @@ function CreateFundraiserPage() {
           <div className="mt-3 flex justify-center">
             <button
               onClick={handleCreateCampaign}
-              className="m-2 rounded-md bg-green-500 p-2 text-lg shadow-md"
+              className="m-2 rounded-md bg-[#6A994E] p-2 text-lg text-[#F2E8CF] shadow-md"
             >
               Create Fundraiser
             </button>

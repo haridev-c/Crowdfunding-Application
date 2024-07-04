@@ -4,10 +4,11 @@ const createCampaign = async (req, res) => {
   console.log("- - - - - - - - - - - - - - - ");
   console.log("Started createCampaign func");
   try {
-    const { title, description, targetAmount, deadline, createdBy } = req.body;
+    const { title, description, targetAmount, deadline, category } = req.body;
     console.log("About to create new campaign");
     Campaign.create({
-      createdBy,
+      createdBy: req.authenticatedUser._id,
+      category,
       title,
       description,
       targetAmount,
@@ -75,7 +76,7 @@ const getAllCampaigns = async (req, res) => {
 
 const getCampaignDetails = async (req, res) => {
   console.log("- - - - - - - - - - - - - - - ");
-  console.log("Started getCampaignDetails func in campaign.controller.js file");
+  console.log("Started getCampaignDetails() in campaign.controller.js file");
   try {
     const { campaignId } = req.body;
     console.log("Captured id: ", campaignId);
@@ -189,6 +190,41 @@ const deleteOne = async (req, res) => {
   }
 };
 
+const getAllCampaignsInCategory = async (req, res) => {
+  console.log("- - - - - - - - - - - - - - - ");
+  console.log(
+    "Started getAllCampaignsInCategory() in campaign.controller.js file"
+  );
+  try {
+    console.log("Getting category from params");
+    const category = req.params.category;
+    console.log("Searching for: ", category);
+    const campaigns = await Campaign.find({ category: category }).populate(
+      "createdBy"
+    );
+
+    if (!campaigns) {
+      console.log("No campaigns found");
+      res.status(204).json({ success: true, serverMsg: "No campaigns found" });
+    } else {
+      console.log("Campaigns found");
+      res
+        .status(200)
+        .json({ success: true, serverMsg: "Campaigns found", campaigns });
+    }
+  } catch (error) {
+    console.log(
+      "Some error occured in getAllCampaignsInCategory() in campaign.controller.js file"
+    );
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      serverMsg:
+        "Some error occured in getAllCampaignsInCategory() in campaign.controller.js file",
+    });
+  }
+};
+
 module.exports = {
   createCampaign,
   getAllCampaigns,
@@ -196,4 +232,5 @@ module.exports = {
   addDonation,
   getLoggedInUserCampaigns,
   deleteOne,
+  getAllCampaignsInCategory,
 };

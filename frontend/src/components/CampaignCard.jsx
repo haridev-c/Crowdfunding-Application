@@ -61,10 +61,10 @@ function CampaignCard({
           <p className="ml-8 font-medium">{createdBy.name}</p>
         </div>
       </div>
-      <div id="campaignDescription" className="my-4 h-20 overflow-hidden">
-        <p className="line-clamp-3 font-light text-[#65758c]">{description}</p>
+      <div id="campaignDescription" className="mb-3 mt-2 h-12 overflow-hidden">
+        <p className="line-clamp-2 font-light text-[#65758c]">{description}</p>
       </div>
-      <div id="Info" className="my-4 flex items-center">
+      <div id="Info" className="flex items-center">
         <div>
           <p>Target Amount: {formatAmount(targetAmount)}</p>
           <p>Amount Raised: {formatAmount(amountRaised)}</p>

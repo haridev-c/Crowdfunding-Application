@@ -9,6 +9,7 @@ const {
   addDonation,
   getLoggedInUserCampaigns,
   deleteOne,
+  getAllCampaignsInCategory,
 } = require("../controllers/campaign.controller");
 
 campaignRouter.post("/create", authenticate, createCampaign);
@@ -17,5 +18,6 @@ campaignRouter.post("/get-campaign-details", getCampaignDetails);
 campaignRouter.post("/add-donation", authenticate, addDonation);
 campaignRouter.get("/get-my-campaigns", authenticate, getLoggedInUserCampaigns);
 campaignRouter.delete("/delete-one", authenticate, deleteOne);
+campaignRouter.get("/get-category/:category", getAllCampaignsInCategory);
 
 module.exports = campaignRouter;

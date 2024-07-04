@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const CampaignSchema = mongoose.Schema({
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "Users" },
   title: String,
+  category: String,
   description: String,
   targetAmount: Number,
   deadline: Date,

@@ -6,26 +6,67 @@ import {
   MenuItems,
   Transition,
 } from "@headlessui/react";
+import { Link } from "react-router-dom";
 
 function CategoriesDropdown() {
   return (
     <div>
       <Menu>
         <MenuButton>Categories</MenuButton>
-        <Transition
-          enter="duration-200 ease-out"
-          enterFrom="scale-95 opacity-0"
-          enterTo="scale-100 opacity-100"
-          leave="duration-300 ease-out"
-          leaveFrom="scale-100 opacity-100"
-          leaveTo="scale-95 opacity-0"
+        <MenuItems
+          anchor="bottom"
+          transition
+          className="mt-5 w-36 origin-top rounded bg-[#E9F1E4] p-2 transition duration-200 ease-out data-[closed]:scale-95 data-[closed]:opacity-0"
         >
-          <MenuItems>
-            <MenuItem>Medical</MenuItem>
-            <MenuItem>Education</MenuItem>
-            <MenuItem>Sports</MenuItem>
-          </MenuItems>
-        </Transition>
+          <MenuItem className="my-2 px-2 font-medium text-[#386641]">
+            <Link
+              className="block rounded px-4 transition-all duration-300 data-[focus]:bg-[#a7c957]"
+              to={"/category/medical"}
+            >
+              Medical
+            </Link>
+          </MenuItem>
+          <MenuItem className="my-2 px-2 font-medium text-[#386641]">
+            <Link
+              className="block rounded px-4 data-[focus]:bg-[#a7c957]"
+              to={"/category/education"}
+            >
+              Education
+            </Link>
+          </MenuItem>
+          <MenuItem className="my-2 px-2 font-medium text-[#386641]">
+            <Link
+              className="block rounded px-4 transition-all duration-300 data-[focus]:bg-[#a7c957]"
+              to={"/category/sports"}
+            >
+              Sports
+            </Link>
+          </MenuItem>
+          <MenuItem className="my-2 px-2 font-medium text-[#386641]">
+            <Link
+              className="block rounded px-4 transition-all duration-300 data-[focus]:bg-[#a7c957]"
+              to={"/category/environment"}
+            >
+              Environment
+            </Link>
+          </MenuItem>
+          <MenuItem className="my-2 px-2 font-medium text-[#386641]">
+            <Link
+              className="block rounded px-4 transition-all duration-300 data-[focus]:bg-[#a7c957]"
+              to={"/category/emergency"}
+            >
+              Emergency
+            </Link>
+          </MenuItem>
+          <MenuItem className="my-2 px-2 font-medium text-[#386641]">
+            <Link
+              className="block rounded px-4 transition-all duration-300 data-[focus]:bg-[#a7c957]"
+              to={"/category/animal"}
+            >
+              Animal
+            </Link>
+          </MenuItem>
+        </MenuItems>
       </Menu>
     </div>
   );
