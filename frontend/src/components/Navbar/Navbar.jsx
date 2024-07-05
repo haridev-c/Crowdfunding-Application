@@ -96,7 +96,7 @@ const Navbar = () => {
               </div>
             ) : (
               <Link to={"/login"}>
-                <button className="rounded bg-[#6A994E] px-4 py-2 font-bold text-[#F2E8CF] hover:shadow-lg">
+                <button className="rounded bg-[#8bc34a] px-4 py-2 font-bold text-[#F2E8CF] transition-all duration-300 hover:shadow-lg">
                   Login
                 </button>
               </Link>

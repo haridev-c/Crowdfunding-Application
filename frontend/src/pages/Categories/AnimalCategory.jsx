@@ -29,35 +29,43 @@ function AnimalCategory() {
   }
 
   return (
-    <div>
+    <div className="">
       <div className="p-6">
-        <div id="" className="h-96 w-full rounded-lg bg-[#E9F1E4]">
+        <div id="" className="flex h-96 w-full rounded-lg bg-[#E9F1E4]">
           <img src={GoldenRetriever} alt="" className="h-full rounded-l-lg" />
+          <div className="prose prose-2xl flex flex-grow items-center p-4">
+            <blockquote>
+              "The greatness of a nation and its moral progress can be judged by
+              the way its animals are treated" - Mahatma Gandhi.
+            </blockquote>
+          </div>
         </div>
       </div>
-      <div
-        id="sampleCampaigns"
-        className="md:flex md:flex-wrap md:justify-around"
-      >
-        {campaigns ? (
-          <div className="md:flex md:flex-wrap md:justify-around">
-            {campaigns.map((item) => (
-              <CampaignCard
-                key={item._id}
-                campaignId={item._id}
-                title={item.title}
-                createdBy={item.createdBy}
-                description={item.description}
-                targetAmount={item.targetAmount}
-                deadline={item.deadline}
-                amountRaised={item.amountRaised}
-              />
-            ))}
-          </div>
-        ) : (
-          <div>No campaigns to show </div>
-        )}
-      </div>
+      <section className="p-6">
+        <div
+          id="sampleCampaigns"
+          className="rounded-lg bg-[#E9F1E4] p-4 md:flex md:flex-wrap md:justify-around"
+        >
+          {campaigns ? (
+            <div className="md:flex md:flex-wrap md:justify-around">
+              {campaigns.map((item) => (
+                <CampaignCard
+                  key={item._id}
+                  campaignId={item._id}
+                  title={item.title}
+                  createdBy={item.createdBy}
+                  description={item.description}
+                  targetAmount={item.targetAmount}
+                  deadline={item.deadline}
+                  amountRaised={item.amountRaised}
+                />
+              ))}
+            </div>
+          ) : (
+            <div>No campaigns to show </div>
+          )}
+        </div>
+      </section>
     </div>
   );
 }

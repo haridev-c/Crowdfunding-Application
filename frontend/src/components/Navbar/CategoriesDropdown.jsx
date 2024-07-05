@@ -7,12 +7,17 @@ import {
   Transition,
 } from "@headlessui/react";
 import { Link } from "react-router-dom";
+import { FiChevronDown } from "react-icons/fi";
 
 function CategoriesDropdown() {
   return (
     <div>
       <Menu>
-        <MenuButton>Categories</MenuButton>
+        <MenuButton>
+          <div className="flex items-center">
+            Categories <FiChevronDown className="ml-2 mt-1" />
+          </div>
+        </MenuButton>
         <MenuItems
           anchor="bottom"
           transition
