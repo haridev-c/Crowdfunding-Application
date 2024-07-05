@@ -30,10 +30,15 @@ function AnimalCategory() {
 
   return (
     <div className="">
+      <section className="my-10">
+        <h1 className="text-center text-4xl font-medium">
+          Explore Campaigns in Animal Category
+        </h1>
+      </section>
       <div className="p-6">
         <div id="" className="flex h-96 w-full rounded-lg bg-[#E9F1E4]">
           <img src={GoldenRetriever} alt="" className="h-full rounded-l-lg" />
-          <div className="prose prose-2xl flex flex-grow items-center p-4">
+          <div className="prose prose-2xl flex flex-grow items-center px-14">
             <blockquote>
               "The greatness of a nation and its moral progress can be judged by
               the way its animals are treated" - Mahatma Gandhi.

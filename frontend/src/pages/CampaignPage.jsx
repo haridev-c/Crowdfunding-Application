@@ -141,7 +141,7 @@ function CampaignPage() {
   return (
     <>
       <div className="flex flex-grow items-center justify-center bg-[#E9F1E4]">
-        <div className="mx-4 my-4 flex flex-col rounded bg-white p-4 shadow-lg md:mx-auto md:mt-10 md:w-1/2">
+        <div className="mx-4 my-4 flex flex-col rounded bg-white p-8 shadow-lg md:mx-auto md:mt-10 md:w-1/2">
           <div id="title" className="text-2xl font-bold text-[#386641]">
             {campaign.title}
           </div>
@@ -175,7 +175,7 @@ function CampaignPage() {
               {campaign.createdBy.name}
             </div>
           </div>
-          <div id="description" className="my-4 text-justify">
+          <div id="description" className="prose my-4 text-justify">
             {campaign.description}
           </div>
           <div id="info" className="flex">

@@ -21,7 +21,7 @@ function CategoriesDropdown() {
         <MenuItems
           anchor="bottom"
           transition
-          className="mt-5 w-36 origin-top rounded bg-[#E9F1E4] p-2 transition duration-200 ease-out data-[closed]:scale-95 data-[closed]:opacity-0"
+          className="mt-5 w-36 origin-top rounded bg-[#E9F1E4] p-2 shadow-lg transition duration-200 ease-out data-[closed]:scale-95 data-[closed]:opacity-0"
         >
           <MenuItem className="my-2 px-2 font-medium text-[#386641]">
             <Link
