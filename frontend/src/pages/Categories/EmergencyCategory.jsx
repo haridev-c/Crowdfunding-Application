@@ -29,26 +29,25 @@ function EmergencyCategory() {
   }
   return (
     <div className="">
-      <section className="my-10 flex justify-center">
+      <section id="header" className="my-10 flex justify-center">
         <h1 className="rounded-full bg-[#E9F1E4] py-10 text-center text-4xl font-medium text-[#FFB703] md:w-2/3">
           Explore Campaigns in Emergency Category
         </h1>
       </section>
       <section id="picWithQuote" className="p-6">
-        <div
-          id=""
-          className="flex w-full flex-col rounded-lg bg-[#E9F1E4] md:h-96 md:flex-row"
-        >
-          <img src={EmergencyPic} alt="" className="h-full rounded-lg" />
+        <div className="flex w-full flex-col rounded-lg bg-[#E9F1E4] md:flex-row">
+          <img
+            src={EmergencyPic}
+            alt=""
+            className="h-auto max-h-96 w-full rounded-lg object-cover md:w-1/2"
+          />
           <div
             id="quote"
-            className="prose prose-2xl flex flex-grow items-center md:px-14"
+            className="flex flex-grow items-center p-6 md:p-8 lg:p-14"
           >
-            <p>
-              <i>
-                Help us provide relief and support to those affected by
-                emergencies. Explore our campaigns and make a difference today.
-              </i>
+            <p className="text-center text-base italic sm:text-lg md:text-left md:text-xl lg:text-2xl xl:text-3xl">
+              Help us provide relief and support to those affected by
+              emergencies. Explore our campaigns and make a difference today.
             </p>
           </div>
         </div>
