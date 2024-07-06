@@ -88,7 +88,7 @@ function CampaignPage() {
 
   const initPayment = (order) => {
     const options = {
-      key: "rzp_test_ZakI1Bhhsz3xal",
+      key: "rzp_test_McObQODIQEYS73",
       amount: order.amount,
       currency: order.currency,
       name: campaign.title,
