@@ -33,10 +33,10 @@ function NavbarUserProfile() {
       <Menu>
         <MenuButton className={"flex rounded-full bg-[#6A994E] text-[#F2E8CF]"}>
           {user.profilePic ? (
-            <div className="size-10 rounded-full">
+            <div className="size-10 overflow-hidden rounded-full">
               <img
                 src={`http://localhost:5050/user/get-dp/${user.profilePic}`}
-                className="size-10 rounded-full"
+                className="size-10 rounded-full object-cover"
               />
             </div>
           ) : (

@@ -42,10 +42,10 @@ function EditProfile() {
       <form className="m-auto rounded-lg p-6 shadow-lg md:w-1/2">
         <div id="profilePhotoSection" className="flex items-center">
           {user.profilePic ? (
-            <div className="size-28 rounded-full">
+            <div className="size-28 overflow-hidden rounded-full">
               <img
                 src={`http://localhost:5050/user/get-dp/${user.profilePic}`}
-                className="size-28 rounded-full"
+                className="size-28 rounded-full object-cover"
               />
             </div>
           ) : (

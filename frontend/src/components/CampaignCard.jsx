@@ -34,10 +34,10 @@ function CampaignCard({
       <div id="creatorDetails" className="my-4 flex items-center">
         <div id="profilePic">
           {createdBy.profilePic ? (
-            <div className="size-10 rounded-full">
+            <div className="size-10 overflow-hidden rounded-full">
               <img
                 src={`http://localhost:5050/user/get-dp/${createdBy.profilePic}`}
-                className="size-10 rounded-full"
+                className="size-10 rounded-full object-cover"
               />
             </div>
           ) : (
