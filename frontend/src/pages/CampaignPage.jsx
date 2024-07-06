@@ -175,14 +175,17 @@ function CampaignPage() {
               {campaign.createdBy.name}
             </div>
           </div>
-          <div id="description" className="prose my-4 text-justify">
+          <div
+            id="description"
+            className="prose my-4 whitespace-pre-wrap text-justify"
+          >
             {campaign.description}
           </div>
           <div id="info" className="flex">
             <div id="targetDetails">
               <p>Amount Raised: {formatAmount(campaign.amountRaised)}</p>
             </div>
-            <div className="flex flex-grow justify-end">
+            <div className="flex flex-grow justify-end text-right">
               <p>Target Amount: {formatAmount(campaign.targetAmount)}</p>
             </div>
           </div>
