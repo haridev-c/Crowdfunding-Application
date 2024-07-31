@@ -105,28 +105,55 @@ const loginUser = async (req, res) => {
   }
 };
 
+// const getProfile = async (req, res) => {
+//   try {
+//     console.log("- - - - - - - - - - - - - - - ");
+//     console.log("Started getProfile func");
+//     console.log("Getting token from request");
+//     const token = req.cookies["token"];
+//     if (token) {
+//       console.log("JWT token captured successfully; verifying token");
+//       jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+//         if (err) throw err;
+//         console.log("JWT token verified; getting user details from db");
+//         const userObject = await User.findById(userData._id);
+//         res.json(userObject);
+//         console.log("response sent");
+//       });
+//     } else {
+//       console.log("No JWT token found; sending null response");
+//       res.json(null);
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     res.json(null);
+//   }
+// };
+
 const getProfile = async (req, res) => {
   try {
-    console.log("- - - - - - - - - - - - - - - ");
-    console.log("Started getProfile func");
-    console.log("Getting token from request");
+    console.log("getProfile function called");
+    console.log("Cookies received:", req.cookies);
     const token = req.cookies["token"];
     if (token) {
-      console.log("JWT token captured successfully; verifying token");
+      console.log("Token found:", token);
       jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-        if (err) throw err;
-        console.log("JWT token verified; getting user details from db");
+        if (err) {
+          console.error("Token verification error:", err);
+          return res.status(401).json({ error: "Invalid token" });
+        }
+        console.log("Token verified, user data:", userData);
         const userObject = await User.findById(userData._id);
+        console.log("User object retrieved:", userObject);
         res.json(userObject);
-        console.log("response sent");
       });
     } else {
-      console.log("No JWT token found; sending null response");
-      res.json(null);
+      console.log("No token found in cookies");
+      res.status(401).json({ error: "No token provided" });
     }
   } catch (error) {
-    console.log(error);
-    res.json(null);
+    console.error("Error in getProfile:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
