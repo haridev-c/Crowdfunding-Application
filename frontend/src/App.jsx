@@ -16,7 +16,7 @@ import EducationCategory from "./pages/Categories/EducationCategory";
 import EnvironmentCategory from "./pages/Categories/EnvironmentCategory";
 import EmergencyCategory from "./pages/Categories/EmergencyCategory";
 
-axios.defaults.baseURL = "http://localhost:5050";
+axios.defaults.baseURL = "https://sparkfundserver.onrender.com";
 axios.defaults.withCredentials = true;
 
 function App() {
