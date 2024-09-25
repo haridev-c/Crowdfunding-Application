@@ -1,12 +1,11 @@
-import React from "react";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
 function CampaignCard({
   title,
   createdBy,
   description,
   targetAmount,
-  deadline,
   amountRaised,
   campaignId,
 }) {
@@ -91,5 +90,15 @@ function CampaignCard({
     </div>
   );
 }
+
+CampaignCard.propTypes = {
+  title: PropTypes.string.isRequired,
+  createdBy: PropTypes.object.isRequired,
+  description: PropTypes.string.isRequired,
+  targetAmount: PropTypes.number.isRequired,
+  deadline: PropTypes.string,
+  amountRaised: PropTypes.number.isRequired,
+  campaignId: PropTypes.string.isRequired,
+};
 
 export default CampaignCard;

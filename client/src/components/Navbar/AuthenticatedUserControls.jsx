@@ -1,4 +1,3 @@
-import React from "react";
 import NavbarUserProfile from "./NavbarUserProfile";
 import { Link } from "react-router-dom";
 

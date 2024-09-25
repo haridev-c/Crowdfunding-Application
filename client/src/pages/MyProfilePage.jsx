@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { GlobalContext } from "../GlobalStateRepository";
 import { Navigate } from "react-router-dom";
 import EditProfile from "../components/EditProfile";

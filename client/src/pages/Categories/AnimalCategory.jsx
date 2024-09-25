@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import CampaignCard from "../../components/CampaignCard";
 import GoldenRetriever from "../../assets/GoldenRetriever.jpg";
 
@@ -47,8 +47,8 @@ function AnimalCategory() {
             className="flex flex-grow items-center p-6 md:p-8 lg:p-14"
           >
             <blockquote className="text-center text-base italic sm:text-lg md:text-left md:text-xl lg:text-2xl xl:text-3xl">
-              "The greatness of a nation and its moral progress can be judged by
-              the way its animals are treated" - Mahatma Gandhi.
+              &quot;The greatness of a nation and its moral progress can be
+              judged by the way its animals are treated&quot; - Mahatma Gandhi.
             </blockquote>
           </div>
         </div>

@@ -1,5 +1,4 @@
-import React, { useContext, useState } from "react";
-import NavbarUserProfile from "./NavbarUserProfile";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { GlobalContext } from "../../GlobalStateRepository";
 import AuthenticatedUserControls from "./AuthenticatedUserControls";

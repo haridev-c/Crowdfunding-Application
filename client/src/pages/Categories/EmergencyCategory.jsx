@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import CampaignCard from "../../components/CampaignCard";
 import EmergencyPic from "../../assets/EmergencyCategoryPic.jpg";
 

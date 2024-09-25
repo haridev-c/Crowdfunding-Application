@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { GlobalContext } from "../GlobalStateRepository";
 
@@ -30,7 +30,7 @@ function CampaignPage() {
 
   useEffect(() => {
     fetchCampaignDetails(id);
-  }, [refresh]);
+  }, [id, refresh]);
 
   const formatAmount = (num) => {
     return new Intl.NumberFormat("en-IN", {

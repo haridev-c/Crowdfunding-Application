@@ -1,4 +1,4 @@
-import React from "react";
+import PropTypes from "prop-types";
 
 function Sidebar({ setTabValue }) {
   return (
@@ -75,5 +75,9 @@ function Sidebar({ setTabValue }) {
     </div>
   );
 }
+
+Sidebar.propTypes = {
+  setTabValue: PropTypes.func.isRequired,
+};
 
 export default Sidebar;

@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import CampaignCard from "../components/CampaignCard";
 import { FaHandHoldingMedical } from "react-icons/fa6";
 import { MdOutlineSportsTennis } from "react-icons/md";
@@ -19,10 +19,6 @@ function HomePage() {
       setCampaigns(data.campaigns);
     });
   }, []);
-
-  // if (!campaigns) {
-  //   return "loading";
-  // }
 
   return (
     <div>

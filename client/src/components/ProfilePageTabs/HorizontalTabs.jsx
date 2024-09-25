@@ -1,4 +1,4 @@
-import React from "react";
+import PropTypes from "prop-types";
 
 function HorizontalTabs({ setTabValue }) {
   return (
@@ -65,5 +65,9 @@ function HorizontalTabs({ setTabValue }) {
     </div>
   );
 }
+
+HorizontalTabs.propTypes = {
+  setTabValue: PropTypes.func.isRequired,
+};
 
 export default HorizontalTabs;

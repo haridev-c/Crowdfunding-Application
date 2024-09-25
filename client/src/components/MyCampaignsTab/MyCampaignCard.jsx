@@ -1,13 +1,12 @@
 import axios from "axios";
-import React from "react";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
 function MyCampaignCard({
   title,
   createdBy,
   description,
   targetAmount,
-  deadline,
   amountRaised,
   campaignId,
   setRefresh,
@@ -107,5 +106,15 @@ function MyCampaignCard({
     </div>
   );
 }
+
+MyCampaignCard.propTypes = {
+  title: PropTypes.string.isRequired,
+  createdBy: PropTypes.object.isRequired,
+  description: PropTypes.string.isRequired,
+  targetAmount: PropTypes.number.isRequired,
+  amountRaised: PropTypes.number.isRequired,
+  campaignId: PropTypes.string.isRequired,
+  setRefresh: PropTypes.func.isRequired,
+};
 
 export default MyCampaignCard;

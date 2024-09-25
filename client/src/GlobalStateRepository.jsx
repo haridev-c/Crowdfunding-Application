@@ -1,5 +1,6 @@
 import axios from "axios";
-import React, { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
+import PropTypes from "prop-types";
 
 export const GlobalContext = createContext();
 
@@ -7,19 +8,6 @@ function GlobalStateRepository({ children }) {
   const [user, setUser] = useState(null);
   const [renderGSR, setRenderGSR] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-
-  // const fetchUserData = async () => {
-  //   try {
-  //     setIsLoading(true);
-  //     const { data } = await axios.get("/user/profile");
-  //     setUser(data);
-  //   } catch (error) {
-  //     console.log("Error from fetchUserData of GSR", error);
-  //     setUser(null);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
 
   const fetchUserData = async () => {
     try {
@@ -59,5 +47,9 @@ function GlobalStateRepository({ children }) {
     </GlobalContext.Provider>
   );
 }
+
+GlobalStateRepository.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 export default GlobalStateRepository;
