@@ -40,7 +40,7 @@ function LoginPage() {
               <p>Email</p>
               <input
                 type="email"
-                placeholder="johndoe@abc.com"
+                placeholder="nivin@gmail.com"
                 className="form-input w-full rounded-md border-none bg-gray-200"
                 name="email"
                 onChange={(e) => setEmail(e.target.value)}
@@ -52,7 +52,7 @@ function LoginPage() {
                 type="password"
                 className="form-input w-full rounded-md border-none bg-gray-200"
                 name="password"
-                placeholder="sjd123!&^#"
+                placeholder="1234"
                 onChange={(e) => setPassword(e.target.value)}
               />
             </label>
