@@ -8,7 +8,7 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 
-//custom modules
+//router imports
 const userRouter = require("./routers/userRouter");
 const campaignRouter = require("./routers/campaignRouter");
 const paymentRouter = require("./routers/paymentRouter");
@@ -22,7 +22,7 @@ app.use(express.json());
 app.use(
   cors({
     credentials: true,
-    origin: "https://sparkfund.onrender.com",
+    origin: "http://localhost:5173",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
