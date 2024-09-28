@@ -1,6 +1,9 @@
-// import GlobalStateRepository from "./GlobalStateRepository";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import axios from "axios";
+
+import { useGetProfileQuery } from "./features/apiSlice";
+import { setUser } from "./features/userSlice";
+import { useDispatch } from "react-redux";
 
 // page imports
 import Layout from "./Layout";
@@ -16,12 +19,22 @@ import MedicalCategory from "./pages/Categories/MedicalCategory";
 import EducationCategory from "./pages/Categories/EducationCategory";
 import EnvironmentCategory from "./pages/Categories/EnvironmentCategory";
 import EmergencyCategory from "./pages/Categories/EmergencyCategory";
+import { useEffect } from "react";
 
 // axios default configurations
 axios.defaults.baseURL = "http://localhost:5050";
 axios.defaults.withCredentials = true;
 
 function App() {
+  const dispatch = useDispatch();
+  const { data: profileData } = useGetProfileQuery();
+
+  useEffect(() => {
+    if (profileData) {
+      dispatch(setUser(profileData));
+    }
+  }, [profileData, dispatch]);
+
   return (
     <>
       {/* <GlobalStateRepository></GlobalStateRepository> */}

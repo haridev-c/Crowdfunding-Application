@@ -1,5 +1,7 @@
-import NavbarUserProfile from "./NavbarUserProfile";
 import { Link } from "react-router-dom";
+
+// component imports
+import NavbarUserProfile from "./NavbarUserProfile";
 
 function AuthenticatedUserControls() {
   return (

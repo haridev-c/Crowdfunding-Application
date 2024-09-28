@@ -1,5 +1,7 @@
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { Link } from "react-router-dom";
+
+// component and icon imports
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { FiChevronDown } from "react-icons/fi";
 
 function CategoriesDropdown() {

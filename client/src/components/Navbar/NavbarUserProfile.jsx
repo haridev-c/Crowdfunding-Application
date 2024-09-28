@@ -1,3 +1,11 @@
+import { Link, useNavigate } from "react-router-dom";
+
+// redux imports
+import { useSelector, useDispatch } from "react-redux";
+import { useLogoutUserMutation } from "../../features/apiSlice";
+import { setUser } from "../../features/userSlice";
+
+// component imports
 import {
   Menu,
   MenuButton,
@@ -5,16 +13,13 @@ import {
   MenuItems,
   Transition,
 } from "@headlessui/react";
-import { Link, useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { useLogoutUserMutation } from "../../features/apiSlice";
-import { setUser } from "../../features/userSlice";
 
 function NavbarUserProfile() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [logoutUser] = useLogoutUserMutation();
-  const dispatch = useDispatch();
+
   const { user } = useSelector((state) => state.user);
 
   const handleLogout = async () => {
@@ -30,6 +35,7 @@ function NavbarUserProfile() {
       }
     } catch (error) {
       console.log("Error logging out", error);
+      alert("Error logging out");
     }
   };
 

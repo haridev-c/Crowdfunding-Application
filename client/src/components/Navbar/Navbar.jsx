@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-// import { GlobalContext } from "../../GlobalStateRepository";
+import { useSelector } from "react-redux";
+
+// component imports
 import AuthenticatedUserControls from "./AuthenticatedUserControls";
 import CategoriesDropdown from "./CategoriesDropdown";
-import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  // const { user } = useContext(GlobalContext);
 
   const { user } = useSelector((state) => state.user);
 

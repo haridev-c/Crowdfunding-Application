@@ -20,7 +20,19 @@ export const apiSlice = createApi({
         credentials: "include",
       }),
     }),
+
+    getProfile: builder.query({
+      query: () => ({
+        url: "user/profile",
+        method: "GET",
+        credentials: "include",
+      }),
+    }),
   }),
 });
 
-export const { useLoginUserMutation, useLogoutUserMutation } = apiSlice;
+export const {
+  useLoginUserMutation,
+  useLogoutUserMutation,
+  useGetProfileQuery,
+} = apiSlice;
