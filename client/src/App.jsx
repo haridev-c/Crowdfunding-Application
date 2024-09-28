@@ -1,5 +1,5 @@
-import GlobalStateRepository from "./GlobalStateRepository";
-import { Route, Routes } from "react-router-dom";
+// import GlobalStateRepository from "./GlobalStateRepository";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import axios from "axios";
 
 // page imports
@@ -24,7 +24,8 @@ axios.defaults.withCredentials = true;
 function App() {
   return (
     <>
-      <GlobalStateRepository>
+      {/* <GlobalStateRepository></GlobalStateRepository> */}
+      <Router>
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />
@@ -47,7 +48,7 @@ function App() {
             />
           </Route>
         </Routes>
-      </GlobalStateRepository>
+      </Router>
     </>
   );
 }

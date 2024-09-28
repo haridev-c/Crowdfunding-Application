@@ -73,9 +73,16 @@ const loginUser = async (req, res) => {
               console.log(
                 "Signed JWT successfully; sending the JWT back with the response"
               );
-              res
-                .cookie("token", token)
-                .json({ success: true, serverMsg: "Login Successfull" });
+              res.cookie("token", token).json({
+                success: true,
+                serverMsg: "Login Successfull",
+                user: {
+                  id: doc._id,
+                  name: doc.name,
+                  email: doc.email,
+                  profilePic: doc.profilePic,
+                },
+              });
             }
           );
         } else {

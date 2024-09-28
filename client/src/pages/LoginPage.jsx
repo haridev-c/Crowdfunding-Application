@@ -1,27 +1,35 @@
-import axios from "axios";
-import { useContext, useState } from "react";
-import { Link, useNavigate, Navigate } from "react-router-dom";
-import { GlobalContext } from "../GlobalStateRepository";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useLoginUserMutation } from "../features/apiSlice";
+import { setUser } from "../features/userSlice";
+import { Navigate } from "react-router-dom";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { setRenderGSR, user } = useContext(GlobalContext);
+  const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const [loginUser] = useLoginUserMutation();
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    axios.post("/user/login", { email, password }).then(({ data }) => {
+  const handleSubmit = async (e) => {
+    try {
+      e.preventDefault();
+      const data = await loginUser({ email, password }).unwrap();
+      console.log(data);
       if (data.success) {
         alert(data.serverMsg);
-        setRenderGSR((prev) => prev + 1);
+        dispatch(setUser(data.user));
         navigate("/");
       } else {
         alert(data.serverMsg);
       }
-    });
+    } catch (error) {
+      console.log("Error submitting form", error);
+    }
   };
 
   if (user) {

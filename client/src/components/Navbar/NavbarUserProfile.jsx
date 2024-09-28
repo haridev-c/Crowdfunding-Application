@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import {
   Menu,
   MenuButton,
@@ -7,25 +6,31 @@ import {
   Transition,
 } from "@headlessui/react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { GlobalContext } from "../../GlobalStateRepository";
+import { useSelector, useDispatch } from "react-redux";
+import { useLogoutUserMutation } from "../../features/apiSlice";
+import { setUser } from "../../features/userSlice";
 
 function NavbarUserProfile() {
   const navigate = useNavigate();
 
-  const { user, setUser } = useContext(GlobalContext);
+  const [logoutUser] = useLogoutUserMutation();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
 
-  const handleLogout = () => {
-    axios
-      .post("/user/logout")
-      .then(({ data }) => {
+  const handleLogout = async () => {
+    try {
+      const data = await logoutUser().unwrap();
+      console.log(data);
+      if (data.success) {
         alert(data.serverMsg);
-        setUser(null);
+        dispatch(setUser(null));
         navigate("/");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      } else {
+        alert(data.serverMsg);
+      }
+    } catch (error) {
+      console.log("Error logging out", error);
+    }
   };
 
   return (

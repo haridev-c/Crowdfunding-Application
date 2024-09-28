@@ -29,10 +29,10 @@ app.use(
 );
 
 // routes setup
-app.use("/user", userRouter);
-app.use("/campaign", campaignRouter);
-app.use("/payments", paymentRouter);
-app.use("/donation", donationRouter);
+app.use("/api/user", userRouter);
+app.use("/api/campaign", campaignRouter);
+app.use("/api/payment", paymentRouter);
+app.use("/api/donation", donationRouter);
 
 // database connection
 mongoose.connect(process.env.CONN_STRING).then(console.log("Connected to db"));
