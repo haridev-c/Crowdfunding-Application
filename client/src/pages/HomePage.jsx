@@ -1,6 +1,10 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+// redux imports
+import { useGetFeaturedCampaignsQuery } from "../features/apiSlice";
+
+// component imports
 import CampaignCard from "../components/CampaignCard";
+
+// icon imports
 import { FaHandHoldingMedical } from "react-icons/fa6";
 import { MdOutlineSportsTennis } from "react-icons/md";
 import { IoMdSchool } from "react-icons/io";
@@ -11,14 +15,7 @@ import { BsArrowRightShort } from "react-icons/bs";
 import { Link } from "react-router-dom";
 
 function HomePage() {
-  const [campaigns, setCampaigns] = useState(null);
-
-  useEffect(() => {
-    axios.get("/campaign/get-one-of-each-category").then(({ data }) => {
-      console.log("collected data: ", data);
-      setCampaigns(data.campaigns);
-    });
-  }, []);
+  const { data, isLoading } = useGetFeaturedCampaignsQuery();
 
   return (
     <div>
@@ -40,15 +37,17 @@ function HomePage() {
           </h1>
         </div>
       </div>
-      {/* Sample campaigns */}
+      {/* Featured campaigns */}
       <div className="my-10 p-2">
         <div id="sampleCampaigns" className="rounded-md bg-[#E9F1E4]">
           <h1 className="flex h-28 items-center justify-center text-center text-4xl font-bold">
             Featured Campaigns
           </h1>
-          {campaigns ? (
+          {isLoading ? (
+            <div>Loading...</div>
+          ) : data.campaigns ? (
             <div className="md:flex md:flex-wrap md:justify-around">
-              {campaigns.map((item) => (
+              {data.campaigns.map((item) => (
                 <CampaignCard
                   key={item._id}
                   campaignId={item._id}
@@ -70,7 +69,10 @@ function HomePage() {
       {/* Categories */}
       <section>
         <h1 className="my-10 text-center text-5xl">Categories</h1>
-        <div id="categoriesList" className="flex flex-wrap justify-around">
+        <div
+          id="categoriesList"
+          className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3"
+        >
           <Link
             to={"/category/medical"}
             className="m-4 flex items-center justify-center rounded bg-[#E9F1E4] px-10 py-4 text-2xl transition-all duration-300 hover:shadow-lg"

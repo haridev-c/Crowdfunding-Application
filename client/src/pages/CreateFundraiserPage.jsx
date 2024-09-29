@@ -1,12 +1,15 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { GlobalContext } from "../GlobalStateRepository";
+
+// redux imports
+import { useSelector } from "react-redux";
+import { useCreateCampaignMutation } from "../features/apiSlice";
 
 function CreateFundraiserPage() {
   const navigate = useNavigate();
 
-  const { user } = useContext(GlobalContext);
+  const { user } = useSelector((state) => state.user);
+  const [createCampaign] = useCreateCampaignMutation();
 
   // state declarations
   const [title, setTitle] = useState("");
@@ -15,24 +18,27 @@ function CreateFundraiserPage() {
   const [category, setCategory] = useState("Medical");
   const [deadline, setDeadline] = useState();
 
-  const handleCreateCampaign = (e) => {
-    e.preventDefault();
-    axios
-      .post("/campaign/create", {
+  const handleCreateCampaign = async (e) => {
+    try {
+      e.preventDefault();
+      const data = await createCampaign({
         title,
         description,
         targetAmount,
         deadline,
         category,
-      })
-      .then(({ data }) => {
-        if (data.success) {
-          alert(data.serverMsg);
-          navigate("/");
-        } else {
-          alert(data.serverMsg);
-        }
-      });
+      }).unwrap();
+
+      if (data.success) {
+        alert(data.serverMsg);
+        navigate("/");
+      } else {
+        alert(data.serverMsg);
+      }
+    } catch (error) {
+      console.log("Error creating campaign");
+      console.error(error);
+    }
   };
 
   if (!user) {

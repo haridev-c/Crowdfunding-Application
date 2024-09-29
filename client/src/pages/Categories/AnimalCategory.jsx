@@ -1,32 +1,12 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+// redux imports
+import { useGetCampaignsQuery } from "../../features/apiSlice";
+// component imports
 import CampaignCard from "../../components/CampaignCard";
-import GoldenRetriever from "../../assets/GoldenRetriever.jpg";
+// static asset imports
+import GoldenRetriever from "../../assets/categoryBanners/GoldenRetriever.jpg";
 
 function AnimalCategory() {
-  const [campaigns, setCampaigns] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    axios
-      .get("/campaign/get-category/Animal")
-      .then(({ data }) => {
-        if (!data.success) {
-          alert(data.serverMsg);
-        } else {
-          console.log("collected data: ", data);
-          setCampaigns(data.campaigns);
-          setLoading(false);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-
-  if (loading) {
-    return null;
-  }
+  const { data, isLoading } = useGetCampaignsQuery("Animal");
 
   return (
     <div className="">
@@ -58,9 +38,11 @@ function AnimalCategory() {
           id="sampleCampaigns"
           className="rounded-lg bg-[#E9F1E4] p-4 md:flex md:flex-wrap md:justify-around"
         >
-          {campaigns ? (
+          {isLoading ? (
+            <div>Loading...</div>
+          ) : data.campaigns ? (
             <div className="md:flex md:flex-wrap md:justify-around">
-              {campaigns.map((item) => (
+              {data.campaigns.map((item) => (
                 <CampaignCard
                   key={item._id}
                   campaignId={item._id}

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import axios from "axios";
 
@@ -19,15 +20,16 @@ import MedicalCategory from "./pages/Categories/MedicalCategory";
 import EducationCategory from "./pages/Categories/EducationCategory";
 import EnvironmentCategory from "./pages/Categories/EnvironmentCategory";
 import EmergencyCategory from "./pages/Categories/EmergencyCategory";
-import { useEffect } from "react";
+
+import spinner from "./assets/spinner.svg";
 
 // axios default configurations
-axios.defaults.baseURL = "http://localhost:5050";
+axios.defaults.baseURL = "http://localhost:5050/api";
 axios.defaults.withCredentials = true;
 
 function App() {
   const dispatch = useDispatch();
-  const { data: profileData } = useGetProfileQuery();
+  const { data: profileData, isLoading } = useGetProfileQuery();
 
   useEffect(() => {
     if (profileData) {
@@ -35,9 +37,16 @@ function App() {
     }
   }, [profileData, dispatch]);
 
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center">
+        <img src={spinner} alt="A green spinner" />
+      </div>
+    );
+  }
+
   return (
     <>
-      {/* <GlobalStateRepository></GlobalStateRepository> */}
       <Router>
         <Routes>
           <Route path="/" element={<Layout />}>

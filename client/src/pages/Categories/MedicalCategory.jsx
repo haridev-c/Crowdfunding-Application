@@ -1,32 +1,15 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+// redux imports
+import { useGetCampaignsQuery } from "../../features/apiSlice";
+
+// component imports
 import CampaignCard from "../../components/CampaignCard";
-import MedicalCategoryPic from "../../assets/MedicalCategoryPic.jpg";
+
+// static asset imports
+import MedicalCategoryPic from "../../assets/categoryBanners/MedicalCategoryPic.jpg";
 
 function MedicalCategory() {
-  const [campaigns, setCampaigns] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data, isLoading } = useGetCampaignsQuery("Medical");
 
-  useEffect(() => {
-    axios
-      .get("/campaign/get-category/Medical")
-      .then(({ data }) => {
-        if (!data.success) {
-          alert(data.serverMsg);
-        } else {
-          console.log("collected data: ", data);
-          setCampaigns(data.campaigns);
-          setLoading(false);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-
-  if (loading) {
-    return null;
-  }
   return (
     <div className="">
       <section id="header" className="my-10 flex justify-center">
@@ -57,9 +40,11 @@ function MedicalCategory() {
           id="sampleCampaigns"
           className="rounded-lg bg-[#E9F1E4] p-4 md:flex md:flex-wrap md:justify-around"
         >
-          {campaigns ? (
+          {isLoading ? (
+            <div>Loading...</div>
+          ) : data.campaigns ? (
             <div className="md:flex md:flex-wrap md:justify-around">
-              {campaigns.map((item) => (
+              {data.campaigns.map((item) => (
                 <CampaignCard
                   key={item._id}
                   campaignId={item._id}

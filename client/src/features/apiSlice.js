@@ -28,6 +28,31 @@ export const apiSlice = createApi({
         credentials: "include",
       }),
     }),
+
+    createCampaign: builder.mutation({
+      query: (campaignData) => ({
+        url: "campaign/create",
+        method: "POST",
+        body: campaignData,
+        credentials: "include",
+      }),
+    }),
+
+    getFeaturedCampaigns: builder.query({
+      query: () => ({
+        url: "campaign/featured-campaigns",
+        method: "GET",
+        credentials: "include",
+      }),
+    }),
+
+    getCampaigns: builder.query({
+      query: (category) => ({
+        url: `campaign/category/${category}`,
+        method: "GET",
+        credentials: "include",
+      }),
+    }),
   }),
 });
 
@@ -35,4 +60,7 @@ export const {
   useLoginUserMutation,
   useLogoutUserMutation,
   useGetProfileQuery,
+  useCreateCampaignMutation,
+  useGetFeaturedCampaignsQuery,
+  useGetCampaignsQuery,
 } = apiSlice;

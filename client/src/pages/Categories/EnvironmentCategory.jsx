@@ -1,32 +1,13 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+// redux imports
+import { useGetCampaignsQuery } from "../../features/apiSlice";
+// componnet imports
 import CampaignCard from "../../components/CampaignCard";
-import EnvironmentPic from "../../assets/EnvironmentCategoryPic.jpg";
+// static asset imports
+import EnvironmentPic from "../../assets/categoryBanners/EnvironmentCategoryPic.jpg";
 
 function EnvironmentCategory() {
-  const [campaigns, setCampaigns] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data, isLoading } = useGetCampaignsQuery("Environment");
 
-  useEffect(() => {
-    axios
-      .get("/campaign/get-category/Environment")
-      .then(({ data }) => {
-        if (!data.success) {
-          alert(data.serverMsg);
-        } else {
-          console.log("collected data: ", data);
-          setCampaigns(data.campaigns);
-          setLoading(false);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-
-  if (loading) {
-    return null;
-  }
   return (
     <div className="">
       <section id="header" className="my-10 flex justify-center">
@@ -57,9 +38,11 @@ function EnvironmentCategory() {
           id="sampleCampaigns"
           className="rounded-lg bg-[#E9F1E4] p-4 md:flex md:flex-wrap md:justify-around"
         >
-          {campaigns ? (
+          {isLoading ? (
+            <div>Loading...</div>
+          ) : data.campaigns ? (
             <div className="md:flex md:flex-wrap md:justify-around">
-              {campaigns.map((item) => (
+              {data.campaigns.map((item) => (
                 <CampaignCard
                   key={item._id}
                   campaignId={item._id}

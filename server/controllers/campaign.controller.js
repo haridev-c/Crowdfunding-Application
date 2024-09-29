@@ -225,10 +225,10 @@ const getAllCampaignsInCategory = async (req, res) => {
   }
 };
 
-const getOneOfEachCategory = async (req, res) => {
+const getFeaturedCampaigns = async (req, res) => {
   console.log("- - - - - - - - - - - - - - - ");
   console.log(
-    "Started getOneOfEachCategory func in campaign.controller.js file"
+    "Started getFeaturedCampaigns func in campaign.controller.js file"
   );
   try {
     // Get all unique categories
@@ -275,5 +275,5 @@ module.exports = {
   getLoggedInUserCampaigns,
   deleteOne,
   getAllCampaignsInCategory,
-  getOneOfEachCategory,
+  getFeaturedCampaigns,
 };
