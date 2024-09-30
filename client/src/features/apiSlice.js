@@ -107,6 +107,16 @@ export const apiSlice = createApi({
       invalidatesTags: ["Campaigns"],
     }),
 
+    addDonationToCampaign: builder.mutation({
+      query: (donationData) => ({
+        url: "campaign/add-donation",
+        method: "POST",
+        body: donationData,
+        credentials: "include",
+      }),
+      invalidatesTags: ["Campaigns"],
+    }),
+
     getUserDonation: builder.query({
       query: () => ({
         url: "donation/user-donations",
@@ -116,11 +126,31 @@ export const apiSlice = createApi({
       providesTags: ["Campaigns"],
     }),
 
+    createDonation: builder.mutation({
+      query: (donationData) => ({
+        url: "donation/create",
+        method: "POST",
+        body: donationData,
+        credentials: "include",
+      }),
+      invalidatesTags: ["Campaigns"],
+    }),
+
     createOrder: builder.mutation({
       query: (amount) => ({
         url: "payment/create-order",
         method: "POST",
         body: amount,
+        credentials: "include",
+      }),
+      invalidatesTags: ["Campaigns"],
+    }),
+
+    verifyPayment: builder.mutation({
+      query: (paymentData) => ({
+        url: "payment/verify",
+        method: "POST",
+        body: paymentData,
         credentials: "include",
       }),
       invalidatesTags: ["Campaigns"],
@@ -142,4 +172,7 @@ export const {
   useDeleteCamapiagnMutation,
   useCreateOrderMutation,
   useGetUserDonationQuery,
+  useVerifyPaymentMutation,
+  useCreateDonationMutation,
+  useAddDonationToCampaignMutation,
 } = apiSlice;

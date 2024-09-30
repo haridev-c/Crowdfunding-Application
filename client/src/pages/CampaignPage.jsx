@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 // redux imports
@@ -6,12 +5,18 @@ import { useSelector } from "react-redux";
 import {
   useGetCampaignQuery,
   useCreateOrderMutation,
+  useVerifyPaymentMutation,
+  useCreateDonationMutation,
+  useAddDonationToCampaignMutation,
 } from "../features/apiSlice";
 
 function CampaignPage() {
   const { id } = useParams();
   const { data: campaignData, isLoading, isSuccess } = useGetCampaignQuery(id);
   const [createOrder] = useCreateOrderMutation();
+  const [verifyPayment] = useVerifyPaymentMutation();
+  const [createDonation] = useCreateDonationMutation();
+  const [addDonationToCampaign] = useAddDonationToCampaignMutation();
 
   let progress;
   if (isSuccess) {
@@ -50,32 +55,52 @@ function CampaignPage() {
 
   const handleAfterPaymentVerificationTasks = async (response) => {
     try {
-      axios
-        .post("/donation/create-donation", {
+      // axios
+      //   .post("/donation/create-donation", {
+      //     campaignId: campaignData.campaign._id,
+      //     donationAmount: donation,
+      //     orderId: response.razorpay_order_id,
+      //     paymentId: response.razorpay_payment_id,
+      //   })
+      //   .then(({ data }) => {
+      //     if (!data.success) {
+      //       alert(data.serverMsg);
+      //     } else {
+      //       axios
+      //         .post("/campaign/add-donation", {
+      //           amount: donation,
+      //           campaignId: campaignData.campaign._id,
+      //           donationID: data.savedDonation._id,
+      //         })
+      //         .then(({ data }) => {
+      //           if (!data.success) {
+      //             alert(data.serverMsg);
+      //           } else {
+      //             setRefresh(!refresh);
+      //           }
+      //         });
+      //     }
+      //   });
+
+      const createdDonationData = await createDonation({
+        campaignId: campaignData.campaign._id,
+        donationAmount: donation,
+        orderId: response.razorpay_order_id,
+        paymentId: response.razorpay_payment_id,
+      }).unwrap();
+
+      if (!createdDonationData.success) {
+        alert(createdDonationData.serverMsg);
+      } else {
+        const donationDataAddedToCampaign = await addDonationToCampaign({
+          amount: donation,
           campaignId: campaignData.campaign._id,
-          donationAmount: donation,
-          orderId: response.razorpay_order_id,
-          paymentId: response.razorpay_payment_id,
-        })
-        .then(({ data }) => {
-          if (!data.success) {
-            alert(data.serverMsg);
-          } else {
-            axios
-              .post("/campaign/add-donation", {
-                amount: donation,
-                campaignId: campaignData.campaign._id,
-                donationID: data.savedDonation._id,
-              })
-              .then(({ data }) => {
-                if (!data.success) {
-                  alert(data.serverMsg);
-                } else {
-                  setRefresh(!refresh);
-                }
-              });
-          }
-        });
+          donationID: createdDonationData.savedDonation._id,
+        }).unwrap();
+        if (!donationDataAddedToCampaign.success) {
+          alert(donationDataAddedToCampaign.serverMsg);
+        }
+      }
     } catch (error) {
       console.error(error);
     }
@@ -91,10 +116,7 @@ function CampaignPage() {
       order_id: order.id,
       handler: async (response) => {
         try {
-          const { data } = await axios.post(
-            "/payment/verify-payment",
-            response,
-          );
+          const data = await verifyPayment(response).unwrap();
           console.log(data);
           // code to update amountRaised field in campiagn model
           if (!data.success) {
@@ -119,9 +141,6 @@ function CampaignPage() {
 
   const handlePayments = async () => {
     try {
-      // const { data } = await axios.post("/payment/create-order", {
-      //   amount: donation,
-      // });
       const data = await createOrder({ amount: donation }).unwrap();
 
       console.log(data);

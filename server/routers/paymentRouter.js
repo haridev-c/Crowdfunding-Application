@@ -8,6 +8,6 @@ const {
 const paymentRouter = express.Router();
 
 paymentRouter.post("/create-order", authenticate, createOrder);
-paymentRouter.post("/verify-payment", authenticate, verifyPayments);
+paymentRouter.post("/verify", authenticate, verifyPayments);
 
 module.exports = paymentRouter;
