@@ -113,8 +113,9 @@ const loginUser = async (req, res) => {
 };
 
 const getProfile = async (req, res) => {
+  console.log("- - - - - - - - - - - - ");
+  console.log("getProfile function called");
   try {
-    console.log("getProfile function called");
     console.log("Cookies received:", req.cookies);
     const token = req.cookies["token"];
     if (token) {

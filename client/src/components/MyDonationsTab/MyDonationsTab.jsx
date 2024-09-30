@@ -1,40 +1,35 @@
-import { useEffect, useState } from "react";
 import CampaignCard from "../CampaignCard";
-import axios from "axios";
+import { useGetUserDonationQuery } from "../../features/apiSlice";
 
 function MyDonationsTab() {
-  const [campaigns, setCampaigns] = useState();
-  const [refresh, setRefresh] = useState(false);
+  const { data: donationData, isLoading } = useGetUserDonationQuery();
 
-  useEffect(() => {
-    axios.get("/donation/get-my-donations").then(({ data }) => {
-      if (!data.success) {
-        alert(data.serverMsg);
-      } else {
-        setCampaigns(data.campaigns);
-      }
-    });
-  }, [refresh]);
-
-  if (!campaigns || campaigns.length == 0) {
+  if (
+    !donationData ||
+    !donationData.campaigns ||
+    donationData.campaigns.length == 0
+  ) {
     return <div>No campaigns found</div>;
   }
 
   return (
     <div className="flex-grow">
       <div className="md:flex md:flex-wrap md:justify-around">
-        {campaigns.map((item) => (
-          <CampaignCard
-            key={item._id}
-            title={item.title}
-            createdBy={item.createdBy}
-            description={item.description}
-            targetAmount={item.targetAmount}
-            amountRaised={item.amountRaised}
-            campaignId={item._id}
-            setRefresh={setRefresh}
-          />
-        ))}
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : (
+          donationData.campaigns.map((item) => (
+            <CampaignCard
+              key={item._id}
+              title={item.title}
+              createdBy={item.createdBy}
+              description={item.description}
+              targetAmount={item.targetAmount}
+              amountRaised={item.amountRaised}
+              campaignId={item._id}
+            />
+          ))
+        )}
       </div>
     </div>
   );

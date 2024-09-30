@@ -3,12 +3,16 @@ import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 // redux imports
 import { useSelector } from "react-redux";
-import { useGetCampaignQuery } from "../features/apiSlice";
+import {
+  useGetCampaignQuery,
+  useCreateOrderMutation,
+} from "../features/apiSlice";
 
 function CampaignPage() {
   const { id } = useParams();
   const { data: campaignData, isLoading, isSuccess } = useGetCampaignQuery(id);
-  // const [campaign, setCampaign] = useState(null);
+  const [createOrder] = useCreateOrderMutation();
+
   let progress;
   if (isSuccess) {
     progress =
@@ -88,7 +92,7 @@ function CampaignPage() {
       handler: async (response) => {
         try {
           const { data } = await axios.post(
-            "/payments/verify-payment",
+            "/payment/verify-payment",
             response,
           );
           console.log(data);
@@ -115,9 +119,11 @@ function CampaignPage() {
 
   const handlePayments = async () => {
     try {
-      const { data } = await axios.post("/payments/create-order", {
-        amount: donation,
-      });
+      // const { data } = await axios.post("/payment/create-order", {
+      //   amount: donation,
+      // });
+      const data = await createOrder({ amount: donation }).unwrap();
+
       console.log(data);
       initPayment(data.order);
     } catch (error) {

@@ -1,13 +1,9 @@
-// import axios from "axios";
-// import { useState } from "react";
 // redux imports
 import { useGetUserCampaignsQuery } from "../../features/apiSlice";
 // component imports
 import MyCampaignCard from "./MyCampaignCard";
 
 function MyCampaignsTab() {
-  // const [refresh, setRefresh] = useState(false);
-
   const { data: campaignData, isLoading } = useGetUserCampaignsQuery();
 
   if (
