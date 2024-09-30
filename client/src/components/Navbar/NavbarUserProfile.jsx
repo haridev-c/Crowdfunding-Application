@@ -46,7 +46,7 @@ function NavbarUserProfile() {
           {user.profilePic ? (
             <div className="size-10 overflow-hidden rounded-full">
               <img
-                src={`http://localhost:5050/user/get-dp/${user.profilePic}`}
+                src={`http://localhost:5050/api/user/dp/${user.profilePic}`}
                 className="size-10 rounded-full object-cover"
               />
             </div>

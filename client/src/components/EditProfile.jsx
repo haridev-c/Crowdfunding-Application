@@ -1,40 +1,47 @@
-import { useContext, useState } from "react";
-import { GlobalContext } from "../GlobalStateRepository";
-import axios from "axios";
+import { useState } from "react";
+
+// Redux imports
+import { useSelector, useDispatch } from "react-redux";
+import {
+  useUpdateProfileMutation,
+  useChangeDPMutation,
+} from "../features/apiSlice";
+import { setUser } from "../features/userSlice";
 
 function EditProfile() {
-  const { user, setRenderGSR } = useContext(GlobalContext);
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
+
   const [name, setName] = useState(user.name);
   const [phoneNo, setPhoneNo] = useState(user.phoneNo);
   const [age, setAge] = useState(user.age);
 
-  const imageUpload = (dp) => {
+  const [updateProfile] = useUpdateProfileMutation();
+  const [changeDP] = useChangeDPMutation();
+
+  // Image upload function
+  const imageUpload = async (dp) => {
     const formData = new FormData();
     formData.append("profilePic", dp);
     formData.append("userID", user._id);
 
-    axios.post("/user/update-dp", formData).then(({ data }) => {
-      console.log(data);
-      setRenderGSR((prev) => prev + 1);
-    });
+    const data = await changeDP(formData).unwrap();
+    console.log(data);
+    dispatch(setUser(data.updatedDoc));
   };
 
-  const userDetailsUpdate = (e) => {
-    e.preventDefault();
-    axios
-      .post("/user/update-user-details", { name, phoneNo, age })
-      .then(({ data }) => {
-        if (!data.success) {
-          alert(data.serverMsg);
-        } else {
-          console.log(data.serverMsg);
-          alert(data.serverMsg);
-          setRenderGSR((prev) => prev + 1);
-        }
-      })
-      .catch((err) => {
-        console.log("Error", err);
-      });
+  // User details update function
+  const handleUserDetailsUpdate = async (e) => {
+    try {
+      e.preventDefault();
+      const data = await updateProfile({ name, phoneNo, age }).unwrap();
+      console.log(data);
+      dispatch(setUser(data.updatedDoc));
+      alert(data.serverMsg);
+    } catch (error) {
+      console.log("Error submitting form");
+      console.error(error);
+    }
   };
 
   return (
@@ -44,7 +51,7 @@ function EditProfile() {
           {user.profilePic ? (
             <div className="size-28 overflow-hidden rounded-full">
               <img
-                src={`http://localhost:5050/user/get-dp/${user.profilePic}`}
+                src={`http://localhost:5050/api/user/dp/${user.profilePic}`}
                 className="size-28 rounded-full object-cover"
               />
             </div>
@@ -136,7 +143,7 @@ function EditProfile() {
 
         <div className="flex w-full">
           <button
-            onClick={userDetailsUpdate}
+            onClick={handleUserDetailsUpdate}
             className="mx-auto rounded-full bg-[#588157] px-10 py-2 text-xl font-bold text-[#f2e8cf] hover:shadow-lg"
           >
             Update

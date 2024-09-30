@@ -21,6 +21,7 @@ import EducationCategory from "./pages/Categories/EducationCategory";
 import EnvironmentCategory from "./pages/Categories/EnvironmentCategory";
 import EmergencyCategory from "./pages/Categories/EmergencyCategory";
 
+// static asset imports
 import spinner from "./assets/spinner.svg";
 
 // axios default configurations

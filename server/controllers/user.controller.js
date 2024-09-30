@@ -112,31 +112,6 @@ const loginUser = async (req, res) => {
   }
 };
 
-// const getProfile = async (req, res) => {
-//   try {
-//     console.log("- - - - - - - - - - - - - - - ");
-//     console.log("Started getProfile func");
-//     console.log("Getting token from request");
-//     const token = req.cookies["token"];
-//     if (token) {
-//       console.log("JWT token captured successfully; verifying token");
-//       jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-//         if (err) throw err;
-//         console.log("JWT token verified; getting user details from db");
-//         const userObject = await User.findById(userData._id);
-//         res.json(userObject);
-//         console.log("response sent");
-//       });
-//     } else {
-//       console.log("No JWT token found; sending null response");
-//       res.json(null);
-//     }
-//   } catch (error) {
-//     console.log(error);
-//     res.json(null);
-//   }
-// };
-
 const getProfile = async (req, res) => {
   try {
     console.log("getProfile function called");
@@ -185,7 +160,11 @@ const updateDp = async (req, res) => {
     ).then((updatedDoc) => {
       if (updatedDoc) {
         console.log("Doc update complete");
-        res.json({ success: true, serverMsg: "Doc update complete" });
+        res.json({
+          success: true,
+          serverMsg: "Doc update complete",
+          updatedDoc: updatedDoc,
+        });
       } else {
         console.log(
           "Something unexpected happened in updateDP while updating document to db"
@@ -216,23 +195,6 @@ const getDP = async (req, res) => {
     console.log("Full image path:", imagePath);
 
     try {
-      // console.log("Starting authorisation check");
-      // Authorisation check
-      // if (req.authenticatedUser.profilePic !== fileName) {
-      //   console.log("Unautherised request!");
-      //   res.json({ success: false, serverMsg: "Unautherised request!" });
-      // } else {
-      //   console.log("Authorisation check passed");
-      //   await fs.access(imagePath, fs.constants.R_OK);
-      //   console.log("File exists and is readable");
-
-      //   res.setHeader("Content-Type", "image/jpeg");
-      //   res.setHeader("Cache-Control", "public, max-age=3600");
-      //   res.setHeader("Content-Disposition", "inline");
-
-      //   res.sendFile(imagePath);
-      //   console.log("File sent");
-      // }
       await fs.access(imagePath, fs.constants.R_OK);
       console.log("File exists and is readable");
 

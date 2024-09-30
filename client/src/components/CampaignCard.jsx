@@ -35,7 +35,7 @@ function CampaignCard({
           {createdBy.profilePic ? (
             <div className="size-10 overflow-hidden rounded-full">
               <img
-                src={`http://localhost:5050/api/user/get-dp/${createdBy.profilePic}`}
+                src={`http://localhost:5050/api/user/dp/${createdBy.profilePic}`}
                 className="size-10 rounded-full object-cover"
               />
             </div>

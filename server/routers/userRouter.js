@@ -17,13 +17,8 @@ userRouter.post("/register", registerUser);
 userRouter.post("/login", loginUser);
 userRouter.get("/profile", getProfile);
 userRouter.post("/logout", logoutUser);
-userRouter.post(
-  "/update-dp",
-  authenticate,
-  upload.single("profilePic"),
-  updateDp
-);
-userRouter.get("/get-dp/:filename", getDP);
-userRouter.post("/update-user-details", authenticate, updateUserDetails);
+userRouter.put("/dp", authenticate, upload.single("profilePic"), updateDp);
+userRouter.get("/dp/:filename", getDP);
+userRouter.patch("/profile", authenticate, updateUserDetails);
 
 module.exports = userRouter;

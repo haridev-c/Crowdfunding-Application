@@ -7,7 +7,7 @@ const {
   getAllCampaigns,
   getCampaignDetails,
   addDonation,
-  getLoggedInUserCampaigns,
+  getUserCampaigns,
   deleteOne,
   getAllCampaignsInCategory,
   getFeaturedCampaigns,
@@ -16,10 +16,10 @@ const {
 campaignRouter.post("/create", authenticate, createCampaign);
 campaignRouter.get("/get-all-campaigns", getAllCampaigns);
 campaignRouter.get("/featured-campaigns", getFeaturedCampaigns);
-campaignRouter.post("/get-campaign-details", getCampaignDetails);
+campaignRouter.get("/single/:campaignId", getCampaignDetails);
 campaignRouter.post("/add-donation", authenticate, addDonation);
-campaignRouter.get("/get-my-campaigns", authenticate, getLoggedInUserCampaigns);
-campaignRouter.delete("/delete-one", authenticate, deleteOne);
+campaignRouter.get("/user-campaigns", authenticate, getUserCampaigns);
+campaignRouter.delete("/delete/:campaignId", authenticate, deleteOne);
 campaignRouter.get("/category/:category", getAllCampaignsInCategory);
 
 module.exports = campaignRouter;

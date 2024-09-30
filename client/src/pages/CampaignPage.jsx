@@ -1,36 +1,27 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { GlobalContext } from "../GlobalStateRepository";
+// redux imports
+import { useSelector } from "react-redux";
+import { useGetCampaignQuery } from "../features/apiSlice";
 
 function CampaignPage() {
-  const [campaign, setCampaign] = useState(null);
-  const [progress, setProgress] = useState();
+  const { id } = useParams();
+  const { data: campaignData, isLoading, isSuccess } = useGetCampaignQuery(id);
+  // const [campaign, setCampaign] = useState(null);
+  let progress;
+  if (isSuccess) {
+    progress =
+      (campaignData.campaign.amountRaised /
+        campaignData.campaign.targetAmount) *
+      100;
+  }
   const [donation, setDonation] = useState();
   const [refresh, setRefresh] = useState(false);
-  const { id } = useParams();
-  const { user } = useContext(GlobalContext);
+
+  const { user } = useSelector((state) => state.user);
+
   const navigate = useNavigate();
-
-  async function fetchCampaignDetails(campaignId) {
-    axios
-      .post("/campaign/get-campaign-details", { campaignId })
-      .then(({ data }) => {
-        if (!data.success) {
-          alert(data.serverMsg);
-        } else {
-          console.log("Campaign details: ", data.campaign);
-          setCampaign(data.campaign);
-          setProgress(
-            (data.campaign.amountRaised / data.campaign.targetAmount) * 100,
-          );
-        }
-      });
-  }
-
-  useEffect(() => {
-    fetchCampaignDetails(id);
-  }, [id, refresh]);
 
   const formatAmount = (num) => {
     return new Intl.NumberFormat("en-IN", {
@@ -57,7 +48,7 @@ function CampaignPage() {
     try {
       axios
         .post("/donation/create-donation", {
-          campaignId: campaign._id,
+          campaignId: campaignData.campaign._id,
           donationAmount: donation,
           orderId: response.razorpay_order_id,
           paymentId: response.razorpay_payment_id,
@@ -69,7 +60,7 @@ function CampaignPage() {
             axios
               .post("/campaign/add-donation", {
                 amount: donation,
-                campaignId: campaign._id,
+                campaignId: campaignData.campaign._id,
                 donationID: data.savedDonation._id,
               })
               .then(({ data }) => {
@@ -91,8 +82,8 @@ function CampaignPage() {
       key: "rzp_test_McObQODIQEYS73",
       amount: order.amount,
       currency: order.currency,
-      name: campaign.title,
-      description: `Contribution to ${campaign.createdBy.name}'s cause`,
+      name: campaignData.campaign.title,
+      description: `Contribution to ${campaignData.campaign.createdBy.name}'s cause`,
       order_id: order.id,
       handler: async (response) => {
         try {
@@ -134,7 +125,7 @@ function CampaignPage() {
     }
   };
 
-  if (!campaign) {
+  if (isLoading) {
     return <div>Loading</div>;
   }
 
@@ -143,14 +134,14 @@ function CampaignPage() {
       <div className="flex flex-grow items-center justify-center bg-[#E9F1E4]">
         <div className="mx-4 my-4 flex flex-col rounded bg-white p-8 shadow-lg md:mx-auto md:mt-10 md:w-1/2">
           <div id="title" className="text-2xl font-bold text-[#386641]">
-            {campaign.title}
+            {campaignData.campaign.title}
           </div>
           <div id="creatorDetails" className="mt-4 flex items-center">
             <div id="profilePic">
-              {campaign.createdBy.profilePic ? (
+              {campaignData.campaign.createdBy.profilePic ? (
                 <div className="size-10 rounded-full">
                   <img
-                    src={`http://localhost:5050/user/get-dp/${campaign.createdBy.profilePic}`}
+                    src={`http://localhost:5050/api/user/dp/${campaignData.campaign.createdBy.profilePic}`}
                     className="size-10 rounded-full"
                   />
                 </div>
@@ -172,21 +163,27 @@ function CampaignPage() {
               )}
             </div>
             <div id="creatorName" className="ml-10 font-medium">
-              {campaign.createdBy.name}
+              {campaignData.campaign.createdBy.name}
             </div>
           </div>
           <div
             id="description"
             className="prose my-4 whitespace-pre-wrap text-justify"
           >
-            {campaign.description}
+            {campaignData.campaign.description}
           </div>
           <div id="info" className="flex">
             <div id="targetDetails">
-              <p>Amount Raised: {formatAmount(campaign.amountRaised)}</p>
+              <p>
+                Amount Raised:{" "}
+                {formatAmount(campaignData.campaign.amountRaised)}
+              </p>
             </div>
             <div className="flex flex-grow justify-end text-right">
-              <p>Target Amount: {formatAmount(campaign.targetAmount)}</p>
+              <p>
+                Target Amount:{" "}
+                {formatAmount(campaignData.campaign.targetAmount)}
+              </p>
             </div>
           </div>
           <div id="donationSection" className="my-4 flex">

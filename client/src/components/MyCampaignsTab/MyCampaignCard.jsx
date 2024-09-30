@@ -1,6 +1,8 @@
-import axios from "axios";
+// import axios from "axios";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+
+import { useDeleteCamapiagnMutation } from "../../features/apiSlice";
 
 function MyCampaignCard({
   title,
@@ -9,8 +11,9 @@ function MyCampaignCard({
   targetAmount,
   amountRaised,
   campaignId,
-  setRefresh,
 }) {
+  const [deleteCampaign] = useDeleteCamapiagnMutation();
+
   let progress = (amountRaised / targetAmount) * 100;
 
   const formatAmount = (num) => {
@@ -22,15 +25,9 @@ function MyCampaignCard({
     }).format(num);
   };
 
-  const handleDeleteCampaign = () => {
-    axios.delete("/campaign/delete-one", { campaignId }).then(({ data }) => {
-      if (!data.success) {
-        alert(data.serverMsg);
-      } else {
-        alert(data.serverMsg);
-        setRefresh((prev) => !prev);
-      }
-    });
+  const handleDeleteCampaign = async () => {
+    const data = await deleteCampaign(campaignId);
+    console.log(data);
   };
 
   return (
@@ -48,7 +45,7 @@ function MyCampaignCard({
           {createdBy.profilePic ? (
             <div className="size-10 rounded-full">
               <img
-                src={`http://localhost:5050/user/get-dp/${createdBy.profilePic}`}
+                src={`http://localhost:5050/api/user/dp/${createdBy.profilePic}`}
                 className="size-10 rounded-full"
               />
             </div>
@@ -82,14 +79,12 @@ function MyCampaignCard({
           <p>Amount Raised: {formatAmount(amountRaised)}</p>
         </div>
         <div className="flex flex-grow justify-end">
-          <Link to={`/campaign/${campaignId}`}>
-            <button
-              onClick={handleDeleteCampaign}
-              className="rounded-full bg-[#bc4749]/95 px-6 py-2 font-medium text-[#f2e8cf] transition-all duration-300 hover:bg-[bc4749] hover:shadow-lg"
-            >
-              Delete
-            </button>
-          </Link>
+          <button
+            onClick={handleDeleteCampaign}
+            className="rounded-full bg-[#bc4749]/95 px-6 py-2 font-medium text-[#f2e8cf] transition-all duration-300 hover:bg-[bc4749] hover:shadow-lg"
+          >
+            Delete
+          </button>
         </div>
       </div>
       <div id="progressBar" className="my-4">

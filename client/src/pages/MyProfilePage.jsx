@@ -1,6 +1,9 @@
-import { useContext, useState } from "react";
-import { GlobalContext } from "../GlobalStateRepository";
+import { useState } from "react";
 import { Navigate } from "react-router-dom";
+
+import { useSelector } from "react-redux";
+
+// component imports
 import EditProfile from "../components/EditProfile";
 import MyCampaignsTab from "../components/MyCampaignsTab/MyCampaignsTab";
 import MyDonationsTab from "../components/MyDonationsTab/MyDonationsTab";
@@ -8,7 +11,7 @@ import Sidebar from "../components/ProfilePageTabs/Sidebar";
 import HorizontalTabs from "../components/ProfilePageTabs/HorizontalTabs";
 
 function MyProfilePage() {
-  const { user } = useContext(GlobalContext);
+  const { user } = useSelector((state) => state.user);
   const [tabVlue, setTabValue] = useState(1);
 
   if (!user) {
