@@ -1,40 +1,67 @@
-import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 
 // redux imports
 import { useSelector } from "react-redux";
 import { useCreateCampaignMutation } from "../features/apiSlice";
 
+// zod and form imports
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
 function CreateFundraiserPage() {
   const navigate = useNavigate();
 
+  // redux hooks
   const { user } = useSelector((state) => state.user);
   const [createCampaign] = useCreateCampaignMutation();
 
-  // state declarations
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [targetAmount, setTargetAmount] = useState();
-  const [category, setCategory] = useState("Medical");
-  const [deadline, setDeadline] = useState();
+  // zod schema definition
+  const campaignSchema = z.object({
+    category: z.enum([
+      "Medical",
+      "Education",
+      "Sports",
+      "Environment",
+      "Emergency",
+      "Animal",
+    ]),
 
-  const handleCreateCampaign = async (e) => {
+    title: z
+      .string()
+      .min(10, { message: "Title must be atleast 10 characters long" })
+      .max(50, { message: "Title cannot be longer than 50 characters" })
+      .trim(),
+
+    description: z
+      .string()
+      .min(10, { message: "Description must be atleast 10 characters long" })
+      .max(500, { message: "Description cannot exceed 500 characters" })
+      .trim(),
+
+    targetAmount: z.coerce
+      .number()
+      .int({ message: "Amount should be an integer" })
+      .positive({ message: "Amount should be positive" }),
+
+    deadline: z.coerce
+      .date()
+      .min(new Date(), { message: "Please select a deadline in the future" }),
+  });
+
+  // react-hook-form initialization
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: zodResolver(campaignSchema) });
+
+  const handleCreateCampaign = async (data) => {
     try {
-      e.preventDefault();
-      const data = await createCampaign({
-        title,
-        description,
-        targetAmount,
-        deadline,
-        category,
-      }).unwrap();
-
-      if (data.success) {
-        alert(data.serverMsg);
-        navigate("/");
-      } else {
-        alert(data.serverMsg);
-      }
+      console.log(data);
+      const responseData = await createCampaign(data).unwrap();
+      alert(responseData.serverMsg);
+      if (responseData.success) navigate("/");
     } catch (error) {
       console.log("Error creating campaign");
       console.error(error);
@@ -49,7 +76,10 @@ function CreateFundraiserPage() {
     <>
       <div className="w-full bg-[#E9F1E4]">
         <div className="m-auto p-2 md:w-1/2">
-          <form className="m-2 flex flex-col rounded-lg border-2 bg-white p-4 shadow-lg">
+          <form
+            onSubmit={handleSubmit(handleCreateCampaign)}
+            className="m-2 flex flex-col rounded-lg border-2 bg-white p-4 shadow-lg"
+          >
             <div className="m-3">
               <h1 className="text-center text-xl font-bold text-[#386641]">
                 Create New Fundraiser
@@ -59,8 +89,8 @@ function CreateFundraiserPage() {
               <label>
                 <p>Campaign Type</p>
                 <select
+                  {...register("category", { required: true })}
                   name="category"
-                  onChange={(e) => setCategory(e.target.value)}
                   className="w-full rounded-md border-none bg-gray-200 focus:ring-0"
                 >
                   <option value="Medical">Medical</option>
@@ -71,29 +101,36 @@ function CreateFundraiserPage() {
                   <option value="Animal">Animal</option>
                 </select>
               </label>
+              {errors.category && (
+                <p className="text-red-500">{errors.category.message}</p>
+              )}
             </div>
             <div className="m-3">
               <label>
                 <p>Campaign Title</p>
                 <input
+                  {...register("title", { required: true })}
                   type="text"
                   className="form-input w-full rounded-md border-none bg-gray-200 focus:ring-0"
                   placeholder="Enter campaign title"
-                  onChange={(e) => setTitle(e.target.value)}
-                  required
                 />
               </label>
+              {errors.title && (
+                <p className="text-red-500">{errors.title.message}</p>
+              )}
             </div>
             <div className="m-3">
               <label>
                 <p>Campaign Description</p>
                 <textarea
+                  {...register("description", { required: true })}
                   className="form-textarea w-full rounded-md border-none bg-gray-200 focus:ring-0"
                   placeholder="Enter campaign description"
-                  onChange={(e) => setDescription(e.target.value)}
-                  required
                 ></textarea>
               </label>
+              {errors.description && (
+                <p className="text-red-500">{errors.description.message}</p>
+              )}
             </div>
             <div className="m-3">
               <label>
@@ -116,30 +153,34 @@ function CreateFundraiserPage() {
                     </svg>
                   </div>
                   <input
+                    {...register("targetAmount", { required: true })}
                     type="number"
                     className="form-input w-full rounded-r-md border-none bg-gray-200 focus:outline-none focus:ring-0"
                     placeholder="Enter target amaount"
-                    onChange={(e) => setTargetAmount(e.target.value)}
-                    required
                   />
                 </div>
               </label>
+              {errors.targetAmount && (
+                <p className="text-red-500">{errors.targetAmount.message}</p>
+              )}
             </div>
             <div className="m-3">
               <label>
                 <p>Deadline</p>
                 <input
+                  {...register("deadline", { required: true })}
                   type="date"
                   className="form-input w-full rounded-md border-none bg-gray-200 focus:ring-0"
                   min={new Date().toISOString().split("T")[0]}
-                  onChange={(e) => setDeadline(e.target.value)}
-                  required
                 />
               </label>
+              {errors.deadline && (
+                <p className="text-red-500">{errors.deadline.message}</p>
+              )}
             </div>
             <div className="mt-3 flex justify-center">
               <button
-                onClick={handleCreateCampaign}
+                type="submit"
                 className="m-2 rounded-md bg-[#6A994E] p-2 text-lg text-[#F2E8CF] shadow-md"
               >
                 Create Fundraiser

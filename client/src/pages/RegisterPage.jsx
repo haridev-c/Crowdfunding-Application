@@ -10,6 +10,7 @@ import * as z from "zod";
 
 function RegisterPage() {
   const { user } = useSelector((state) => state.user);
+  const [registerUser] = useRegisterUserMutation();
 
   // zod schema definition
   const formSchema = z.object({
@@ -33,6 +34,7 @@ function RegisterPage() {
       .trim(),
   });
 
+  // react-hook-form initialization
   const {
     register,
     handleSubmit,
@@ -40,8 +42,6 @@ function RegisterPage() {
   } = useForm({
     resolver: zodResolver(formSchema),
   });
-
-  const [registerUser] = useRegisterUserMutation();
 
   const navigate = useNavigate();
 
