@@ -1,29 +1,55 @@
-import { useContext, useState } from "react";
 import { Link, useNavigate, Navigate } from "react-router-dom";
-import axios from "axios";
-import { GlobalContext } from "../GlobalStateRepository";
+
+// redux imports
+import { useSelector } from "react-redux";
+import { useRegisterUserMutation } from "../features/apiSlice";
+
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 
 function RegisterPage() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { user } = useSelector((state) => state.user);
 
-  const { user } = useContext(GlobalContext);
+  // zod schema definition
+  const formSchema = z.object({
+    name: z
+      .string()
+      .min(3, { message: "Name must be atleast 3 characters long" })
+      .max(20, { message: "Name cannot be longer than 20 characters" })
+      .trim(),
+    email: z
+      .string({ required_error: "Email is required" })
+      .email({ message: "Invalid email format" })
+      .trim(),
+    password: z
+      .string({ required_error: "Password is required" })
+      .min(8, { message: "Password should be min 8 characters long" })
+      .max(14, { message: "Password should be max 14 characters long" })
+      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).+$/, {
+        message:
+          "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
+      })
+      .trim(),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(formSchema),
+  });
+
+  const [registerUser] = useRegisterUserMutation();
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    axios.post("/user/register", { name, email, password }).then((result) => {
-      console.log(result.data);
-      if (result.data.success) {
-        alert(result.data.serverMsg);
-        navigate("/login");
-      } else {
-        alert(result.data.serverMsg);
-        navigate("/login");
-      }
-    });
+  const onSubmit = async (data) => {
+    const responseData = await registerUser(data).unwrap();
+    console.log(responseData);
+    alert(data.serverMsg);
+    if (!data.success) navigate("/login");
   };
 
   if (user) {
@@ -33,42 +59,52 @@ function RegisterPage() {
   return (
     <>
       <div className="m-auto flex flex-grow flex-col justify-center md:w-1/2">
-        <form className="my-4 flex flex-col rounded-md border-2 border-solid p-6 shadow-xl">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="my-4 flex flex-col rounded-md border-2 border-solid p-6 shadow-xl"
+        >
           <h2 className="m-3 text-center text-2xl font-bold text-[#386641]">
             Join the SparkFund Community
           </h2>
           <label htmlFor="name" className="my-2">
             <p>Full Name</p>
             <input
+              {...register("name")}
               type="text"
               name="name"
               placeholder="John Doe"
               className="form-input w-full rounded-md border-none bg-gray-200"
-              onChange={(e) => setName(e.target.value)}
             />
           </label>
+          {errors.name && <p className="text-red-500">{errors.name.message}</p>}
           <label htmlFor="email" className="my-2">
             <p>Email</p>
             <input
+              {...register("email")}
               type="email"
               placeholder="johndoe@abc.com"
               className="form-input w-full rounded-md border-none bg-gray-200"
               name="email"
-              onChange={(e) => setEmail(e.target.value)}
             />
           </label>
+          {errors.email && (
+            <p className="text-red-500">{errors.email.message}</p>
+          )}
           <label htmlFor="password" className="my-2">
             <p>Password</p>
             <input
+              {...register("password")}
               type="password"
               className="form-input w-full rounded-md border-none bg-gray-200"
               name="password"
               placeholder="sjd123!&^#"
-              onChange={(e) => setPassword(e.target.value)}
             />
           </label>
+          {errors.password && (
+            <p className="text-red-500">{errors.password.message}</p>
+          )}
           <button
-            onClick={handleSubmit}
+            type="submit"
             className="my-6 rounded-md bg-[#6A994E] py-2 text-lg font-bold text-[#F2E8CF]"
           >
             Sign Up

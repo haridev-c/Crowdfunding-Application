@@ -1,13 +1,31 @@
-import { useState } from "react";
+import { Navigate } from "react-router-dom";
 import { Link, useNavigate } from "react-router-dom";
+
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+// redux imports
 import { useDispatch, useSelector } from "react-redux";
 import { useLoginUserMutation } from "../features/apiSlice";
 import { setUser } from "../features/userSlice";
-import { Navigate } from "react-router-dom";
 
 function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const formSchema = z.object({
+    email: z.string().email({ message: "Invalid email format" }).trim(),
+    password: z
+      .string({ required_error: "Password is required" })
+      .trim()
+      .refine((val) => val !== "", { message: "Password is required" }),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(formSchema),
+  });
 
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -15,17 +33,14 @@ function LoginPage() {
 
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const onSubmit = async (data) => {
     try {
-      e.preventDefault();
-      const data = await loginUser({ email, password }).unwrap();
-      console.log(data);
-      if (data.success) {
-        alert(data.serverMsg);
-        dispatch(setUser(data.user));
+      const responseData = await loginUser(data).unwrap();
+      console.log(responseData);
+      alert(responseData.serverMsg);
+      if (responseData.success) {
+        dispatch(setUser(responseData.user));
         navigate("/");
-      } else {
-        alert(data.serverMsg);
       }
     } catch (error) {
       console.log("Error submitting form", error);
@@ -40,32 +55,41 @@ function LoginPage() {
     <>
       <div className="flex flex-grow bg-[#E9F1E4]">
         <div className="m-auto flex flex-col justify-center md:w-1/2">
-          <form className="my-4 flex flex-col rounded-md border-2 border-solid bg-white p-6 shadow-xl">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="my-4 flex flex-col rounded-md border-2 border-solid bg-white p-6 shadow-xl"
+          >
             <h2 className="m-3 text-center text-2xl font-bold text-[#386641]">
               Welcome Back to SparkFund
             </h2>
             <label htmlFor="email" className="my-2">
               <p>Email</p>
               <input
+                {...register("email")}
                 type="email"
                 placeholder="nivin@gmail.com"
                 className="form-input w-full rounded-md border-none bg-gray-200"
                 name="email"
-                onChange={(e) => setEmail(e.target.value)}
               />
             </label>
+            {errors.email && (
+              <p className="text-red-500">{errors.email.message}</p>
+            )}
             <label htmlFor="password" className="my-2">
               <p>Password</p>
               <input
+                {...register("password")}
                 type="password"
                 className="form-input w-full rounded-md border-none bg-gray-200"
                 name="password"
                 placeholder="1234"
-                onChange={(e) => setPassword(e.target.value)}
               />
             </label>
+            {errors.password && (
+              <p className="text-red-500">{errors.password.message}</p>
+            )}
             <button
-              onClick={handleSubmit}
+              type="submit"
               className="my-6 rounded-md bg-[#6A994E] py-2 text-lg font-bold text-[#F2E8CF]"
             >
               Login

@@ -24,6 +24,15 @@ export const apiSlice = createApi({
       invalidatesTags: ["User"],
     }),
 
+    registerUser: builder.mutation({
+      query: (userDetails) => ({
+        url: "user/register",
+        method: "POST",
+        body: userDetails,
+      }),
+      invalidatesTags: ["User"],
+    }),
+
     getProfile: builder.query({
       query: () => ({
         url: "user/profile",
@@ -175,4 +184,5 @@ export const {
   useVerifyPaymentMutation,
   useCreateDonationMutation,
   useAddDonationToCampaignMutation,
+  useRegisterUserMutation,
 } = apiSlice;
