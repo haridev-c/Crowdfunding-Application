@@ -11,22 +11,21 @@ import {
 } from "../features/apiSlice";
 
 function CampaignPage() {
+  // get campaign id from url
   const { id } = useParams();
-  const { data: campaignData, isLoading, isSuccess } = useGetCampaignQuery(id);
+
+  // initialise RTK query hooks
   const [createOrder] = useCreateOrderMutation();
   const [verifyPayment] = useVerifyPaymentMutation();
   const [createDonation] = useCreateDonationMutation();
   const [addDonationToCampaign] = useAddDonationToCampaignMutation();
+  const { data: campaignData, isLoading } = useGetCampaignQuery(id);
 
-  let progress;
-  if (isSuccess) {
-    progress =
-      (campaignData.campaign.amountRaised /
-        campaignData.campaign.targetAmount) *
-      100;
-  }
+  let progress =
+    (campaignData?.campaign.amountRaised /
+      campaignData?.campaign.targetAmount) *
+    100;
   const [donation, setDonation] = useState();
-  const [refresh, setRefresh] = useState(false);
 
   const { user } = useSelector((state) => state.user);
 
@@ -55,33 +54,6 @@ function CampaignPage() {
 
   const handleAfterPaymentVerificationTasks = async (response) => {
     try {
-      // axios
-      //   .post("/donation/create-donation", {
-      //     campaignId: campaignData.campaign._id,
-      //     donationAmount: donation,
-      //     orderId: response.razorpay_order_id,
-      //     paymentId: response.razorpay_payment_id,
-      //   })
-      //   .then(({ data }) => {
-      //     if (!data.success) {
-      //       alert(data.serverMsg);
-      //     } else {
-      //       axios
-      //         .post("/campaign/add-donation", {
-      //           amount: donation,
-      //           campaignId: campaignData.campaign._id,
-      //           donationID: data.savedDonation._id,
-      //         })
-      //         .then(({ data }) => {
-      //           if (!data.success) {
-      //             alert(data.serverMsg);
-      //           } else {
-      //             setRefresh(!refresh);
-      //           }
-      //         });
-      //     }
-      //   });
-
       const createdDonationData = await createDonation({
         campaignId: campaignData.campaign._id,
         donationAmount: donation,

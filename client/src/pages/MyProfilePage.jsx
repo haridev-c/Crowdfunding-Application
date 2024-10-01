@@ -15,7 +15,7 @@ function MyProfilePage() {
   const [tabVlue, setTabValue] = useState(1);
 
   if (!user) {
-    return <Navigate to={"/"} />;
+    return <Navigate to={"/login"} />;
   }
 
   return (

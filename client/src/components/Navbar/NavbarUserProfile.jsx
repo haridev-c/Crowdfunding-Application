@@ -26,12 +26,10 @@ function NavbarUserProfile() {
     try {
       const data = await logoutUser().unwrap();
       console.log(data);
+      alert(data.serverMsg);
       if (data.success) {
-        alert(data.serverMsg);
         dispatch(setUser(null));
         navigate("/");
-      } else {
-        alert(data.serverMsg);
       }
     } catch (error) {
       console.log("Error logging out", error);
@@ -89,7 +87,7 @@ function NavbarUserProfile() {
             </MenuItem>
             <MenuItem>
               <Link
-                to={"/dashboard"}
+                to={"/profile"}
                 className="my-1 block w-full rounded p-1 px-6 font-bold text-[#386641] transition-all duration-300 data-[focus]:bg-[#a7c957]"
               >
                 My Profile

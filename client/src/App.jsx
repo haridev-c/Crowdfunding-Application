@@ -63,7 +63,7 @@ function App() {
             <Route path="/category/emergency" element={<EmergencyCategory />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/dashboard" element={<MyProfilePage />} />
+            <Route path="/profile" element={<MyProfilePage />} />
             <Route path="/campaign/:id" element={<CampaignPage />} />
             <Route
               path="/create-new-fundraiser"
