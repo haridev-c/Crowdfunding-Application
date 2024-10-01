@@ -1,6 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { Link, useNavigate } from "react-router-dom";
 
+// zod and form imports
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -11,6 +12,12 @@ import { useLoginUserMutation } from "../features/apiSlice";
 import { setUser } from "../features/userSlice";
 
 function LoginPage() {
+  // redux hooks
+  const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const [loginUser] = useLoginUserMutation();
+
+  // zod schema definition
   const formSchema = z.object({
     email: z.string().email({ message: "Invalid email format" }).trim(),
     password: z
@@ -26,10 +33,6 @@ function LoginPage() {
   } = useForm({
     resolver: zodResolver(formSchema),
   });
-
-  const { user } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
-  const [loginUser] = useLoginUserMutation();
 
   const navigate = useNavigate();
 

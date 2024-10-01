@@ -4,7 +4,7 @@ import axios from "axios";
 
 // redux imports
 import { useGetProfileQuery } from "./features/apiSlice";
-import { setUser } from "./features/userSlice";
+import { setUser, removeUser } from "./features/userSlice";
 import { useDispatch } from "react-redux";
 
 // page imports
@@ -31,11 +31,12 @@ axios.defaults.withCredentials = true;
 
 function App() {
   const dispatch = useDispatch();
-  const { data: profileData, isLoading } = useGetProfileQuery();
+  const { data: profileData, isLoading, isError } = useGetProfileQuery();
 
   useEffect(() => {
+    if (isError) dispatch(removeUser());
     if (profileData) dispatch(setUser(profileData));
-  }, [profileData, dispatch]);
+  }, [profileData, dispatch, isError]);
 
   if (isLoading) {
     return (
