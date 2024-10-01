@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+
 // redux imports
 import { useSelector } from "react-redux";
 import {
@@ -11,6 +12,10 @@ import {
 } from "../features/apiSlice";
 
 function CampaignPage() {
+  const navigate = useNavigate();
+
+  const { user } = useSelector((state) => state.user);
+
   // get campaign id from url
   const { id } = useParams();
 
@@ -26,10 +31,6 @@ function CampaignPage() {
       campaignData?.campaign.targetAmount) *
     100;
   const [donation, setDonation] = useState();
-
-  const { user } = useSelector((state) => state.user);
-
-  const navigate = useNavigate();
 
   const formatAmount = (num) => {
     return new Intl.NumberFormat("en-IN", {

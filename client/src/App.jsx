@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import axios from "axios";
 
+// redux imports
 import { useGetProfileQuery } from "./features/apiSlice";
 import { setUser } from "./features/userSlice";
 import { useDispatch } from "react-redux";
@@ -33,9 +34,7 @@ function App() {
   const { data: profileData, isLoading } = useGetProfileQuery();
 
   useEffect(() => {
-    if (profileData) {
-      dispatch(setUser(profileData));
-    }
+    if (profileData) dispatch(setUser(profileData));
   }, [profileData, dispatch]);
 
   if (isLoading) {

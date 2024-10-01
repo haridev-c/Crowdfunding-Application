@@ -6,11 +6,7 @@ import MyCampaignCard from "./MyCampaignCard";
 function MyCampaignsTab() {
   const { data: campaignData, isLoading } = useGetUserCampaignsQuery();
 
-  if (
-    !campaignData ||
-    !campaignData.userCampaigns ||
-    campaignData.userCampaigns.length == 0
-  ) {
+  if (!campaignData?.userCampaigns?.length) {
     return <div>No campaigns found</div>;
   }
 

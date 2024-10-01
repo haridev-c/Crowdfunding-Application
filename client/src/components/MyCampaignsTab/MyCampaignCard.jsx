@@ -1,7 +1,7 @@
-// import axios from "axios";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
+// redux imports
 import { useDeleteCamapiagnMutation } from "../../features/apiSlice";
 
 function MyCampaignCard({

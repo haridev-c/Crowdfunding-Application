@@ -1,14 +1,13 @@
-import CampaignCard from "../CampaignCard";
+// redux imports
 import { useGetUserDonationQuery } from "../../features/apiSlice";
+
+// component imports
+import CampaignCard from "../CampaignCard";
 
 function MyDonationsTab() {
   const { data: donationData, isLoading } = useGetUserDonationQuery();
 
-  if (
-    !donationData ||
-    !donationData.campaigns ||
-    donationData.campaigns.length == 0
-  ) {
+  if (!donationData?.campaigns?.length) {
     return <div>No campaigns found</div>;
   }
 
