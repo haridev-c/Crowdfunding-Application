@@ -1,4 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
+import { formatDistanceToNow } from "date-fns";
 
 // redux imports
 import { useSelector } from "react-redux";
@@ -28,7 +29,9 @@ function CampaignPage() {
   const [verifyPayment] = useVerifyPaymentMutation();
   const [createDonation] = useCreateDonationMutation();
   const [addDonationToCampaign] = useAddDonationToCampaignMutation();
-  const { data: campaignData, isLoading } = useGetCampaignQuery(id);
+  const { data: campaignData, isLoading } = useGetCampaignQuery(id); // fetch campaign data
+
+  !isLoading && console.log(campaignData);
 
   // zod schema definition
   const donationSchema = z.object({
@@ -178,8 +181,13 @@ function CampaignPage() {
                 </svg>
               )}
             </div>
-            <div id="creatorName" className="ml-10 font-medium">
+            <div id="creatorName" className="ml-10 flex-grow font-medium">
               {campaignData.campaign.createdBy.name}
+            </div>
+            <div>
+              {formatDistanceToNow(campaignData.campaign.deadline, {
+                addSuffix: true,
+              })}
             </div>
           </div>
           <div
