@@ -29,18 +29,21 @@ function CreateFundraiserPage() {
 
     title: z
       .string()
+      .min(1, { message: "Title is required" })
       .min(10, { message: "Title must be atleast 10 characters long" })
       .max(50, { message: "Title cannot be longer than 50 characters" })
       .trim(),
 
     description: z
       .string()
+      .min(1, { message: "Description is required" })
       .min(10, { message: "Description must be atleast 10 characters long" })
       .max(500, { message: "Description cannot exceed 500 characters" })
       .trim(),
 
     targetAmount: z.coerce
       .number()
+      .min(1, { message: "Amount is required" })
       .int({ message: "Amount should be an integer" })
       .positive({ message: "Amount should be positive" }),
 
@@ -109,7 +112,7 @@ function CreateFundraiserPage() {
               <label>
                 <p>Campaign Title</p>
                 <input
-                  {...register("title", { required: true })}
+                  {...register("title")}
                   type="text"
                   className="form-input w-full rounded-md border-none bg-gray-200 focus:ring-0"
                   placeholder="Enter campaign title"
@@ -123,7 +126,7 @@ function CreateFundraiserPage() {
               <label>
                 <p>Campaign Description</p>
                 <textarea
-                  {...register("description", { required: true })}
+                  {...register("description")}
                   className="form-textarea w-full rounded-md border-none bg-gray-200 focus:ring-0"
                   placeholder="Enter campaign description"
                 ></textarea>
@@ -153,7 +156,7 @@ function CreateFundraiserPage() {
                     </svg>
                   </div>
                   <input
-                    {...register("targetAmount", { required: true })}
+                    {...register("targetAmount")}
                     type="number"
                     className="form-input w-full rounded-r-md border-none bg-gray-200 focus:outline-none focus:ring-0"
                     placeholder="Enter target amaount"
@@ -168,7 +171,7 @@ function CreateFundraiserPage() {
               <label>
                 <p>Deadline</p>
                 <input
-                  {...register("deadline", { required: true })}
+                  {...register("deadline")}
                   type="date"
                   className="form-input w-full rounded-md border-none bg-gray-200 focus:ring-0"
                   min={new Date().toISOString().split("T")[0]}

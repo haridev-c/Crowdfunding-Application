@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 // redux imports
@@ -10,6 +9,11 @@ import {
   useCreateDonationMutation,
   useAddDonationToCampaignMutation,
 } from "../features/apiSlice";
+
+// zod and form imports
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 
 function CampaignPage() {
   const navigate = useNavigate();
@@ -26,11 +30,30 @@ function CampaignPage() {
   const [addDonationToCampaign] = useAddDonationToCampaignMutation();
   const { data: campaignData, isLoading } = useGetCampaignQuery(id);
 
+  // zod schema definition
+  const donationSchema = z.object({
+    amount: z.coerce
+      .number()
+      .min(1, { message: "Amount is required" })
+      .int({ message: "Amount should be an integer" })
+      .positive({ message: "Amount should be positive" })
+      .max(100000, { message: "Amount should not exceed 100000" }),
+  });
+
+  // react-hook-form initialization
+  const {
+    register,
+    watch,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: zodResolver(donationSchema) });
+
+  const donation = watch("amount");
+
   let progress =
     (campaignData?.campaign.amountRaised /
       campaignData?.campaign.targetAmount) *
     100;
-  const [donation, setDonation] = useState();
 
   const formatAmount = (num) => {
     return new Intl.NumberFormat("en-IN", {
@@ -41,18 +64,13 @@ function CampaignPage() {
     }).format(num);
   };
 
+  // if user not logged in then prompt user to login
   const handleLoginPrompt = () => {
     alert("You have to login first befor making a donation");
     navigate("/login");
   };
-  const handleDonationCheck = () => {
-    if (!donation) {
-      alert("Please input a donation amount");
-    } else {
-      handlePayments();
-    }
-  };
 
+  // create a donation document in db and update campaign document
   const handleAfterPaymentVerificationTasks = async (response) => {
     try {
       const createdDonationData = await createDonation({
@@ -112,12 +130,12 @@ function CampaignPage() {
     rzp1.open();
   };
 
-  const handlePayments = async () => {
+  const handlePayments = async (data) => {
     try {
-      const data = await createOrder({ amount: donation }).unwrap();
+      const responseData = await createOrder(data).unwrap();
 
-      console.log(data);
-      initPayment(data.order);
+      console.log(responseData);
+      initPayment(responseData.order);
     } catch (error) {
       console.log(error);
     }
@@ -184,20 +202,24 @@ function CampaignPage() {
               </p>
             </div>
           </div>
-          <div id="donationSection" className="my-4 flex">
+
+          <form
+            onSubmit={handleSubmit(handlePayments)}
+            id="donationSection"
+            className="my-4 flex"
+          >
             <div className="flex-grow">
               <input
+                {...register("amount")}
                 type="number"
-                value={donation}
                 placeholder="Enter donation amount"
-                onChange={(e) => setDonation(e.target.value)}
                 className="w-full rounded border-none bg-gray-200"
               />
             </div>
             <div className="ml-4 flex justify-end" id="donateButton">
               {user ? (
                 <button
-                  onClick={handleDonationCheck}
+                  type="submit"
                   className="rounded-full bg-[#A7C957]/95 px-6 py-2 font-medium transition-all duration-300 hover:bg-[#A7C957] hover:shadow-md hover:shadow-[#386641]"
                 >
                   Donate
@@ -211,7 +233,10 @@ function CampaignPage() {
                 </button>
               )}
             </div>
-          </div>
+          </form>
+          {errors.amount && (
+            <p className="text-red-500">{errors.amount.message}</p>
+          )}
           <div id="progressBar" className="my-4 py-2">
             <div className="h-4 w-full rounded-full bg-gray-200">
               <div
