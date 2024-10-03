@@ -1,7 +1,3 @@
-// third-party libraries
-require("console-stamp")(console, {
-  format: ":date(yyyy/mm/dd HH:MM:ss.l)",
-});
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();

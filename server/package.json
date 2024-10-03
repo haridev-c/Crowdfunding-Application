@@ -23,7 +23,6 @@
     "razorpay": "^2.9.4"
   },
   "devDependencies": {
-    "console-stamp": "^3.1.2",
     "nodemon": "^3.1.3"
   }
 }
