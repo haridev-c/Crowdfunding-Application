@@ -31,8 +31,6 @@ function CampaignPage() {
   const [addDonationToCampaign] = useAddDonationToCampaignMutation();
   const { data: campaignData, isLoading } = useGetCampaignQuery(id); // fetch campaign data
 
-  !isLoading && console.log(campaignData);
-
   // zod schema definition
   const donationSchema = z.object({
     amount: z.coerce
@@ -48,6 +46,7 @@ function CampaignPage() {
     register,
     watch,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({ resolver: zodResolver(donationSchema) });
 
@@ -83,18 +82,13 @@ function CampaignPage() {
         paymentId: response.razorpay_payment_id,
       }).unwrap();
 
-      if (!createdDonationData.success) {
-        alert(createdDonationData.serverMsg);
-      } else {
-        const donationDataAddedToCampaign = await addDonationToCampaign({
-          amount: donation,
-          campaignId: campaignData.campaign._id,
-          donationID: createdDonationData.savedDonation._id,
-        }).unwrap();
-        if (!donationDataAddedToCampaign.success) {
-          alert(donationDataAddedToCampaign.serverMsg);
-        }
-      }
+      await addDonationToCampaign({
+        amount: donation,
+        campaignId: campaignData.campaign._id,
+        donationID: createdDonationData.savedDonation._id,
+      });
+
+      alert("Thank you for donating to this charity");
     } catch (error) {
       console.error(error);
     }
@@ -112,15 +106,11 @@ function CampaignPage() {
         try {
           const data = await verifyPayment(response).unwrap();
           console.log(data);
-          // code to update amountRaised field in campiagn model
-          if (!data.success) {
-            alert(data.serverMsg);
-          } else {
-            handleAfterPaymentVerificationTasks(response);
-          }
+          // code to create donation document and update campaign document
+          handleAfterPaymentVerificationTasks(response);
         } catch (error) {
           console.log("An error occured while initiating payment");
-          console.log(error);
+          console.error(error);
           alert("An error occured while initiating payment");
         }
       },
@@ -139,6 +129,7 @@ function CampaignPage() {
 
       console.log(responseData);
       initPayment(responseData.order);
+      reset();
     } catch (error) {
       console.log(error);
     }

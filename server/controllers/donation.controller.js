@@ -8,8 +8,8 @@ const createDonation = async (req, res) => {
     console.log("Destructuring values from req.body");
     const { campaignId, donationAmount, orderId, paymentId } = req.body;
 
-    console.log("Creating a new instance of Donation model");
-    const newDonation = new Donation({
+    console.log("Creating new donation record");
+    const savedDonation = await Donation.create({
       donorName: req.authenticatedUser.name,
       donorId: req.authenticatedUser._id,
       campaignId: campaignId,
@@ -18,29 +18,21 @@ const createDonation = async (req, res) => {
       paymentId: paymentId,
     });
 
-    console.log("Saving the created instance");
-    const savedDonation = await newDonation.save();
-
     if (!savedDonation) {
       console.log("Some error occured and the document could not be created");
-      res.json({
-        success: false,
-        serverMsg: "Some error occured and the document could not be created",
-      });
-    } else {
-      console.log("Document created successfully");
-      res.json({
-        success: true,
-        serverMsg: "Document created successfully",
-        savedDonation,
-      });
+      return res
+        .status(500)
+        .json({ serverMsg: "Donation could not be created" });
     }
+    console.log("Document created successfully");
+    return res.status(201).json({
+      serverMsg: "Document created successfully",
+      savedDonation,
+    });
   } catch (error) {
-    console.log(
-      "Some error occured in addDonation() in donation.controller.js file"
-    );
+    console.log("Error in addDonation() in donation.controller.js file");
     console.error(error);
-    res.json({ success: false, serverMsg: "Internal server error" });
+    return res.status(500).json({ serverMsg: "Internal server error" });
   }
 };
 
@@ -65,24 +57,16 @@ const getUserDonation = async (req, res) => {
 
     if (campaigns.length === 0) {
       console.log("No donations found for this user");
-      res.json({
-        success: false,
-        serverMsg: "No donations found for this user",
-      });
-    } else {
-      console.log("Campaigns found, sending response");
-      res.json({
-        success: true,
-        serverMsg: "Campaigns found",
-        campaigns: campaigns,
-      });
+      return res
+        .status(404)
+        .json({ serverMsg: "No donations found for this user" });
     }
+    console.log("Campaigns found, sending response");
+    return res.status(200).json({ campaigns: campaigns });
   } catch (error) {
-    console.log(
-      "Some error occured in getUserDonation() in donation.controller.js file"
-    );
+    console.log("Error in getUserDonation() in donation.controller.js file");
     console.error(error);
-    res.json({ success: false, serverMsg: "Internal server error" });
+    return res.status(500).json({ serverMsg: "Internal server error" });
   }
 };
 

@@ -3,44 +3,31 @@ const Campaign = require("../models/campaign.model");
 const createCampaign = async (req, res) => {
   console.log("- - - - - - - - - - - - - - - ");
   console.log("Started createCampaign func");
+
   try {
     const { title, description, targetAmount, deadline, category } = req.body;
     console.log("About to create new campaign");
-    Campaign.create({
+
+    const doc = await Campaign.create({
       createdBy: req.authenticatedUser._id,
       category,
       title,
       description,
       targetAmount,
       deadline,
-    }).then((doc) => {
-      if (doc) {
-        console.log("Created new campaign. Campaign details:");
-        console.log(doc);
-        res.json({
-          success: true,
-          serverMsg: "Successfully created a new campaign",
-        });
-        console.log("Response sent");
-      } else {
-        console.log("Document creation did not go as planned");
-        console.log(doc);
-        res.json({
-          success: false,
-          serverMsg: "Document creation did not go as planned",
-        });
-      }
     });
+
+    if (!doc) {
+      console.log("Error creating new campaign");
+      return res.status(500).json({ serverMsg: "Error creating new campaign" });
+    }
+
+    console.log("Created new campiagn: ", doc);
+    return res.status(201).json({ serverMsg: "Campaign created successfully" });
   } catch (error) {
-    console.log(
-      "Something went wrong in createCampaign func in campaign.controller.js file"
-    );
-    console.log("Error: ", error);
-    res.json({
-      success: false,
-      serverMsg: "Internal server error occured",
-      error,
-    });
+    console.log("Error in createCampaign func in campaign.controller.js file");
+    console.error(error);
+    return res.status(500).json({ serverMsg: "Internal server error " });
   }
 };
 
@@ -51,26 +38,20 @@ const getAllCampaigns = async (req, res) => {
     console.log("Going to find all campaigns from DB");
     const campaigns = await Campaign.find().populate("createdBy", "-password");
 
-    if (campaigns) {
-      if (campaigns.length === 0) {
-        console.log("No campaigns exist in database");
-        res.json({
-          success: false,
-          serverMsg: "No campaigns exist in database",
-        });
-        console.log("Response sent");
-      } else {
-        console.log("Campaigns found; going to send them through response");
-        res.json({ success: true, serverMsg: "Campaigns found", campaigns });
-        console.log("Response sent");
-      }
+    // check if no campaigns exist in db
+    if (!campaigns || campaigns.length === 0) {
+      console.log("No campaigns exist in database");
+      return res
+        .status(404)
+        .json({ serverMsg: "No campaigns exist in database" });
     }
+
+    console.log("Campaigns found; sending response");
+    return res.status(200).json({ campaigns });
   } catch (error) {
-    console.log(
-      "Something went wrong in getAllCampaigns func in campaign.controller.js file"
-    );
-    console.log("Error :", error);
-    res.json({ success: false, serverMsg: "Internal server error occured" });
+    console.log("Error in getAllCampaigns func in campaign.controller.js file");
+    console.error(error);
+    return res.status(500).json({ serverMsg: "Internal server error occured" });
   }
 };
 
@@ -78,6 +59,7 @@ const getCampaignDetails = async (req, res) => {
   console.log("- - - - - - - - - - - - - - - ");
   console.log("Started getCampaignDetails() in campaign.controller.js file");
   try {
+    // Get campaign ID from params
     const { campaignId } = req.params;
     console.log("Captured id: ", campaignId);
     console.log("Searching for campaign");
@@ -87,51 +69,44 @@ const getCampaignDetails = async (req, res) => {
     );
 
     if (!campaign) {
-      console.log("No campaign found for the given id; sending false response");
-      res.json({
-        success: false,
-        serverMsg: "Couldn't fetch campaign from database",
-      });
-    } else {
-      console.log("Campaign found; sending campaign details via response");
-      res.json({ success: true, serverMsg: "Campaign found", campaign });
+      console.log("No campaign found for the given id");
+      return res.status(404).json({ serverMsg: "Campaign does not exist" });
     }
+    console.log("Campaign found; sending campaign details via response");
+    return res.status(200).json({ campaign });
   } catch (error) {
-    console.log("Some error occured in getCampaignDetails func.");
-    console.log(error);
-    res
-      .status(500)
-      .json({ success: false, serverMsg: "Internal server error" });
+    console.log("Error in getCampaignDetails func.");
+    console.error(error);
+    return res.status(500).json({ serverMsg: "Internal server error" });
   }
 };
 
 const addDonation = async (req, res) => {
   console.log("- - - - - - - - - - - - - - - ");
   console.log("Started addDonation func in campaign.controller.js file");
-  const { campaignId, donationID } = req.body;
-  const amount = Number(req.body.amount);
   try {
+    // Get campaign ID and donation ID from request body
+    const { campaignId, donationID } = req.body;
+    const amount = Number(req.body.amount);
+
+    // Find campaign by ID and update amountRaised and donations array
     const updatedCampaign = await Campaign.findByIdAndUpdate(
       campaignId,
       { $inc: { amountRaised: amount }, $push: { donations: donationID } },
       { new: true }
     );
 
+    // Check if campaign was found and updated
     if (!updatedCampaign) {
       console.log("Couldnt find campaign from given campaign ID");
-      res.json({
-        success: false,
-        serverMsg: "Failed to update campaign from given CampaignID",
-      });
-    } else {
-      res.json({ success: true, serverMsg: "Campaign updated successfully" });
+      return res.status(500).json({ serverMsg: "Failed to update campaign" });
     }
+
+    return res.status(200).json({ serverMsg: "Campaign updated successfully" });
   } catch (error) {
-    console.log(
-      "Some error happeend in addDonation func in campaign.controller.js file"
-    );
-    console.log(error);
-    res.json({ success: false, serverMsg: "Internal server error" });
+    console.log("Error in addDonation() in campaign.controller.js file");
+    console.error(error);
+    return res.status(500).json({ serverMsg: "Internal server error" });
   }
 };
 
@@ -140,25 +115,25 @@ const getUserCampaigns = async (req, res) => {
   console.log("Started getUserCampaigns() in campaign.controller.js file");
   try {
     console.log("Searching for campaigns");
+
+    // Find all campaigns created by the authenticated user
     const userCampaigns = await Campaign.find({
       createdBy: req.authenticatedUser._id,
     }).populate("createdBy", "-password");
 
+    // Check if no campaigns were found
     if (!userCampaigns) {
       console.log("No campaigns found for the query");
-      res.json({ success: false, serverMsg: "No campaigns found" });
-    } else {
-      console.log("Campaigns found; sending success response");
-      res.json({ success: true, serverMsg: "Campaigns found", userCampaigns });
+      return res.status(404).json({ serverMsg: "No campaigns found" });
     }
+    console.log("Campaigns found; sending success response");
+    return res
+      .status(200)
+      .json({ serverMsg: "Campaigns found", userCampaigns });
   } catch (error) {
-    console.log(
-      "Some error occured in getUserCampaigns() in campaign.controller.js file"
-    );
+    console.log("Error in getUserCampaigns() in campaign.controller.js file");
     console.error(error);
-    res
-      .status(500)
-      .json({ success: false, serverMsg: "Internal server error" });
+    res.status(500).json({ serverMsg: "Internal server error" });
   }
 };
 
@@ -184,13 +159,9 @@ const deleteOne = async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(
-      "Some error occured in deleteOne func in campaign.controller.js file"
-    );
+    console.log("Error in deleteOne func in campaign.controller.js file");
     console.error(error);
-    res
-      .status(500)
-      .json({ success: false, serverMsg: "Internal server error" });
+    return res.status(500).json({ serverMsg: "Internal server error" });
   }
 };
 
@@ -202,6 +173,7 @@ const getAllCampaignsInCategory = async (req, res) => {
   try {
     console.log("Getting category from params");
     const category = req.params.category;
+
     console.log("Searching for: ", category);
     const campaigns = await Campaign.find({ category: category }).populate(
       "createdBy"
@@ -209,31 +181,20 @@ const getAllCampaignsInCategory = async (req, res) => {
 
     if (!campaigns) {
       console.log("No campaigns found");
-      res.status(204).json({ success: true, serverMsg: "No campaigns found" });
-    } else {
-      console.log("Campaigns found");
-      res
-        .status(200)
-        .json({ success: true, serverMsg: "Campaigns found", campaigns });
+      return res.status(404).json({ serverMsg: "No campaigns found" });
     }
+    console.log("Campaigns found");
+    return res.status(200).json({ campaigns });
   } catch (error) {
-    console.log(
-      "Some error occured in getAllCampaignsInCategory() in campaign.controller.js file"
-    );
+    console.log("Error in getAllCampaignsInCategory() in campaign controller");
     console.error(error);
-    res.status(500).json({
-      success: false,
-      serverMsg:
-        "Some error occured in getAllCampaignsInCategory() in campaign.controller.js file",
-    });
+    return res.status(500).json({ serverMsg: "Internal server error" });
   }
 };
 
 const getFeaturedCampaigns = async (req, res) => {
   console.log("- - - - - - - - - - - - - - - ");
-  console.log(
-    "Started getFeaturedCampaigns func in campaign.controller.js file"
-  );
+  console.log("Started getFeaturedCampaigns() in campaign.controller.js file");
   try {
     // Get all unique categories
     const categories = await Campaign.distinct("category");
@@ -253,21 +214,15 @@ const getFeaturedCampaigns = async (req, res) => {
 
     if (validCampaigns.length === 0) {
       console.log("No campaigns found");
-      res.json({ success: false, serverMsg: "No campaigns found" });
-    } else {
-      console.log("Campaigns found for each category");
-      res.json({
-        success: true,
-        serverMsg: "Campaigns found for each category",
-        campaigns: validCampaigns,
-      });
+      return res.status(404).json({ serverMsg: "No campaigns found" });
     }
+
+    console.log("Campaigns found for each category");
+    return res.status(200).json({ campaigns: validCampaigns });
   } catch (error) {
-    console.log(
-      "Some error occurred in getOneOfEachCategory func in campaign.controller.js file"
-    );
+    console.log("error in getOneOfEachCategory() in campaign controller");
     console.error(error);
-    res.json({ success: false, serverMsg: "Internal server error" });
+    return res.status(500).json({ serverMsg: "Internal server error" });
   }
 };
 

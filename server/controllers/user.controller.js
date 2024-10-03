@@ -19,7 +19,7 @@ const registerUser = async (req, res) => {
     if (!doc) {
       console.log("No existing user found; creating new user");
       bcrypt.hash(password, saltRounds).then(async (hash) => {
-        const newUser = await User.create({
+        await User.create({
           name,
           email,
           password: hash,
@@ -52,61 +52,56 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
   console.log("- - - - - - - - - - - - - - - ");
   console.log("Started loginUser func");
-  console.log("Destructuring email and password from request");
-  const { email, password } = req.body;
-
   try {
+    const { email, password } = req.body;
     console.log("Checking email id for existing account");
     const doc = await User.findOne({ email }).select("+password").exec();
     console.log(doc);
-    if (doc) {
-      console.log("Email id found, comparing password with hash");
-      bcrypt.compare(password, doc.password).then((result) => {
-        if (result) {
-          console.log("Hash matched successfully; signing JWT token");
-          jwt.sign(
-            { _id: doc._id, email: doc.email },
-            jwtSecret,
-            {},
-            (err, token) => {
-              if (err) throw err;
-              console.log(
-                "Signed JWT successfully; sending the JWT back with the response"
-              );
 
-              const { password: hashedPassword, __v, ...rest } = doc.toObject();
-
-              res.cookie("token", token).json({
-                success: true,
-                serverMsg: "Login Successfull",
-                user: rest,
-              });
-            }
-          );
-        } else {
-          console.log(
-            "Password did not match; alerting user to check password"
-          );
-          res.json({
-            success: false,
-            serverMsg: "Password did not match, try again",
-          });
-          console.log("Response sent");
-        }
-      });
-    } else {
+    // send response if no doc found
+    if (!doc) {
       console.log("No doc found");
-      res.json({
-        success: false,
-        serverMsg: "Did not find any existing account, please login",
-      });
+      return res
+        .status(404)
+        .json({ serverMsg: "Did not find any existing account, please login" });
     }
-  } catch (error) {
-    console.log(
-      "Some error happened in loginUser func in user.controller.js file"
+
+    // if doc found compare password with hash
+    console.log("Email id found, comparing password with hash");
+    const result = await bcrypt.compare(password, doc.password);
+
+    // send response if password did not match
+    if (!result) {
+      console.log("Password did not match; alerting user to check password");
+      return res
+        .status(400)
+        .json({ serverMsg: "Password did not match, try again" });
+    }
+
+    // if password matched sign JWT token
+    console.log("Hash matched successfully; signing JWT token");
+    jwt.sign(
+      { _id: doc._id, email: doc.email },
+      jwtSecret,
+      {},
+      (err, token) => {
+        if (err) throw err;
+        console.log(
+          "Signed JWT successfully; sending the JWT back with the response"
+        );
+
+        const { password: hashedPassword, __v, ...rest } = doc.toObject();
+
+        return res.status(200).cookie("token", token).json({
+          serverMsg: "Login Successfull",
+          user: rest,
+        });
+      }
     );
-    res.status(500).json(error);
-    console.log(error);
+  } catch (error) {
+    console.log("Error loginUser() in user.controller.js file");
+    console.error(error);
+    return res.status(500).json({ serverMsg: "Internal server error" });
   }
 };
 
@@ -152,40 +147,31 @@ const updateDp = async (req, res) => {
   try {
     const userID = req.body.userID;
     console.log("Updating user doc");
-    User.findByIdAndUpdate(
+    const updatedDoc = await User.findByIdAndUpdate(
       userID,
       { $set: { profilePic: req.file.filename } },
       { new: true }
-    ).then((updatedDoc) => {
-      if (updatedDoc) {
-        console.log("Doc update complete");
-        res.json({
-          success: true,
-          serverMsg: "Doc update complete",
-          updatedDoc: updatedDoc,
-        });
-      } else {
-        console.log(
-          "Something unexpected happened in updateDP while updating document to db"
-        );
-        res.json({
-          success: false,
-          serverMsg:
-            "Something unexpected happened in updateDP while updating document to db",
-        });
-      }
-    });
+    );
+
+    if (!updatedDoc) {
+      console.log("Error while updating document to db");
+      return res.status(500).json({ serverMsg: "Error in updating dp" });
+    }
+
+    // send success response
+    console.log("Doc update complete");
+    return res.status(200).json({ updatedDoc: updatedDoc });
   } catch (error) {
     console.log("Error occured in updateDp func in user.controller.js file");
-    console.log(error);
-    res.json({ success: false, serverMsg: "Internal server error" });
+    console.error(error);
+    return res.status(500).json({ serverMsg: "Internal server error" });
   }
 };
 
 const getDP = async (req, res) => {
+  console.log("- - - - - - - - - - - - - - - ");
+  console.log("Started getDP func");
   try {
-    console.log("- - - - - - - - - - - - - - - ");
-    console.log("Started getDP func");
     const fileName = req.params.filename;
 
     const uploadsDir = path.join(__dirname, "..", "uploads");
@@ -211,9 +197,7 @@ const getDP = async (req, res) => {
   } catch (error) {
     console.log("Error in getDP func in user.controller.js file");
     console.error(error);
-    res
-      .status(500)
-      .json({ success: false, serverMsg: "Internal server error" });
+    return res.status(500).json({ serverMsg: "Internal server error" });
   }
 };
 
@@ -223,35 +207,30 @@ const updateUserDetails = async (req, res) => {
   try {
     const { name, age, phoneNo } = req.body;
     const { _id } = req.authenticatedUser;
+
+    // check if user exists and update details
     console.log("Updating user details");
     const updatedDoc = await User.findByIdAndUpdate(
       _id,
-      {
-        $set: { name, age, phoneNo },
-      },
+      { $set: { name, age, phoneNo } },
       { new: true }
     );
 
     if (!updatedDoc) {
       console.log("Something went wrong in updateUserDetails");
-      res.json({
-        success: false,
-        serevrMsg: "Something went wrong while trying to update user details",
-      });
-    } else {
-      console.log("Update successfull");
-      res.json({
-        success: true,
-        serverMsg: "User details updated successfully",
-        updatedDoc,
-      });
+      return res.status(500).json({ serevrMsg: "Error updating user details" });
     }
+
+    // send success response
+    console.log("Update successfull");
+    return res.status(200).json({
+      serverMsg: "User details updated successfully",
+      updatedDoc,
+    });
   } catch (error) {
-    console.log(
-      "Error in updateUserDetails func in user.controller.js file: ",
-      error
-    );
-    res.json({ success: false, serverMsg: "Internal server error" });
+    console.log("Error in updateUserDetails() in user controller ");
+    console.error(error);
+    return res.status(500).json({ serverMsg: "Internal server error" });
   }
 };
 

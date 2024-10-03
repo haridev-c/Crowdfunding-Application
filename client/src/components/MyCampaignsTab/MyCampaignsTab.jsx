@@ -7,7 +7,11 @@ function MyCampaignsTab() {
   const { data: campaignData, isLoading } = useGetUserCampaignsQuery();
 
   if (!campaignData?.userCampaigns?.length) {
-    return <div>No campaigns found</div>;
+    return (
+      <div className="flex flex-grow items-center justify-center">
+        No campaigns found
+      </div>
+    );
   }
 
   return (

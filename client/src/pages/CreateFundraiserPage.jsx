@@ -61,10 +61,9 @@ function CreateFundraiserPage() {
 
   const handleCreateCampaign = async (data) => {
     try {
-      console.log(data);
       const responseData = await createCampaign(data).unwrap();
       alert(responseData.serverMsg);
-      if (responseData.success) navigate("/");
+      navigate("/");
     } catch (error) {
       console.log("Error creating campaign");
       console.error(error);

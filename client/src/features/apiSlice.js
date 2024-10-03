@@ -118,7 +118,7 @@ export const apiSlice = createApi({
 
     addDonationToCampaign: builder.mutation({
       query: (donationData) => ({
-        url: "campaign/add-donation",
+        url: "campaign/donation",
         method: "POST",
         body: donationData,
         credentials: "include",

@@ -39,14 +39,12 @@ function LoginPage() {
   const onSubmit = async (data) => {
     try {
       const responseData = await loginUser(data).unwrap();
-      console.log(responseData);
       alert(responseData.serverMsg);
-      if (responseData.success) {
-        dispatch(setUser(responseData.user));
-        navigate("/");
-      }
+      dispatch(setUser(responseData.user));
+      navigate("/");
     } catch (error) {
-      console.log("Error submitting form", error);
+      console.error("Error submitting form", error);
+      alert(error.data.serverMsg);
     }
   };
 
