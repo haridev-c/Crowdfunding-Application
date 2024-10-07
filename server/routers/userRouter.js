@@ -1,6 +1,6 @@
 const {
   registerUser,
-  loginUser,
+  loginWithPass,
   getProfile,
   logoutUser,
   updateDp,
@@ -9,12 +9,12 @@ const {
 } = require("../controllers/user.controller");
 
 const express = require("express");
-const authenticate = require("../middlewares/authentication.middleware");
+const { authenticate } = require("../controllers/auth.controller");
 const upload = require("../middlewares/imageUpload");
 const userRouter = express.Router();
 
 userRouter.post("/register", registerUser);
-userRouter.post("/login", loginUser);
+userRouter.post("/login", loginWithPass);
 userRouter.get("/profile", getProfile);
 userRouter.post("/logout", logoutUser);
 userRouter.put("/dp", authenticate, upload.single("profilePic"), updateDp);

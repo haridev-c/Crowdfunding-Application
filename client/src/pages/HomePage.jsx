@@ -45,7 +45,7 @@ function HomePage() {
           </h1>
           {isLoading ? (
             <div>Loading...</div>
-          ) : data.campaigns ? (
+          ) : data?.campaigns ? (
             <div className="md:flex md:flex-wrap md:justify-around">
               {data.campaigns.map((item) => (
                 <CampaignCard

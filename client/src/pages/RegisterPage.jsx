@@ -46,10 +46,15 @@ function RegisterPage() {
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
-    const responseData = await registerUser(data).unwrap();
-    console.log(responseData);
-    alert(data.serverMsg);
-    if (!data.success) navigate("/login");
+    try {
+      const responseData = await registerUser(data).unwrap();
+      console.log(responseData);
+      alert(responseData.serverMsg);
+    } catch (error) {
+      console.error(error);
+      alert(error.data.serverMsg);
+      navigate("/login");
+    }
   };
 
   if (user) {

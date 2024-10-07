@@ -54,7 +54,7 @@ export const apiSlice = createApi({
 
     getFeaturedCampaigns: builder.query({
       query: () => ({
-        url: "campaign/featured-campaigns",
+        url: "campaign/featured",
         method: "GET",
         credentials: "include",
       }),

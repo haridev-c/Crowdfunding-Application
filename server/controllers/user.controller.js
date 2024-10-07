@@ -4,54 +4,37 @@ const jwt = require("jsonwebtoken");
 const path = require("path");
 const fs = require("fs").promises;
 
-const saltRounds = 10;
-const jwtSecret = "asjkdbv9238r4jvdsb";
-
 const registerUser = async (req, res) => {
   console.log("- - - - - - - - - - - - - - - ");
-  console.log("Started registerUser func ");
-  const { name, email, password } = req.body;
-
+  console.log("Started createUser() ");
   try {
+    const { name, email, password } = req.body;
     console.log("Checking for existing user");
     const doc = await User.findOne({ email });
 
-    if (!doc) {
-      console.log("No existing user found; creating new user");
-      bcrypt.hash(password, saltRounds).then(async (hash) => {
-        await User.create({
-          name,
-          email,
-          password: hash,
-        });
-        res.json({
-          serverMsg:
-            "Account created successfully, you can now proceed to login",
-          success: true,
-        });
-        console.log("Successfully created a new account");
-      });
-    } else {
-      console.log(
-        "Existing user found; alerting user to login insted of signup"
-      );
-      res.json({
-        serverMsg: "User already exists, please login",
-        success: false,
-      });
-    }
+    // if user already exists, return 400 status code
+    if (doc) return res.status(400).json({ serverMsg: "User already exists" });
+
+    console.log("No existing user found; creating new user");
+    const hash = await bcrypt.hash(password, 10);
+    await User.create({
+      name,
+      email,
+      password: hash,
+    });
+    return res.status(201).json({
+      serverMsg: "Account created successfully, you can now proceed to login",
+    });
   } catch (error) {
-    console.log(
-      "Something went wrong with registering a user; check registerUser in user.controller.js"
-    );
-    console.log(error);
-    res.status(500).json("Internal server error");
+    console.log("Error in createUser() in auth.controller.js file");
+    console.error(error);
+    return res.status(500).json({ serverMsg: "Internal server error" });
   }
 };
 
-const loginUser = async (req, res) => {
+const loginWithPass = async (req, res) => {
   console.log("- - - - - - - - - - - - - - - ");
-  console.log("Started loginUser func");
+  console.log("Started loginWithPass()");
   try {
     const { email, password } = req.body;
     console.log("Checking email id for existing account");
@@ -61,17 +44,17 @@ const loginUser = async (req, res) => {
     // send response if no doc found
     if (!doc) {
       console.log("No doc found");
-      return res
-        .status(404)
-        .json({ serverMsg: "Did not find any existing account, please login" });
+      return res.status(404).json({
+        serverMsg: "Did not find an existing account, please signup",
+      });
     }
 
     // if doc found compare password with hash
     console.log("Email id found, comparing password with hash");
-    const result = await bcrypt.compare(password, doc.password);
+    const isMatch = await bcrypt.compare(password, doc.password);
 
     // send response if password did not match
-    if (!result) {
+    if (!isMatch) {
       console.log("Password did not match; alerting user to check password");
       return res
         .status(400)
@@ -80,24 +63,26 @@ const loginUser = async (req, res) => {
 
     // if password matched sign JWT token
     console.log("Hash matched successfully; signing JWT token");
-    jwt.sign(
+    const token = jwt.sign(
       { _id: doc._id, email: doc.email },
-      jwtSecret,
-      {},
-      (err, token) => {
-        if (err) throw err;
-        console.log(
-          "Signed JWT successfully; sending the JWT back with the response"
-        );
-
-        const { password: hashedPassword, __v, ...rest } = doc.toObject();
-
-        return res.status(200).cookie("token", token).json({
-          serverMsg: "Login Successfull",
-          user: rest,
-        });
-      }
+      process.env.JWT_SECRET,
+      { expiresIn: "2d" }
     );
+
+    if (!token)
+      return res.status(500).json({ serverMsg: "Internal server error" });
+
+    console.log(
+      "Signed JWT successfully; sending the JWT back with the response"
+    );
+
+    // eslint-disable-next-line no-unused-vars
+    const { password: hashedPassword, __v, ...rest } = doc.toObject();
+
+    return res.status(200).cookie("token", token).json({
+      serverMsg: "Login Successfull",
+      user: rest,
+    });
   } catch (error) {
     console.log("Error loginUser() in user.controller.js file");
     console.error(error);
@@ -113,7 +98,7 @@ const getProfile = async (req, res) => {
     const token = req.cookies["token"];
     if (token) {
       console.log("Token found:", token);
-      jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+      jwt.verify(token, process.env.JWT_SECRET, {}, async (err, userData) => {
         if (err) {
           console.error("Token verification error:", err);
           return res.status(401).json({ error: "Invalid token" });
@@ -206,7 +191,7 @@ const updateUserDetails = async (req, res) => {
   console.log("Started updateUserDetails func in user.controller.js file");
   try {
     const { name, age, phoneNo } = req.body;
-    const { _id } = req.authenticatedUser;
+    const { _id } = req.user;
 
     // check if user exists and update details
     console.log("Updating user details");
@@ -236,7 +221,7 @@ const updateUserDetails = async (req, res) => {
 
 module.exports = {
   registerUser,
-  loginUser,
+  loginWithPass,
   getProfile,
   logoutUser,
   updateDp,

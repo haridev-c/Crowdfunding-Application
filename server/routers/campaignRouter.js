@@ -15,7 +15,7 @@ const {
 
 campaignRouter.post("/create", authenticate, createCampaign);
 campaignRouter.get("/get-all-campaigns", getAllCampaigns);
-campaignRouter.get("/featured-campaigns", getFeaturedCampaigns);
+campaignRouter.get("/featured", getFeaturedCampaigns);
 campaignRouter.get("/single/:campaignId", getCampaignDetails);
 campaignRouter.post("/donation", authenticate, addDonation);
 campaignRouter.get("/user-campaigns", authenticate, getUserCampaigns);
