@@ -113,7 +113,22 @@ const updateDp = async (req, res) => {
   console.log("- - - - - - - - - - - - - - - ");
   console.log("updateDp func started");
   try {
-    const userID = req.body.userID;
+    const userID = req.user._id;
+    const oldImagePath = path.join(
+      __dirname,
+      "..",
+      "uploads",
+      req.user?.profilePic
+    );
+    // if old profile picture exist in server, delete it before updating new picture
+    try {
+      await fs.access(oldImagePath, fs.constants.F_OK);
+      await fs.unlink(oldImagePath);
+    } catch (error) {
+      console.log("Old profile picture does not exist");
+      console.error(error);
+    }
+
     console.log("Updating user doc");
     const updatedDoc = await User.findByIdAndUpdate(
       userID,
@@ -142,8 +157,7 @@ const getDP = async (req, res) => {
   try {
     const fileName = req.params.filename;
 
-    const uploadsDir = path.join(__dirname, "..", "uploads");
-    const imagePath = path.join(uploadsDir, fileName);
+    const imagePath = path.join(__dirname, "..", "uploads", fileName);
 
     console.log("Full image path:", imagePath);
 
@@ -155,8 +169,7 @@ const getDP = async (req, res) => {
       res.setHeader("Cache-Control", "public, max-age=3600");
       res.setHeader("Content-Disposition", "inline");
 
-      res.sendFile(imagePath);
-      console.log("File sent");
+      return res.status(200).sendFile(imagePath);
     } catch (err) {
       console.log("File does not exist or is not readable");
       console.error("Error details:", err);
