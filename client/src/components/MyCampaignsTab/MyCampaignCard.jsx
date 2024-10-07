@@ -109,7 +109,6 @@ MyCampaignCard.propTypes = {
   targetAmount: PropTypes.number.isRequired,
   amountRaised: PropTypes.number.isRequired,
   campaignId: PropTypes.string.isRequired,
-  setRefresh: PropTypes.func.isRequired,
 };
 
 export default MyCampaignCard;

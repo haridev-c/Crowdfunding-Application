@@ -10,8 +10,8 @@ const createDonation = async (req, res) => {
 
     console.log("Creating new donation record");
     const savedDonation = await Donation.create({
-      donorName: req.authenticatedUser.name,
-      donorId: req.authenticatedUser._id,
+      donorName: req.user.name,
+      donorId: req.user._id,
       campaignId: campaignId,
       donationAmount: donationAmount,
       orderId: orderId,
@@ -40,7 +40,7 @@ const getUserDonation = async (req, res) => {
   console.log("- - - - - - - - - - - - - - - ");
   console.log("Started getUserDonation() in donation.controller.js file");
   try {
-    const userId = req.authenticatedUser._id;
+    const userId = req.user._id;
 
     // Find all donations made by the user
     const userDonations = await Donation.find({ donorId: userId });

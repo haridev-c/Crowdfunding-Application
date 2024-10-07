@@ -15,7 +15,7 @@ const userRouter = express.Router();
 
 userRouter.post("/register", registerUser);
 userRouter.post("/login", loginWithPass);
-userRouter.get("/profile", getProfile);
+userRouter.get("/profile", authenticate, getProfile);
 userRouter.post("/logout", logoutUser);
 userRouter.put("/dp", authenticate, upload.single("profilePic"), updateDp);
 userRouter.get("/dp/:filename", getDP);

@@ -1,6 +1,6 @@
 const express = require("express");
 
-const authenticate = require("../middlewares/authentication.middleware");
+const { authenticate } = require("../controllers/auth.controller");
 const {
   createOrder,
   verifyPayments,

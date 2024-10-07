@@ -5,9 +5,9 @@ const {
   createDonation,
   getUserDonation,
 } = require("../controllers/donation.controller");
-const authenticateUser = require("../middlewares/authentication.middleware");
+const { authenticate } = require("../controllers/auth.controller");
 
-donationRouter.post("/create", authenticateUser, createDonation);
-donationRouter.get("/user-donations", authenticateUser, getUserDonation);
+donationRouter.post("/create", authenticate, createDonation);
+donationRouter.get("/user-donations", authenticate, getUserDonation);
 
 module.exports = donationRouter;

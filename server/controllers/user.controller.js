@@ -94,27 +94,10 @@ const getProfile = async (req, res) => {
   console.log("- - - - - - - - - - - - ");
   console.log("getProfile function called");
   try {
-    console.log("Cookies received:", req.cookies);
-    const token = req.cookies["token"];
-    if (token) {
-      console.log("Token found:", token);
-      jwt.verify(token, process.env.JWT_SECRET, {}, async (err, userData) => {
-        if (err) {
-          console.error("Token verification error:", err);
-          return res.status(401).json({ error: "Invalid token" });
-        }
-        console.log("Token verified, user data:", userData);
-        const userObject = await User.findById(userData._id);
-        console.log("User object retrieved:", userObject);
-        res.json(userObject);
-      });
-    } else {
-      console.log("No token found in cookies");
-      res.status(401).json({ error: "No token provided" });
-    }
+    return res.status(200).json(req.user);
   } catch (error) {
     console.error("Error in getProfile:", error);
-    res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
 

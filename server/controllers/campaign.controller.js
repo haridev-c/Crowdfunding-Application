@@ -9,7 +9,7 @@ const createCampaign = async (req, res) => {
     console.log("About to create new campaign");
 
     const doc = await Campaign.create({
-      createdBy: req.authenticatedUser._id,
+      createdBy: req.user._id,
       category,
       title,
       description,
@@ -118,7 +118,7 @@ const getUserCampaigns = async (req, res) => {
 
     // Find all campaigns created by the authenticated user
     const userCampaigns = await Campaign.find({
-      createdBy: req.authenticatedUser._id,
+      createdBy: req.user._id,
     }).populate("createdBy", "-password");
 
     // Check if no campaigns were found

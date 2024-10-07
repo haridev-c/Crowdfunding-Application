@@ -1,7 +1,7 @@
 const express = require("express");
 const campaignRouter = express.Router();
 
-const authenticate = require("../middlewares/authentication.middleware");
+const { authenticate } = require("../controllers/auth.controller");
 const {
   createCampaign,
   getAllCampaigns,
