@@ -9,6 +9,7 @@ const userRouter = require("./routers/userRouter");
 const campaignRouter = require("./routers/campaignRouter");
 const paymentRouter = require("./routers/paymentRouter");
 const donationRouter = require("./routers/donationRouter");
+const authRouter = require("./routers/authRouter");
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use("/api/user", userRouter);
 app.use("/api/campaign", campaignRouter);
 app.use("/api/payment", paymentRouter);
 app.use("/api/donation", donationRouter);
+app.use("/auth", authRouter);
 
 // database connection
 mongoose.connect(process.env.CONN_STRING).then(console.log("Connected to db"));

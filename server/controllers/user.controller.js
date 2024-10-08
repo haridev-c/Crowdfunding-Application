@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const path = require("path");
 const fs = require("fs").promises;
+const { sendVerificationEmail } = require("./auth.controller");
 
 const registerUser = async (req, res) => {
   console.log("- - - - - - - - - - - - - - - ");
@@ -15,16 +16,10 @@ const registerUser = async (req, res) => {
     // if user already exists, return 400 status code
     if (doc) return res.status(400).json({ serverMsg: "User already exists" });
 
-    console.log("No existing user found; creating new user");
-    const hash = await bcrypt.hash(password, 10);
-    await User.create({
-      name,
-      email,
-      password: hash,
-    });
-    return res.status(201).json({
-      serverMsg: "Account created successfully, you can now proceed to login",
-    });
+    await sendVerificationEmail(email, password, name);
+    return res
+      .status(200)
+      .json({ serverMsg: "Verification email sent, please verify your email" });
   } catch (error) {
     console.log("Error in createUser() in auth.controller.js file");
     console.error(error);
