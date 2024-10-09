@@ -96,7 +96,7 @@ function CampaignPage() {
 
   const initPayment = (order) => {
     const options = {
-      key: "rzp_test_McObQODIQEYS73",
+      key: import.meta.env.RAZORPAY_KEY,
       amount: order.amount,
       currency: order.currency,
       name: campaignData.campaign.title,
