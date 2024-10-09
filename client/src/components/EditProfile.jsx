@@ -60,7 +60,6 @@ function EditProfile() {
   const imageUpload = async (dp) => {
     const formData = new FormData();
     formData.append("profilePic", dp);
-    formData.append("userID", user._id);
 
     const data = await changeDP(formData).unwrap();
     console.log(data);

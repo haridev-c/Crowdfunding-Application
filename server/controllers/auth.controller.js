@@ -92,7 +92,7 @@ const verifyEmail = async (req, res) => {
 
     return res
       .status(200)
-      .send("Email verified successfully. You can now proceed to login");
+      .send("Email verified successfully, please login to continue");
   } catch (error) {
     console.log("Error in verifyEmail() in auth.controller.js file");
     console.error(error);

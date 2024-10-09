@@ -5,7 +5,7 @@ import axios from "axios";
 // redux imports
 import { useGetProfileQuery } from "./features/apiSlice";
 import { setUser, removeUser } from "./features/userSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 // page imports
 import Layout from "./Layout";
@@ -24,6 +24,7 @@ import EmergencyCategory from "./pages/Categories/EmergencyCategory";
 
 // static asset imports
 import spinner from "./assets/spinner.svg";
+import EmailVerificationPage from "./pages/EmailVerificationPage";
 
 // axios default configurations
 axios.defaults.baseURL = "http://localhost:5050/api";
@@ -31,7 +32,12 @@ axios.defaults.withCredentials = true;
 
 function App() {
   const dispatch = useDispatch();
-  const { data: profileData, isLoading, isError } = useGetProfileQuery();
+  const { user } = useSelector((state) => state.user);
+  const {
+    data: profileData,
+    isLoading,
+    isError,
+  } = useGetProfileQuery(undefined, { skip: !user }); // Skip fetching profile data if user is null
 
   useEffect(() => {
     if (isError) dispatch(removeUser());
@@ -70,6 +76,10 @@ function App() {
               element={<CreateFundraiserPage />}
             />
           </Route>
+          <Route
+            path="/email-verification"
+            element={<EmailVerificationPage />}
+          />
         </Routes>
       </Router>
     </>

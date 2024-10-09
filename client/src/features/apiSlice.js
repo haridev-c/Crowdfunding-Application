@@ -12,7 +12,7 @@ export const apiSlice = createApi({
         body: credentials,
         credentials: "include",
       }),
-      providesTags: ["User"],
+      invalidatesTags: ["User"],
     }),
 
     logoutUser: builder.mutation({

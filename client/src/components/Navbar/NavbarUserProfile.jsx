@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 // redux imports
 import { useSelector, useDispatch } from "react-redux";
 import { useLogoutUserMutation } from "../../features/apiSlice";
-import { setUser } from "../../features/userSlice";
+import { removeUser } from "../../features/userSlice";
 
 // component imports
 import {
@@ -26,11 +26,9 @@ function NavbarUserProfile() {
     try {
       const data = await logoutUser().unwrap();
       console.log(data);
+      dispatch(removeUser());
       alert(data.serverMsg);
-      if (data.success) {
-        dispatch(setUser(null));
-        navigate("/");
-      }
+      navigate("/");
     } catch (error) {
       console.log("Error logging out", error);
       alert("Error logging out");
