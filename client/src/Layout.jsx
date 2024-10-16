@@ -4,6 +4,9 @@ import { Outlet } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer";
 
+// shadcn imports
+import { Toaster } from "@/components/ui/toaster";
+
 function Layout() {
   return (
     <>
@@ -11,6 +14,7 @@ function Layout() {
         <Navbar />
         <Outlet />
         <Footer />
+        <Toaster />
       </div>
     </>
   );

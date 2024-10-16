@@ -16,6 +16,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
+// shadcn imports
+import { useToast } from "@/hooks/use-toast";
+
 function CampaignPage() {
   const navigate = useNavigate();
 
@@ -66,9 +69,15 @@ function CampaignPage() {
     }).format(num);
   };
 
+  // shadcn toast hook
+  const { toast } = useToast();
+
   // if user not logged in then prompt user to login
   const handleLoginPrompt = () => {
-    alert("You have to login first befor making a donation");
+    toast({
+      description: "You have to login first before making a donation",
+    });
+
     navigate("/login");
   };
 
@@ -87,8 +96,7 @@ function CampaignPage() {
         campaignId: campaignData.campaign._id,
         donationID: createdDonationData.savedDonation._id,
       });
-
-      alert("Thank you for donating to this charity");
+      toast({ description: "Thank you for donating to this charity" });
     } catch (error) {
       console.error(error);
     }
@@ -111,7 +119,7 @@ function CampaignPage() {
         } catch (error) {
           console.log("An error occured while initiating payment");
           console.error(error);
-          alert("An error occured while initiating payment");
+          toast({ variant: "destructive", description: "An error occured" });
         }
       },
       theme: {

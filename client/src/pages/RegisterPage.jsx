@@ -8,6 +8,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
+// shadcn imports
+import { useToast } from "@/hooks/use-toast";
+
 function RegisterPage() {
   const { user } = useSelector((state) => state.user);
   const [registerUser] = useRegisterUserMutation();
@@ -44,15 +47,15 @@ function RegisterPage() {
   });
 
   const navigate = useNavigate();
-
+  const { toast } = useToast();
   const onSubmit = async (data) => {
     try {
       const responseData = await registerUser(data).unwrap();
       console.log(responseData);
-      alert(responseData.serverMsg);
+      toast({ description: responseData.serverMsg });
     } catch (error) {
       console.error(error);
-      alert(error.data.serverMsg);
+      toast({ description: error.data.serverMsg });
       navigate("/login");
     }
   };

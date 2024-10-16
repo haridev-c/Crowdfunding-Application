@@ -14,6 +14,9 @@ import {
   Transition,
 } from "@headlessui/react";
 
+// shadcn imports
+import { useToast } from "@/hooks/use-toast";
+
 function NavbarUserProfile() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -22,16 +25,18 @@ function NavbarUserProfile() {
 
   const { user } = useSelector((state) => state.user);
 
+  const { toast } = useToast();
+
   const handleLogout = async () => {
     try {
       const data = await logoutUser().unwrap();
       console.log(data);
       dispatch(removeUser());
-      alert(data.serverMsg);
+      toast({ description: data.serverMsg });
       navigate("/");
     } catch (error) {
       console.log("Error logging out", error);
-      alert("Error logging out");
+      toast({ variant: "destructive", description: "Error logging out" });
     }
   };
 

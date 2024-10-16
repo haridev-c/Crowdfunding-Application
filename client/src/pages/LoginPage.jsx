@@ -11,6 +11,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLoginUserMutation } from "../features/apiSlice";
 import { setUser } from "../features/userSlice";
 
+// shadcn imports
+import { useToast } from "@/hooks/use-toast";
+
 function LoginPage() {
   // redux hooks
   const { user } = useSelector((state) => state.user);
@@ -35,16 +38,21 @@ function LoginPage() {
   });
 
   const navigate = useNavigate();
-
+  const { toast } = useToast();
   const onSubmit = async (data) => {
     try {
       const responseData = await loginUser(data).unwrap();
-      alert(responseData.serverMsg);
+      toast({
+        description: responseData.serverMsg,
+      });
       dispatch(setUser(responseData.user));
       navigate("/");
     } catch (error) {
       console.error("Error submitting form", error);
-      alert(error.data.serverMsg);
+      toast({
+        variant: "destructive",
+        description: error.data.serverMsg,
+      });
     }
   };
 

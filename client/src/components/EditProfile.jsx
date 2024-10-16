@@ -11,6 +11,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
+// shadcn imports
+import { useToast } from "@/hooks/use-toast";
+
 function EditProfile() {
   // redux hooks
   const dispatch = useDispatch();
@@ -66,6 +69,8 @@ function EditProfile() {
     dispatch(setUser(data.updatedDoc));
   };
 
+  const { toast } = useToast();
+
   // User details update function
   const handleUserDetailsUpdate = async (data) => {
     try {
@@ -73,7 +78,7 @@ function EditProfile() {
       const responseData = await updateProfile(data).unwrap();
       console.log(responseData);
       dispatch(setUser(responseData.updatedDoc));
-      alert(responseData.serverMsg);
+      toast({ description: responseData.serverMsg });
     } catch (error) {
       console.log("Error submitting form");
       console.error(error);

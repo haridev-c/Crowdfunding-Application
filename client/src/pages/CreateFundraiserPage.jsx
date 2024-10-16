@@ -9,6 +9,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
+// shadcn imports
+import { useToast } from "@/hooks/use-toast";
+
 function CreateFundraiserPage() {
   const navigate = useNavigate();
 
@@ -59,10 +62,11 @@ function CreateFundraiserPage() {
     formState: { errors },
   } = useForm({ resolver: zodResolver(campaignSchema) });
 
+  const { toast } = useToast();
   const handleCreateCampaign = async (data) => {
     try {
       const responseData = await createCampaign(data).unwrap();
-      alert(responseData.serverMsg);
+      toast({ description: responseData.serverMsg });
       navigate("/");
     } catch (error) {
       console.log("Error creating campaign");
