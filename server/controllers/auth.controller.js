@@ -60,7 +60,7 @@ const sendVerificationEmail = async (email, password, name) => {
       { expiresIn: "1h" }
     );
 
-    const verificationLink = `http://localhost:5050/auth/verify-email?token=${token}`;
+    const verificationLink = `http://localhost:5173/verify-email/${token}`;
 
     await resend.emails.send({
       from: "SparkFund <sparkfund@haridev.dev>",
@@ -75,6 +75,8 @@ const sendVerificationEmail = async (email, password, name) => {
 };
 
 const verifyEmail = async (req, res) => {
+  console.log("- - - - - - - - - - - - - - - -");
+  console.log("started verifyEmail() in auth.controller.js file");
   try {
     const { token } = req.query;
     const { name, email, password } = jwt.verify(token, process.env.JWT_SECRET);
@@ -86,13 +88,14 @@ const verifyEmail = async (req, res) => {
     });
 
     if (!user)
-      return res
-        .status(400)
-        .json({ serverMsg: "Error creating account", user });
+      return res.status(400).json({ serverMsg: "Error creating account" });
 
     return res
       .status(200)
-      .send("Email verified successfully, please login to continue");
+      .json({
+        serverMsg: "Email verified successfully, you can now proceed to login",
+        user,
+      });
   } catch (error) {
     console.log("Error in verifyEmail() in auth.controller.js file");
     console.error(error);

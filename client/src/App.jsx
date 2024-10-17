@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import axios from "axios";
 
 // redux imports
 import { useGetProfileQuery } from "./features/apiSlice";
@@ -21,14 +20,10 @@ import MedicalCategory from "./pages/Categories/MedicalCategory";
 import EducationCategory from "./pages/Categories/EducationCategory";
 import EnvironmentCategory from "./pages/Categories/EnvironmentCategory";
 import EmergencyCategory from "./pages/Categories/EmergencyCategory";
+import EmailVerificationPage from "./pages/EmailVerificationPage";
 
 // static asset imports
 import spinner from "./assets/spinner.svg";
-import EmailVerificationPage from "./pages/EmailVerificationPage";
-
-// axios default configurations
-axios.defaults.baseURL = "http://localhost:5050/api";
-axios.defaults.withCredentials = true;
 
 function App() {
   const dispatch = useDispatch();
@@ -75,11 +70,11 @@ function App() {
               path="/create-new-fundraiser"
               element={<CreateFundraiserPage />}
             />
+            <Route
+              path="/verify-email/:token"
+              element={<EmailVerificationPage />}
+            />
           </Route>
-          <Route
-            path="/email-verification"
-            element={<EmailVerificationPage />}
-          />
         </Routes>
       </Router>
     </>

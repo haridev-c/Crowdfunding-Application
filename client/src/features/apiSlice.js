@@ -2,12 +2,12 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const apiSlice = createApi({
   reducerPath: "api",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5050/api" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5050" }),
   tagTypes: ["Campaigns", "User"],
   endpoints: (builder) => ({
     loginUser: builder.mutation({
       query: (credentials) => ({
-        url: "user/login",
+        url: "api/user/login",
         method: "POST",
         body: credentials,
         credentials: "include",
@@ -17,7 +17,7 @@ export const apiSlice = createApi({
 
     logoutUser: builder.mutation({
       query: () => ({
-        url: "user/logout",
+        url: "api/user/logout",
         method: "POST",
         credentials: "include",
       }),
@@ -26,7 +26,7 @@ export const apiSlice = createApi({
 
     registerUser: builder.mutation({
       query: (userDetails) => ({
-        url: "user/register",
+        url: "api/user/register",
         method: "POST",
         body: userDetails,
       }),
@@ -35,7 +35,7 @@ export const apiSlice = createApi({
 
     getProfile: builder.query({
       query: () => ({
-        url: "user/profile",
+        url: "api/user/profile",
         method: "GET",
         credentials: "include",
       }),
@@ -44,7 +44,7 @@ export const apiSlice = createApi({
 
     createCampaign: builder.mutation({
       query: (campaignData) => ({
-        url: "campaign/create",
+        url: "api/campaign/create",
         method: "POST",
         body: campaignData,
         credentials: "include",
@@ -54,7 +54,7 @@ export const apiSlice = createApi({
 
     getFeaturedCampaigns: builder.query({
       query: () => ({
-        url: "campaign/featured",
+        url: "api/campaign/featured",
         method: "GET",
         credentials: "include",
       }),
@@ -62,7 +62,7 @@ export const apiSlice = createApi({
 
     getCampaigns: builder.query({
       query: (category) => ({
-        url: `campaign/category/${category}`,
+        url: `api/campaign/category/${category}`,
         method: "GET",
         credentials: "include",
       }),
@@ -71,7 +71,7 @@ export const apiSlice = createApi({
 
     updateProfile: builder.mutation({
       query: (profileData) => ({
-        url: "user/profile",
+        url: "api/user/profile",
         method: "PATCH",
         body: profileData,
         credentials: "include",
@@ -81,7 +81,7 @@ export const apiSlice = createApi({
 
     changeDP: builder.mutation({
       query: (dp) => ({
-        url: "user/dp",
+        url: "api/user/dp",
         method: "PUT",
         body: dp,
         credentials: "include",
@@ -91,7 +91,7 @@ export const apiSlice = createApi({
 
     getUserCampaigns: builder.query({
       query: () => ({
-        url: "campaign/user-campaigns",
+        url: "api/campaign/user-campaigns",
         method: "GET",
         credentials: "include",
       }),
@@ -100,7 +100,7 @@ export const apiSlice = createApi({
 
     getCampaign: builder.query({
       query: (id) => ({
-        url: `campaign/single/${id}`,
+        url: `api/campaign/single/${id}`,
         method: "GET",
         credentials: "include",
       }),
@@ -109,7 +109,7 @@ export const apiSlice = createApi({
 
     deleteCamapiagn: builder.mutation({
       query: (id) => ({
-        url: `campaign/delete/${id}`,
+        url: `api/campaign/delete/${id}`,
         method: "DELETE",
         credentials: "include",
       }),
@@ -118,7 +118,7 @@ export const apiSlice = createApi({
 
     addDonationToCampaign: builder.mutation({
       query: (donationData) => ({
-        url: "campaign/donation",
+        url: "api/campaign/donation",
         method: "POST",
         body: donationData,
         credentials: "include",
@@ -128,7 +128,7 @@ export const apiSlice = createApi({
 
     getUserDonation: builder.query({
       query: () => ({
-        url: "donation/user-donations",
+        url: "api/donation/user-donations",
         method: "GET",
         credentials: "include",
       }),
@@ -137,7 +137,7 @@ export const apiSlice = createApi({
 
     createDonation: builder.mutation({
       query: (donationData) => ({
-        url: "donation/create",
+        url: "api/donation/create",
         method: "POST",
         body: donationData,
         credentials: "include",
@@ -147,7 +147,7 @@ export const apiSlice = createApi({
 
     createOrder: builder.mutation({
       query: (amount) => ({
-        url: "payment/create-order",
+        url: "api/payment/create-order",
         method: "POST",
         body: amount,
         credentials: "include",
@@ -157,12 +157,22 @@ export const apiSlice = createApi({
 
     verifyPayment: builder.mutation({
       query: (paymentData) => ({
-        url: "payment/verify",
+        url: "api/payment/verify",
         method: "POST",
         body: paymentData,
         credentials: "include",
       }),
       invalidatesTags: ["Campaigns"],
+    }),
+
+    verifyEmail: builder.query({
+      query: (token) => ({
+        url: `auth/verify-email?token=${token}`,
+        method: "GET",
+        baseUrl: "http://localhost:5050",
+        credentials: "include",
+      }),
+      providesTags: ["User"],
     }),
   }),
 });
@@ -185,4 +195,5 @@ export const {
   useCreateDonationMutation,
   useAddDonationToCampaignMutation,
   useRegisterUserMutation,
+  useVerifyEmailQuery,
 } = apiSlice;
