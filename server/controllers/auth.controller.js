@@ -35,13 +35,23 @@ passport.use(
 );
 
 const authenticate = (req, res, next) => {
+  console.log("- - - - - - - - - - - - - - - -");
+  console.log("started authenticate() in auth.controller.js file");
+
   passport.authenticate("jwt", { session: false }, (err, user) => {
+    console.log("Inside passport.authenticate() in auth.controller.js file");
+
     if (err) {
       console.error(err);
       return res.status(500).json({ serverMsg: "Internal server error" });
     }
 
+    if (!req.cookies["token"]) {
+      return res.status(401).json({ message: "No authentication token found" });
+    }
+
     if (!user) {
+      console.log("User not found; unauthorized");
       return res.status(401).json({ serverMsg: "Unauthorized" });
     }
 
@@ -90,12 +100,10 @@ const verifyEmail = async (req, res) => {
     if (!user)
       return res.status(400).json({ serverMsg: "Error creating account" });
 
-    return res
-      .status(200)
-      .json({
-        serverMsg: "Email verified successfully, you can now proceed to login",
-        user,
-      });
+    return res.status(200).json({
+      serverMsg: "Email verified successfully, you can now proceed to login",
+      user,
+    });
   } catch (error) {
     console.log("Error in verifyEmail() in auth.controller.js file");
     console.error(error);
