@@ -84,6 +84,8 @@ const loginWithPass = async (req, res) => {
           process.env.NODE_ENV === "production"
             ? process.env.DOMAIN
             : "localhost",
+        path: "/",
+        maxAge: 30 * 24 * 60 * 60 * 1000,
       })
       .json({
         serverMsg: "Login Successfull",
