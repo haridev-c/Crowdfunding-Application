@@ -74,10 +74,21 @@ const loginWithPass = async (req, res) => {
     // eslint-disable-next-line no-unused-vars
     const { password: hashedPassword, __v, ...rest } = doc.toObject();
 
-    return res.status(200).cookie("token", token).json({
-      serverMsg: "Login Successfull",
-      user: rest,
-    });
+    return res
+      .status(200)
+      .cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        domain:
+          process.env.NODE_ENV === "production"
+            ? process.env.DOMAIN
+            : "localhost",
+      })
+      .json({
+        serverMsg: "Login Successfull",
+        user: rest,
+      });
   } catch (error) {
     console.log("Error loginUser() in user.controller.js file");
     console.error(error);
