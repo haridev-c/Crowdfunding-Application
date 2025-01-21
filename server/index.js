@@ -13,6 +13,9 @@ const authRouter = require("./routers/authRouter");
 
 const app = express();
 
+// configure express app settings
+app.set("trust proxy", 1); //tells express server to trust first proxy servers like Nginx, Heroku, Render
+
 // middleware setup
 app.use(cookieParser());
 app.use(express.json());
@@ -22,6 +25,7 @@ app.use(
     origin: process.env.CLIENT_URL,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
+    exposedHeaders: ["set-cookie"],
   })
 );
 
