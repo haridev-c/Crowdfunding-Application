@@ -183,7 +183,7 @@ const getAllCampaignsInCategory = async (req, res) => {
       console.log("No campaigns found");
       return res.status(404).json({ serverMsg: "No campaigns found" });
     }
-    console.log("Campaigns found");
+    console.log("Campaigns found: ", campaigns);
     return res.status(200).json({ campaigns });
   } catch (error) {
     console.log("Error in getAllCampaignsInCategory() in campaign controller");
