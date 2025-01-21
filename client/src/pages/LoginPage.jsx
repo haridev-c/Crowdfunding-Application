@@ -76,7 +76,7 @@ function LoginPage() {
               <input
                 {...register("email")}
                 type="email"
-                placeholder="nivin@gmail.com"
+                placeholder="Enter your registered email"
                 className="form-input w-full rounded-md border-none bg-gray-200"
                 name="email"
               />
@@ -91,7 +91,7 @@ function LoginPage() {
                 type="password"
                 className="form-input w-full rounded-md border-none bg-gray-200"
                 name="password"
-                placeholder="1234"
+                placeholder="Enter your registered password"
               />
             </label>
             {errors.password && (

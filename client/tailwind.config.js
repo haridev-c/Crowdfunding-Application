@@ -1,16 +1,14 @@
 /** @type {import('tailwindcss').Config} */
+import forms from "@tailwindcss/forms";
+import typography from "@tailwindcss/typography";
+import animate from "tailwindcss-animate";
+
 export default {
-    darkMode: ["class"],
-    content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}", // Adjust the path according to your project structure
+  ],
   theme: {
-  	extend: {
-  		borderRadius: {
-  			lg: 'var(--radius)',
-  			md: 'calc(var(--radius) - 2px)',
-  			sm: 'calc(var(--radius) - 4px)'
-  		},
-  		colors: {}
-  	}
+    extend: {},
   },
-  plugins: [require("@tailwindcss/forms"), require("@tailwindcss/typography"), require("tailwindcss-animate")],
+  plugins: [forms, typography, animate],
 };

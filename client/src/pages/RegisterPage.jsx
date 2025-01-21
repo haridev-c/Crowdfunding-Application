@@ -80,7 +80,7 @@ function RegisterPage() {
               {...register("name")}
               type="text"
               name="name"
-              placeholder="John Doe"
+              placeholder="Enter your full name"
               className="form-input w-full rounded-md border-none bg-gray-200"
             />
           </label>
@@ -90,7 +90,7 @@ function RegisterPage() {
             <input
               {...register("email")}
               type="email"
-              placeholder="johndoe@abc.com"
+              placeholder="Enter your valid email"
               className="form-input w-full rounded-md border-none bg-gray-200"
               name="email"
             />
@@ -105,7 +105,7 @@ function RegisterPage() {
               type="password"
               className="form-input w-full rounded-md border-none bg-gray-200"
               name="password"
-              placeholder="sjd123!&^#"
+              placeholder="Create a strong password"
             />
           </label>
           {errors.password && (
