@@ -1,0 +1,15 @@
+{
+  "name": "crowdfunding-application",
+  "version": "1.0.0",
+  "description": "This Crowdfunding Application is designed to help users create and manage crowdfunding campaigns. Users can create projects, set funding goals, and track the progress of their campaigns. The application includes both frontend and backend components.",
+  "main": "index.js",
+  "scripts": {
+    "prebuild": "cd server && npm install && cd ../client && npm install",
+    "build": "cd client && npm run build",
+    "postbuild": "mv -f client/dist server/views",
+    "start": "cd server && npm run prod"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

@@ -79,7 +79,7 @@ const loginWithPass = async (req, res) => {
       .cookie("token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        sameSite: process.env.NODE_ENV === "production" ? true : "lax",
         domain:
           process.env.NODE_ENV === "production"
             ? process.env.DOMAIN
@@ -113,7 +113,7 @@ const logoutUser = (req, res) => {
   console.log("- - - - - - - - - - - - - - - ");
   console.log("logoutUser func started");
   res.clearCookie("token");
-  res.json({ success: true, serverMsg: "Logged out successfully" });
+  res.status(200).json({ serverMsg: "Logged out successfully" });
   console.log("Successfully logged out user");
 };
 

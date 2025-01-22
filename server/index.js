@@ -3,6 +3,7 @@ const cors = require("cors");
 require("dotenv").config();
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
+const path = require("path");
 
 //router imports
 const userRouter = require("./routers/userRouter");
@@ -10,6 +11,8 @@ const campaignRouter = require("./routers/campaignRouter");
 const paymentRouter = require("./routers/paymentRouter");
 const donationRouter = require("./routers/donationRouter");
 const authRouter = require("./routers/authRouter");
+
+const PORT = process.env.PORT || 5050;
 
 const app = express();
 
@@ -36,10 +39,17 @@ app.use("/api/payment", paymentRouter);
 app.use("/api/donation", donationRouter);
 app.use("/auth", authRouter);
 
+// serve the built react app
+app.use(express.static(path.join(__dirname, "views")));
+app.get("*", (req, res) => {
+  const indexFile = path.join(__dirname, "views", "index.html");
+  res.sendFile(indexFile);
+});
+
 // database connection
 mongoose.connect(process.env.CONN_STRING).then(console.log("Connected to db"));
 
 // opening up port
-app.listen(5050, () => {
-  console.log("Server listening at http://localhost:5050");
+app.listen(PORT, () => {
+  console.log("Server listening at port " + PORT);
 });
