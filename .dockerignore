@@ -1,0 +1,41 @@
+# Ignore version control directories
+.git
+.gitignore
+
+# Ignore node modules and other package manager directories
+node_modules
+vendor
+*.egg-info
+
+# Ignore package-lock.json 
+package-lock.json
+
+# Ignore build directories
+build
+dist
+target
+out
+
+# Ignore temporary files and directories
+*.tmp
+*.swp
+*.log
+*.bak
+*.old
+*.DS_Store
+Thumbs.db
+
+
+# Ignore IDE and editor directories
+.idea
+.vscode
+*.sublime-project
+*.sublime-workspace
+
+# Ignore test and documentation files
+tests
+docs
+*.md
+
+
+
