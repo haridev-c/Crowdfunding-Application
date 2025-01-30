@@ -1,6 +1,9 @@
 #stage 1 - build client
 FROM node:22.13.1-slim AS build-stage
 
+# Environment variables
+ENV NODE_OPTIONS=--max-old-space-size=4096
+
 #set working directory
 WORKDIR /app
 
