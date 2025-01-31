@@ -9,6 +9,7 @@ function CampaignCard({
   amountRaised,
   campaignId,
 }) {
+  const serverUrl = import.meta.env.VITE_SERVER_URL;
   let progress = (amountRaised / targetAmount) * 100;
 
   const formatAmount = (num) => {
@@ -35,7 +36,7 @@ function CampaignCard({
           {createdBy.profilePic ? (
             <div className="size-10 overflow-hidden rounded-full">
               <img
-                src={`http://localhost:5050/api/user/dp/${createdBy.profilePic}`}
+                src={`${serverUrl}/api/user/dp/${createdBy.profilePic}`}
                 className="size-10 rounded-full object-cover"
               />
             </div>

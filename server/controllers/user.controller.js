@@ -78,7 +78,7 @@ const loginWithPass = async (req, res) => {
       .status(200)
       .cookie("token", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: false,
         sameSite: process.env.NODE_ENV === "production" ? true : "lax",
         domain:
           process.env.NODE_ENV === "production"
