@@ -1,5 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+const serverUrl = import.meta.env.VITE_SERVER_URL;
+
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
@@ -176,7 +178,7 @@ export const apiSlice = createApi({
       query: (token) => ({
         url: `auth/verify-email?token=${token}`,
         method: "GET",
-        baseUrl: "http://localhost:5050",
+        baseUrl: serverUrl,
         credentials: "include",
       }),
       providesTags: ["User"],

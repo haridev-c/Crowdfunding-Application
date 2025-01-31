@@ -12,6 +12,8 @@ function MyCampaignCard({
   amountRaised,
   campaignId,
 }) {
+  const serverUrl = import.meta.env.VITE_SERVER_URL;
+
   const [deleteCampaign] = useDeleteCamapiagnMutation();
 
   let progress = (amountRaised / targetAmount) * 100;
@@ -45,7 +47,7 @@ function MyCampaignCard({
           {createdBy.profilePic ? (
             <div className="size-10 rounded-full">
               <img
-                src={`http://localhost:5050/api/user/dp/${createdBy.profilePic}`}
+                src={`${serverUrl}/api/user/dp/${createdBy.profilePic}`}
                 className="size-10 rounded-full"
               />
             </div>

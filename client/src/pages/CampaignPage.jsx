@@ -20,6 +20,8 @@ import * as z from "zod";
 import { useToast } from "@/hooks/use-toast";
 
 function CampaignPage() {
+  const serverUrl = import.meta.env.VITE_SERVER_URL;
+
   const navigate = useNavigate();
 
   const { user } = useSelector((state) => state.user);
@@ -159,7 +161,7 @@ function CampaignPage() {
               {campaignData.campaign.createdBy.profilePic ? (
                 <div className="size-10 rounded-full">
                   <img
-                    src={`http://localhost:5050/api/user/dp/${campaignData.campaign.createdBy.profilePic}`}
+                    src={`${serverUrl}/api/user/dp/${campaignData.campaign.createdBy.profilePic}`}
                     className="size-10 rounded-full"
                   />
                 </div>

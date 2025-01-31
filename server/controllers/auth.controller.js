@@ -7,6 +7,8 @@ const bcrypt = require("bcrypt");
 const User = require("../models/user.model");
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+const clientUrl = process.env.CLIENT_URL;
+
 const cookieExtractor = (req) => {
   let token = null;
   if (req && req.cookies) token = req.cookies["token"];
@@ -70,7 +72,7 @@ const sendVerificationEmail = async (email, password, name) => {
       { expiresIn: "1h" }
     );
 
-    const verificationLink = `http://localhost:5173/verify-email/${token}`;
+    const verificationLink = `${clientUrl}/verify-email/${token}`;
 
     await resend.emails.send({
       from: "SparkFund <sparkfund@haridev.dev>",

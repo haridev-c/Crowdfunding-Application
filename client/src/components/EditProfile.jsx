@@ -15,6 +15,8 @@ import * as z from "zod";
 import { useToast } from "@/hooks/use-toast";
 
 function EditProfile() {
+  const serverUrl = import.meta.env.VITE_SERVER_URL;
+
   // redux hooks
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
@@ -92,7 +94,7 @@ function EditProfile() {
           {user.profilePic ? (
             <div className="size-28 overflow-hidden rounded-full">
               <img
-                src={`http://localhost:5050/api/user/dp/${user.profilePic}`}
+                src={`${serverUrl}/api/user/dp/${user.profilePic}`}
                 className="size-28 rounded-full object-cover"
               />
             </div>
